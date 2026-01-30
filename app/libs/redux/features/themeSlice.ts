@@ -8,7 +8,7 @@ const initialState: ServerState = {
   activeServer: "atm 10",
 };
 
-export const serverSlice = createSlice({
+export const themeSlice = createSlice({
   name: 'server',
   initialState,
   reducers: {
@@ -18,5 +18,5 @@ export const serverSlice = createSlice({
   },
 });
 
-export const { setActiveServer } = serverSlice.actions;
-export default serverSlice.reducer;
+export const { setActiveServer } = themeSlice.actions;
+export default themeSlice.reducer;

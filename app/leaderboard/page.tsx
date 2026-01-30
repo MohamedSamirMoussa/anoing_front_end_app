@@ -23,7 +23,6 @@ const Leaderboard = () => {
   console.log(data);
   
 
-  // تأكد من الـ state path حسب الـ store.ts (سواء كان state.server أو state.theme)
   const activeServer = useSelector(
     (state: RootState) => state.theme.activeServer || "atm 10",
   );
