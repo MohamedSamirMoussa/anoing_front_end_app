@@ -21,7 +21,7 @@ const initialState: ILeaderboard = {
 };
 export const getLeaderboardAtmThunk = createAsyncThunk(
   "leaderboard/atm10",
-  async (serverName, { rejectWithValue }) => {
+  async (serverName:string, { rejectWithValue }) => {
     try {
       const { data } = await api.get(`/leaderboard/` , {
         params:{serverName}
