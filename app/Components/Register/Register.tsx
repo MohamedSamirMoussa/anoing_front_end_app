@@ -3,7 +3,12 @@ import Image from "next/image";
 import emailIcon from "../../../public/email.png";
 import lockIcon from "../../../public/lock.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faEye, faEyeSlash, faChevronDown } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUser,
+  faEye,
+  faEyeSlash,
+  faChevronDown,
+} from "@fortawesome/free-solid-svg-icons";
 import { FormikProps } from "formik";
 import { useState } from "react";
 import { IFormValues, TabType } from "@/app/auth/page";
@@ -25,12 +30,15 @@ const Register = ({ formik, activeTab }: RegisterProps) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // 1. جلب الثيم النشط من Redux
-  const activeServer = useSelector((state: any) => state.theme.activeServer || "Vanilla");
+  const activeServer = useSelector(
+    (state: any) => state.theme.activeServer || "Vanilla",
+  );
   const theme = themes[activeServer] || themes["Vanilla"];
 
   if (activeTab !== TABS.SIGN_UP) return null;
 
-  const showError = (field: keyof IFormValues) => formik.touched[field] && formik.errors[field];
+  const showError = (field: keyof IFormValues) =>
+    formik.touched[field] && formik.errors[field];
 
   // منطق قوة كلمة السر
   const passwordChecks = {
@@ -42,26 +50,34 @@ const Register = ({ formik, activeTab }: RegisterProps) => {
 
   return (
     <div className="register flex flex-col w-full gap-2">
-      
       {/* Username Field */}
       <div className="field-group w-full">
-        <div 
+        <div
           className="group rounded-2xl w-full flex items-center bg-white/5 border transition-all duration-300 focus-within:ring-1"
-          style={{ 
-            borderColor: showError("username") ? "#ef4444" : formik.values.username ? theme.color : "rgba(255,255,255,0.1)" 
+          style={{
+            borderColor: showError("username")
+              ? "#ef4444"
+              : formik.values.username
+                ? theme.color
+                : "rgba(255,255,255,0.1)",
           }}
         >
           <div className="pl-4 pr-2">
-            <FontAwesomeIcon 
-              icon={faUser} 
-              style={{ color: showError("username") ? "#ef4444" : formik.values.username ? theme.color : "#6b7280" }}
+            <FontAwesomeIcon
+              icon={faUser}
+              style={{
+                color: showError("username")
+                  ? "#ef4444"
+                  : formik.values.username
+                    ? theme.color
+                    : "#6b7280",
+              }}
               className="text-lg transition-colors"
             />
           </div>
           <input
             type="text"
             id="username"
-            name="username"
             placeholder="Username"
             {...formik.getFieldProps("username")}
             className="w-full px-4 py-4 bg-transparent outline-none text-white placeholder:text-gray-500"
@@ -71,19 +87,27 @@ const Register = ({ formik, activeTab }: RegisterProps) => {
 
       {/* Email Field */}
       <div className="field-group w-full">
-        <div 
+        <div
           className="group rounded-2xl w-full flex items-center bg-white/5 border transition-all duration-300 focus-within:ring-1"
-          style={{ 
-            borderColor: showError("email") ? "#ef4444" : formik.values.email ? theme.color : "rgba(255,255,255,0.1)" 
+          style={{
+            borderColor: showError("email")
+              ? "#ef4444"
+              : formik.values.email
+                ? theme.color
+                : "rgba(255,255,255,0.1)",
           }}
         >
           <div className="pl-4 pr-2">
-            <Image src={emailIcon} alt="email" width={20} className="brightness-200" />
+            <Image
+              src={emailIcon}
+              alt="email"
+              width={20}
+              className="brightness-200"
+            />
           </div>
           <input
             type="email"
             id="email"
-            name="email"
             placeholder="Email Address"
             {...formik.getFieldProps("email")}
             className="w-full px-4 py-4 bg-transparent outline-none text-white placeholder:text-gray-500"
@@ -93,24 +117,36 @@ const Register = ({ formik, activeTab }: RegisterProps) => {
 
       {/* Password Field */}
       <div className="field-group w-full">
-        <div 
+        <div
           className="group rounded-2xl w-full flex items-center bg-white/5 border transition-all duration-300 focus-within:ring-1"
-          style={{ 
-            borderColor: showError("password") ? "#ef4444" : formik.values.password ? theme.color : "rgba(255,255,255,0.1)" 
+          style={{
+            borderColor: showError("password")
+              ? "#ef4444"
+              : formik.values.password
+                ? theme.color
+                : "rgba(255,255,255,0.1)",
           }}
         >
           <div className="pl-4 pr-2">
-            <Image src={lockIcon} alt="lock" width={20} className="brightness-200" />
+            <Image
+              src={lockIcon}
+              alt="lock"
+              width={20}
+              className="brightness-200"
+            />
           </div>
           <input
             type={showPassword ? "text" : "password"}
             id="password"
-            name="password"
             placeholder="Password"
             {...formik.getFieldProps("password")}
             className="w-full px-4 py-4 bg-transparent outline-none text-white placeholder:text-gray-500"
           />
-          <button type="button" onClick={() => setShowPassword(!showPassword)} className="pr-4 text-gray-500">
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="pr-4 text-gray-500"
+          >
             <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
           </button>
         </div>
@@ -119,11 +155,12 @@ const Register = ({ formik, activeTab }: RegisterProps) => {
         {formik.values.password && (
           <div className="mt-2 px-1">
             <div className="w-full bg-gray-800 h-1 rounded-full overflow-hidden">
-              <div 
+              <div
                 className="h-full transition-all duration-500"
-                style={{ 
+                style={{
                   width: `${(passwordStrength / 3) * 100}%`,
-                  background: passwordStrength === 3 ? theme.gradient : theme.color 
+                  background:
+                    passwordStrength === 3 ? theme.gradient : theme.color,
                 }}
               />
             </div>
@@ -133,25 +170,37 @@ const Register = ({ formik, activeTab }: RegisterProps) => {
 
       {/* Confirm Password Field */}
       <div className="field-group w-full">
-        <div 
+        <div
           className="group rounded-2xl w-full flex items-center bg-white/5 border transition-all duration-300 focus-within:ring-1"
-          style={{ 
-            borderColor: showError("confirmPassword") ? "#ef4444" : 
-                         (formik.values.confirmPassword && formik.values.password === formik.values.confirmPassword) ? "#22c55e" : "rgba(255,255,255,0.1)" 
+          style={{
+            borderColor: showError("confirmPassword")
+              ? "#ef4444"
+              : formik.values.confirmPassword &&
+                  formik.values.password === formik.values.confirmPassword
+                ? "#22c55e"
+                : "rgba(255,255,255,0.1)",
           }}
         >
           <div className="pl-4 pr-2">
-            <Image src={lockIcon} alt="lock" width={20} className="brightness-200" />
+            <Image
+              src={lockIcon}
+              alt="lock"
+              width={20}
+              className="brightness-200"
+            />
           </div>
           <input
             type={showConfirmPassword ? "text" : "password"}
             id="confirmPassword"
-            name="confirmPassword"
             placeholder="Confirm Password"
             {...formik.getFieldProps("confirmPassword")}
             className="w-full px-4 py-4 bg-transparent outline-none text-white placeholder:text-gray-500"
           />
-          <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="pr-4 text-gray-500">
+          <button
+            type="button"
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            className="pr-4 text-gray-500"
+          >
             <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
           </button>
         </div>
@@ -161,21 +210,35 @@ const Register = ({ formik, activeTab }: RegisterProps) => {
       <div className="field-group w-full relative">
         <select
           id="gender"
-          name="gender"
           {...formik.getFieldProps("gender")}
           className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-2xl outline-none text-white appearance-none transition-all focus:border-white/30"
-          style={{ borderColor: formik.values.gender ? theme.color : "rgba(255,255,255,0.1)" }}
+          style={{
+            borderColor: formik.values.gender
+              ? theme.color
+              : "rgba(255,255,255,0.1)",
+          }}
         >
-          <option value="" className="bg-black">Select Gender</option>
-          <option value="male" className="bg-black">Male</option>
-          <option value="female" className="bg-black">Female</option>
+          <option value="" className="bg-black">
+            Select Gender
+          </option>
+          <option value="male" className="bg-black">
+            Male
+          </option>
+          <option value="female" className="bg-black">
+            Female
+          </option>
         </select>
-        <FontAwesomeIcon icon={faChevronDown} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none text-xs" />
+        <FontAwesomeIcon
+          icon={faChevronDown}
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none text-xs"
+        />
       </div>
 
       {/* عرض الأخطاء المجمعة (اختياري) */}
       {Object.keys(formik.errors).length > 0 && formik.submitCount > 0 && (
-        <p className="text-red-500 text-xs text-center font-bold uppercase tracking-widest">Please check all fields</p>
+        <p className="text-red-500 text-xs text-center font-bold uppercase tracking-widest">
+          Please check all fields
+        </p>
       )}
     </div>
   );
