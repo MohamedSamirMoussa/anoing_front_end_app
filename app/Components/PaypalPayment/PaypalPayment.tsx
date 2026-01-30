@@ -27,6 +27,7 @@ const PaypalPayment = ({ amount }: { amount: IDonate }) => {
       
       const res = await dispatch(donateWithPaypalThunk(amount) as any);
 
+    console.log(res);
     
       if (res.payload) {
         return res.payload;

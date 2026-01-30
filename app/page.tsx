@@ -14,12 +14,12 @@ const DiscordChannel = React.lazy(() => import("./Components/DiscordChannel/Disc
 const Main = () => {
   const dispatch = useDispatch();
 const initialized = React.useRef(false)
-  // useEffect(() => {
-  //   if (!initialized.current) {
-  //     dispatch(refreshAuthThunk() as any);
-  //     initialized.current = true; 
-  //   }
-  // }, [dispatch]);
+  useEffect(() => {
+    if (!initialized.current) {
+      dispatch(refreshAuthThunk() as any);
+      initialized.current = true; 
+    }
+  }, [dispatch]);
 
   return (
     /* Consider adding a loading spinner or skeleton in fallback */
