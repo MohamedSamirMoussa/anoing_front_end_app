@@ -19,7 +19,7 @@ const initialState: ILeaderboard = {
 };
 export const getLeaderboardAtmThunk = createAsyncThunk(
   "leaderboard/atm10",
-  async (value, { rejectWithValue }) => {
+  async (value:string, { rejectWithValue }) => {
     try {
       const { data } = await api.get("/leaderboard/search", {
         params: { value },

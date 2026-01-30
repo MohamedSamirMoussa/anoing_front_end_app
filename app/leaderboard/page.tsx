@@ -57,7 +57,7 @@ const formatLastSeen = (dateString: string | number | Date) => {
 };
 
   useEffect(() => {
-    dispatch(getLeaderboardAtmThunk(activeServer) as any);
+    dispatch(getLeaderboardAtmThunk(activeServer as string) as any);
   }, [dispatch, activeServer]);
 
   if (isLoading) return <Loading />;
