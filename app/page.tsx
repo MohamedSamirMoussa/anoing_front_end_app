@@ -16,7 +16,7 @@ const Main = () => {
 
   useEffect(() => {
     // Attempt to restore session on mount
-    dispatch(refreshAuthThunk());
+    dispatch(refreshAuthThunk() as any);
   }, [dispatch]);
 
   return (
