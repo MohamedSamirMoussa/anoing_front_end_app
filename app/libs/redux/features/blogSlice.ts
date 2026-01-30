@@ -1,10 +1,21 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { api } from "../../api/api";
 import { handleThunkError } from "@/app/hooks/handlingErr";
 
-// تعريف الـ Interface الخاص بالـ State
+// 1. تحسين تعريف الأنواع (Interfaces) لجعل الكود أكثر أماناً
+interface IBlog {
+  _id: string;
+  title: string;
+  description: string;
+  image: {
+    secure_url: string;
+  };
+  createdAt: string;
+  [key: string]: any; 
+}
+
 interface IBlogState {
-  blog: any[]; // مصفوفة المنشورات
+  blog: IBlog[];
   loading: boolean;
   error: any;
 }
@@ -15,30 +26,22 @@ const initialState: IBlogState = {
   error: null,
 };
 
-/**
- * 1. Thunk لإنشاء منشور جديد
- * يستخدم FormData لأننا نرسل ملفات (صور)
- */
+// --- Thunks ---
+
 export const createBlogThunk = createAsyncThunk(
   "blog/createBlog",
   async (formData: FormData, { rejectWithValue }) => {
     try {
       const { data } = await api.post("/blog/create-blog", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" },
       });
-      // نرجع البيانات التي أرسلها السيرفر (عادة تحتوي على الـ Blog الجديد)
       return data;
     } catch (error: unknown) {
       return handleThunkError(error, rejectWithValue);
     }
-  },
+  }
 );
 
-/**
- * 2. Thunk لجلب كل المنشورات
- */
 export const getBlogThunk = createAsyncThunk(
   "blog/getBlogs",
   async (_, { rejectWithValue }) => {
@@ -48,64 +51,57 @@ export const getBlogThunk = createAsyncThunk(
     } catch (error: unknown) {
       return handleThunkError(error, rejectWithValue);
     }
-  },
+  }
 );
+
+// --- Slice ---
 
 const blogSlice = createSlice({
   name: "blog",
   initialState,
   reducers: {
-    // يمكنك إضافة Action يدوي هنا لو رغبت في مسح الأخطاء مثلاً
     clearBlogError: (state) => {
       state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
-      /* --- جلب المنشورات (Get Blogs) --- */
+      // جلب المدونات
       .addCase(getBlogThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getBlogThunk.fulfilled, (state, action) => {
+      .addCase(getBlogThunk.fulfilled, (state, action: PayloadAction<any>) => {
         state.loading = false;
-        // هنا نقوم بتخزين المصفوفة القادمة من السيرفر
-        // ملاحظة: تأكد إذا كان السيرفر يرسل المصفوفة داخل object اسمه result أو مباشرة
-        state.blog = action.payload.result || action.payload;
+        // التأكد من استخراج البيانات بشكل صحيح حسب شكل الـ API
+        state.blog = action.payload?.result || action.payload?.blogs || action.payload || []
         state.error = null;
       })
       .addCase(getBlogThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        state.blog = [];
       })
 
-      /* --- إنشاء منشور جديد (Create Blog) - التحديث اللحظي --- */
+      // إنشاء مدونة جديدة
       .addCase(createBlogThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
-        // ✅ ملاحظة هامة: لا نصفر state.blog هنا لكي تظل المنشورات القديمة ظاهرة
       })
-      .addCase(createBlogThunk.fulfilled, (state, action) => {
+      .addCase(createBlogThunk.fulfilled, (state, action: PayloadAction<any>) => {
         state.loading = false;
         state.error = null;
 
-        // استخراج المنشور الجديد من الـ Payload
-        const newBlog =
-          action.payload.result || action.payload.blog || action.payload;
+        // استخراج الكائن الجديد
+        const newBlog = action.payload.result || action.payload.blog || action.payload;
 
-        // ✅ إضافة المنشور الجديد فوراً في أول المصفوفة (التحديث اللحظي)
-        if (Array.isArray(state.blog)) {
-          state.blog.unshift(newBlog);
-        } else {
-          // في حال كانت الحالة ليست مصفوفة لأي سبب، نحولها لمصفوفة ونضع العنصر
-          state.blog = [newBlog];
+        // إضافة المنشور الجديد في بداية المصفوفة (Unshift)
+        if (newBlog) {
+          state.blog = [newBlog, ...state.blog];
         }
       })
       .addCase(createBlogThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-        // ✅ لا نصفر state.blog هنا لكي لا تختفي المنشورات إذا فشل الرفع
       });
   },
 });

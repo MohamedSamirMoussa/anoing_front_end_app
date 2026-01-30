@@ -43,7 +43,10 @@ const Home = () => {
     }
   };
 
-  if(loading) return <Loading />
+  console.log(loading);
+  
+
+  // if(loading) return <Loading />
 
   return (
     <div id="home" className="py-20 lg:py-0">
@@ -101,7 +104,7 @@ const Home = () => {
                   <button
                     key={serverName}
                     onClick={() => handleTabChange(serverName)}
-                    className={`px-4 py-2 rounded-xl transition-all duration-300`}
+                    className={`px-4 py-2 rounded-xl transition-all duration-300 w-full`}
                     style={{
                       background:
                         activeTab === serverName

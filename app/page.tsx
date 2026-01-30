@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import Loading from "./Components/Loading/Loading";
+// import Loading from "./Components/Loading/Loading";
 
 // Components
 const Home = React.lazy(() => import("./Components/Home/Home"));
@@ -13,7 +13,7 @@ const Main = () => {
 
   return (
     /* Consider adding a loading spinner or skeleton in fallback */
-    <React.Suspense fallback={<Loading />}>
+    <React.Suspense fallback={null}>
       <Home />
       <About />
       <OptionalMods />

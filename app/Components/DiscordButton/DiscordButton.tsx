@@ -3,6 +3,7 @@ import Image from "next/image";
 import discord from "../../../public/discord.png";
 import { useDispatch  } from "react-redux";
 import { getDiscordRedirect } from "@/app/libs/redux/features/authSlice";
+import toast from "react-hot-toast";
 
 
 const DiscordButton = () => {
@@ -14,6 +15,7 @@ const DiscordButton = () => {
 
     if (res.payload?.result) {
       window.location.href = res.payload.result.discordUrl;
+      toast.success("Login successfully")
     }
   };
 

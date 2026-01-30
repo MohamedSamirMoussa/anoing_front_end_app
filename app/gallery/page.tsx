@@ -28,7 +28,7 @@ const page = () => {
 
   return (
     <div className="gallery min-h-screen pt-10">
-      <div className="container w-[90%] mx-auto">
+      <div className="container w-[80%] mx-auto">
         <div className="inners">
           <section className="join-us my-8">
             <div className="inner">
@@ -53,22 +53,31 @@ const page = () => {
                   ></div>
 
                   {/* Image Stack - Logic for overlapping */}
-                  {[seven, five, two, three, one, four, six].map((img, i) => (
-                    <div
-                      key={i}
-                      className={`img w-[300px] transition-all duration-500 ${i === 3 ? "z-20 scale-110" : "z-10"}`}
-                      style={{
-                        marginLeft: i === 0 ? "0" : "-150px", // Creates the overlap effect
-                      }}
-                    >
-                      <Image
-                        src={img}
-                        width={600}
-                        alt={`gallery-img-${i}`}
-                        className="rounded-lg shadow-2xl"
-                      />
-                    </div>
-                  ))}
+                  <div className="seven  translate-x-60 transition-all duration-300">
+                    <Image src={seven} alt={`img-micecraft-${seven}`} />
+                  </div>
+
+                  <div className="five translate-x-40 transition-all duration-300">
+                    <Image src={five} alt={`img-micecraft-${five}`} />
+                  </div>
+                  <div className="two translate-x-20 transition-all duration-300">
+                    <Image src={two} alt={`img-micecraft-${two}`} />
+                  </div>
+
+                  <div className="three z-10">
+                    <Image src={three} alt={`img-micecraft-${three}`} />
+                  </div>
+                  <div className="one -translate-x-20 transition-all duration-300 z-20">
+                    <Image src={one} alt={`img-micecraft-${one}`} />
+                  </div>
+
+                  <div className="four -translate-x-40 transition-all duration-300">
+                    <Image src={four} alt={`img-micecraft-${four}`} />
+                  </div>
+
+                  <div className="six -translate-x-60 transition-all duration-300">
+                    <Image src={six} alt={`img-micecraft-${six}`} />
+                  </div>
                 </div>
 
                 {!isLogged ? (

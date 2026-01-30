@@ -139,10 +139,10 @@ const Page = () => {
   return (
     <div className="auth text-white py-12 min-h-screen flex items-center">
         {/* ... بقية كود الـ UI كما هو ... */}
-        <div className="container w-[90%] md:w-[80%] m-auto flex flex-col lg:flex-row justify-center items-center gap-5">
+        <div className="container w-[90%] md:w-[80%] m-auto flex justify-center items-center gap-20">
             {/* LEFT IMAGE */}
-            <div className="img hidden lg:block w-1/2">
-                <figure className="relative w-full transition-all duration-700">
+            <div className="img w-fit -translate-x-30">
+                <figure className="relative w-fit transition-all duration-700">
                     <div
                         className="absolute inset-0 blur-[120px] opacity-20 rounded-full -z-10"
                         style={{ background: theme.gradient }}
@@ -159,7 +159,7 @@ const Page = () => {
             </div>
 
             {/* RIGHT FORM */}
-            <div className="inputs-group flex flex-col gap-6 w-full lg:w-1/2 max-w-lg">
+            <div className="inputs-group flex flex-col w-1/2">
                 <div className="tabs border border-white/10 w-full flex p-1.5 rounded-2xl bg-white/5 backdrop-blur-sm">
                     {Object.values(TABS).map((tab) => (
                         <button

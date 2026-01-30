@@ -15,10 +15,17 @@ const Blogs = ({ theme, isLogged }: BlogsProps) => {
   const [isClient, setIsClient] = useState<boolean>(false);
   const blogs = useSelector((s: RootState) => s.blogs.blog);
     
+  console.log(blogs);
+  
+
   useEffect(() => {
     setIsClient(true);
     // @ts-ignore (Or use AppDispatch type for better TS support)
-    dispatch(getBlogThunk());
+
+      dispatch(getBlogThunk());
+;
+     
+
   }, [dispatch]);
 
   if (!isClient) return <div className="min-h-[200px]" />;
@@ -28,7 +35,7 @@ const Blogs = ({ theme, isLogged }: BlogsProps) => {
         {blogs?.map((blog: any, index: number) => (
           <div
             key={blog._id || index}
-            className="group blog rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-2xl"
+            className="group blog rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-2xl even:translate-y-20"
             style={{ 
               borderWidth: "1px", 
               borderColor: theme.color,

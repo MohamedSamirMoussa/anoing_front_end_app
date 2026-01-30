@@ -60,8 +60,6 @@ const formatLastSeen = (dateString: string | number | Date) => {
     dispatch(getLeaderboardAtmThunk(activeServer as string) as any);
   }, [dispatch, activeServer]);
 
-  if (isLoading) return <Loading />;
-
   return (
     <div className="leaderboard-container min-h-screen w-[90%] md:w-[80%] mx-auto py-20 px-4">
       <div className="py-10">
