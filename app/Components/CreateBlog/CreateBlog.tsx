@@ -1,32 +1,35 @@
 "use client";
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { createBlogThunk } from '@/app/libs/redux/features/blogSlice'; 
-import toast from 'react-hot-toast';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { createBlogThunk } from "@/app/libs/redux/features/blogSlice";
+import toast from "react-hot-toast";
 
 const CreateBlog = ({ theme }: { theme: any }) => {
   const dispatch = useDispatch<any>();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
+    title: "",
+    description: "",
     image: null as File | null,
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
-      setFormData(prev => ({ ...prev, image: e.target.files![0] }));
+      setFormData((prev) => ({ ...prev, image: e.target.files![0] }));
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.image || !formData.title) return toast.error("Please fill all fields");
+    if (!formData.image || !formData.title)
+      return toast.error("Please fill all fields");
 
     const data = new FormData();
     data.append("title", formData.title);
@@ -35,27 +38,36 @@ const CreateBlog = ({ theme }: { theme: any }) => {
 
     try {
       setLoading(true);
-     const res = await dispatch(createBlogThunk(data));
-     console.log(res);
-     
-      toast.success(res.payload.message);
-      setFormData({ title: '', description: '', image: null }); 
-      window.location.href = '/gallery'
+      const res = await dispatch(createBlogThunk(data));
+      if (createBlogThunk.fulfilled.match(res)) {
+        toast.success(res.payload?.message || "Post Published!");
+        setFormData({ title: "", description: "", image: null });
+        window.location.href = "/gallery";
+      } else {
+        // في حالة الـ Rejected
+        const errorMsg =
+          (res.payload as any)?.message || "Failed to create blog";
+        toast.error(errorMsg);
+      }
     } catch (err) {
-        console.log(err);
-        
-      toast.error("Failed to create blog");
+      toast.error("An unexpected error occurred");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="py-12 w-full md:w-[60%] lg:w-[50%] mx-auto backdrop-blur-xl p-8 rounded-3xl border" 
-         style={{ borderColor: `${theme.color}44`, background: 'rgba(255,255,255,0.03)' }}>
-      
-      <h2 className="text-4xl font-bold font-orbitron mb-8 text-center" 
-          style={{ color: theme.color }}>
+    <div
+      className="py-12 w-full md:w-[60%] lg:w-[50%] mx-auto backdrop-blur-xl p-8 rounded-3xl border"
+      style={{
+        borderColor: `${theme.color}44`,
+        background: "rgba(255,255,255,0.03)",
+      }}
+    >
+      <h2
+        className="text-4xl font-bold font-orbitron mb-8 text-center"
+        style={{ color: theme.color }}
+      >
         Share a Memory
       </h2>
 
@@ -70,7 +82,6 @@ const CreateBlog = ({ theme }: { theme: any }) => {
               onChange={handleChange}
               placeholder="Post Title"
               className="w-full bg-transparent border-b-2 border-gray-600 p-3 outline-none focus:border-white transition-colors text-white font-orbitron"
-             
             />
           </div>
         </div>
@@ -92,12 +103,21 @@ const CreateBlog = ({ theme }: { theme: any }) => {
           <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-600 rounded-2xl hover:border-white transition-all group-hover:bg-white/5">
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
               <p className="text-sm text-gray-400">
-                {formData.image ? 
-                  <span className="text-green-400 font-bold">{formData.image.name}</span> : 
-                  "Click to upload a cool image"}
+                {formData.image ? (
+                  <span className="text-green-400 font-bold">
+                    {formData.image.name}
+                  </span>
+                ) : (
+                  "Click to upload a cool image"
+                )}
               </p>
             </div>
-            <input type="file" className="hidden" onChange={handleFileChange} accept="image/*" />
+            <input
+              type="file"
+              className="hidden"
+              onChange={handleFileChange}
+              accept="image/*"
+            />
           </label>
         </div>
 
@@ -105,7 +125,7 @@ const CreateBlog = ({ theme }: { theme: any }) => {
         <button
           disabled={loading}
           className="w-full py-4 rounded-xl font-orbitron font-bold text-xl uppercase tracking-widest transition-all hover:scale-[1.02] active:scale-95 disabled:opacity-50"
-          style={{ background: theme.gradient, color: '#fff' }}
+          style={{ background: theme.gradient, color: "#fff" }}
         >
           {loading ? "Uploading..." : "Publish Post"}
         </button>
