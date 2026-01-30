@@ -3,7 +3,7 @@ import { store } from "../redux/store";
 import { refreshAuthThunk } from "../redux/features/authSlice";
 
 export const api = axios.create({
-  baseURL: "https://anoing-app.vercel.app/api/v1",
+  baseURL: `${process.env.BACK_END_URI}/api/v1`,
   withCredentials: true,
 });
 
