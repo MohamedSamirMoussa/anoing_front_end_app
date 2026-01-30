@@ -26,11 +26,11 @@ const Leaderboard = () => {
 
   // تأكد من الـ state path حسب الـ store.ts (سواء كان state.server أو state.theme)
   const activeServer = useSelector(
-    (state: RootState) => state.theme.activeServer || "Vanilla",
+    (state: RootState) => state.theme.activeServer || "atm 10",
   );
 
   // الثيم الحالي للسيرفر المختار
-  const currentTheme = themes[activeServer] || themes["Vanilla"];
+  const currentTheme = themes[activeServer] || themes["atm 10"];
   const users = data?.result?.leaderboard || [];
   const handleServerChange = (server: string) => {
     dispatch(setActiveServer(server));
