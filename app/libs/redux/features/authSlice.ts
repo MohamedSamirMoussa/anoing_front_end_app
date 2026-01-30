@@ -124,8 +124,8 @@ export const getDiscordRedirect = createAsyncThunk<any, any>(
     try {
       const { data } = await api.get("/auth/discord");
       return data;
-    } catch (err: unknown) {
-      return rejectWithValue(err.response?.data || err.message);
+    }  catch (error: unknown) {
+      return handleThunkError(error, rejectWithValue);
     }
   },
 );
