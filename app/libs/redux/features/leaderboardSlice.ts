@@ -1,18 +1,24 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../../api/api";
 
+interface LeaderboardResult {
+  result?: {
+    leaderboard: any[];
+  };
+}
+
+
 export interface ILeaderboard {
-  data: [];
+  data: LeaderboardResult | null; 
   error: any;
   loading: boolean;
 }
 
 const initialState: ILeaderboard = {
-  data: [],
+  data: null,
   error: null,
   loading: false,
 };
-
 export const getLeaderboardAtmThunk = createAsyncThunk(
   "leaderboard/atm10",
   async (serverName, { rejectWithValue }) => {

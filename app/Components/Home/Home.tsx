@@ -1,5 +1,4 @@
 "use client";
-import React, { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { faBoxOpen, faUsers } from "@fortawesome/free-solid-svg-icons";
