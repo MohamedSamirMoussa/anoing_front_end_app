@@ -10,7 +10,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCrown, faMedal } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import LiveSearch from "../Components/LiveSearch/LiveSearch";
-import Loading from "../Components/Loading/Loading";
 
 const servers: string[] = ["atm 10", "GTNH", "Vanilla"];
 
@@ -60,7 +59,12 @@ const formatLastSeen = (dateString: string | number | Date) => {
 };
 
   useEffect(() => {
-    dispatch(getLeaderboardAtmThunk(activeServer as string) as any);
+   const get = async ()=>{
+    const res = await  dispatch(getLeaderboardAtmThunk("atm 10") as any);
+    console.log(res);
+    
+   }
+   get()
   }, [dispatch, activeServer]);
 
   return (
