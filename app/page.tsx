@@ -13,10 +13,12 @@ const DiscordChannel = React.lazy(() => import("./Components/DiscordChannel/Disc
 
 const Main = () => {
   const dispatch = useDispatch();
-
+const initialized = React.useRef(false)
   useEffect(() => {
-    // Attempt to restore session on mount
-    dispatch(refreshAuthThunk() as any);
+    if (!initialized.current) {
+      dispatch(refreshAuthThunk() as any);
+      initialized.current = true; 
+    }
   }, [dispatch]);
 
   return (
