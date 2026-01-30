@@ -175,19 +175,6 @@ export const logoutThunk = createAsyncThunk<any, any>(
   },
 );
 
-export const refreshAuthThunk = createAsyncThunk(
-  "auth/refresh",
-  async (_, { rejectWithValue }) => {
-    try {
-      // السيرفر سيسحب الـ refresh_token من الكوكيز تلقائياً
-      const { data } = await api.get("/auth/refresh");
-      return data.result; // يحتوي على الـ access_token والـ user
-    } catch (error: unknown) {
-      return handleThunkError(error, rejectWithValue);;
-    }
-  },
-);
-
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -225,11 +212,6 @@ const authSlice = createSlice({
       .addCase(logoutThunk.fulfilled, (state) => {
         state.user = null;
         state.isLogged = false;
-      })
-      .addCase(refreshAuthThunk.fulfilled, (state, action) => {
-        state.isLogged = true;
-        state.user = action.payload.user;
-        state.token = action.payload.access_token;
       })
 
       .addMatcher(

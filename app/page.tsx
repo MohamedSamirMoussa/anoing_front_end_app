@@ -1,8 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
- // Recommended: typed hooks
-import { refreshAuthThunk } from "./libs/redux/features/authSlice";
-import { useDispatch } from "react-redux";
+import React from "react";
 import Loading from "./Components/Loading/Loading";
 
 // Components
@@ -13,14 +10,6 @@ const Community = React.lazy(() => import("./Components/Community/Community"));
 const DiscordChannel = React.lazy(() => import("./Components/DiscordChannel/DiscordChannel"));
 
 const Main = () => {
-  const dispatch = useDispatch();
-const initialized = React.useRef(false)
-  useEffect(() => {
-    if (!initialized.current) {
-      dispatch(refreshAuthThunk() as any);
-      initialized.current = true; 
-    }
-  }, [dispatch]);
 
   return (
     /* Consider adding a loading spinner or skeleton in fallback */

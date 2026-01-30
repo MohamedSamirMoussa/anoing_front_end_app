@@ -6,8 +6,6 @@ import { Toaster } from "react-hot-toast";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import "./globals.css";
-import Loading from "./Components/Loading/Loading";
-
 const Navbar = React.lazy(() => import("./Components/Navbar/Navbar"));
 const Footer = React.lazy(() => import("./Components/Footer/Footer"));
 const SnowBackground = React.lazy(() => import("./Components/SnowBackground/SnowBackground"));
