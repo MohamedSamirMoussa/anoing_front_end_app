@@ -14,7 +14,7 @@ const SnowBackground = () => {
     >
       <Snowfall
         snowflakeCount={200}
-        color={`${theme.color}22`} 
+        color={`${theme.color}40`} 
         radius={[0.5, 2.0]}
         speed={[0.5, 3.0]}
         wind={[-0.5, 2.0]}

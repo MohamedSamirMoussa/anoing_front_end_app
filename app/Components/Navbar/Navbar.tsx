@@ -68,16 +68,17 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathname]);
 
-  // ستايل موحد للينكات عشان م نكررش الكود
   const linkStyle = (sec: string) => ({
     color: activeSection === sec ? theme.color : "#fff",
-    "--hover-color": theme.color, // نستخدم CSS Variable للـ hover في ملف الـ CSS
+    "--hover-color": theme.color, 
   } as React.CSSProperties);
 
   if(loading) return <Loading />
 
   return (
-    <nav className="nav w-full shadow-xl fixed top-0 z-[999] backdrop-blur-md bg-[#00000033]">
+    <nav className="nav w-full shadow-xl fixed top-0 z-[999] backdrop-blur-md bg-[#00000033]"
+    style={{"--active-gradient" : theme.gradient} as React.CSSProperties}
+    >
       <section className="container md:w-[90%] lg:w-[80%] mx-auto h-20 flex items-center justify-between lg:justify-center">
         
         {/* Mobile Logo (Left-aligned on mobile) */}

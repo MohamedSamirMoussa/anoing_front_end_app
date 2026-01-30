@@ -1,4 +1,5 @@
-nav , .mobile ul {
+nav,
+.mobile ul {
   background: var(--nav-linear);
 }
 
@@ -20,14 +21,7 @@ nav , .mobile ul {
   z-index: -1;
   height: 2px;
   opacity: 0;
-  background: linear-gradient(
-    to right,
-    rgba(240, 193, 75, 0.3),
-    rgba(240, 193, 75, 1),
-    rgba(240, 193, 75, 1),
-    rgba(74, 0, 224, 1),
-    rgba(164, 0, 224, 0.3)
-  );
+  background: var(--active-gradient, linear-gradient(to right, #fff, #ccc));
   transition: opacity 0.3s ease-out;
 }
 
