@@ -21,9 +21,10 @@ export const getLeaderboardAtmThunk = createAsyncThunk(
   "leaderboard/atm10",
   async (value:string, { rejectWithValue }) => {
     try {
-      const { data } = await api.get("/leaderboard", {
+      const { data } = await api.get("/leaderboard/", {
         params: { value },
       });
+
 
       return data;
     } catch (error: unknown) {

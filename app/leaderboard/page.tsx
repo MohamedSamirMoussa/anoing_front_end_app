@@ -60,7 +60,7 @@ const formatLastSeen = (dateString: string | number | Date) => {
 
   useEffect(() => {
    const get = async ()=>{
-    const res = await  dispatch(getLeaderboardAtmThunk("atm 10") as any);
+    const res = await  dispatch(getLeaderboardAtmThunk(activeServer) as any);
     console.log(res);
     
    }
