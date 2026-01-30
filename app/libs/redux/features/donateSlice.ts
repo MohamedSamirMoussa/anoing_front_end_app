@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../../api/api";
 import { IDonate } from "@/app/Components/Donate/Donate";
+import { handleThunkError } from "@/app/hooks/handlingErr";
 
 interface DonateState {
   isLoading: boolean;
@@ -18,7 +19,7 @@ export const donateWithPaypalThunk = createAsyncThunk(
   "donate/paypal",
   async (amount: IDonate, { rejectWithValue }) => {
     try {
-      const {data} = await api.post(
+      const { data } = await api.post(
         "/checkout/paypal",
         { amount },
         {
@@ -29,23 +30,21 @@ export const donateWithPaypalThunk = createAsyncThunk(
       );
 
       return data.result;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || error.message);
+    } catch (error: unknown) {
+      return handleThunkError(error, rejectWithValue);
     }
   },
 );
 
-export const captureWithPaypalThunk = createAsyncThunk<string , any>(
+export const captureWithPaypalThunk = createAsyncThunk<string, any>(
   "paypal/capture",
   async (orderId, { rejectWithValue }) => {
     try {
       const { data } = await api.post(`/checkout/paypal/${orderId}`);
-      console.log(data)
+      console.log(data);
       return data.result;
-    } catch (error) {
-      console.log(error);
-      
-      return rejectWithValue(error.response?.data || error.message);
+    } catch (error: unknown) {
+      return handleThunkError(error, rejectWithValue);
     }
   },
 );

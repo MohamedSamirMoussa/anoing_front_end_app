@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../../api/api";
+import { handleThunkError } from "@/app/hooks/handlingErr";
 
 interface LeaderboardResult {
   result?: {
@@ -7,9 +8,8 @@ interface LeaderboardResult {
   };
 }
 
-
 export interface ILeaderboard {
-  data: LeaderboardResult | null; 
+  data: LeaderboardResult | null;
   error: any;
   loading: boolean;
 }
@@ -21,15 +21,15 @@ const initialState: ILeaderboard = {
 };
 export const getLeaderboardAtmThunk = createAsyncThunk(
   "leaderboard/atm10",
-  async (serverName:string, { rejectWithValue }) => {
+  async (serverName: string, { rejectWithValue }) => {
     try {
-      const { data } = await api.get(`/leaderboard/` , {
-        params:{serverName}
+      const { data } = await api.get(`/leaderboard/`, {
+        params: { serverName },
       });
 
       return data;
-    } catch (error: any) {
-      rejectWithValue(error.payload || error);
+    } catch (error: unknown) {
+      return handleThunkError(error, rejectWithValue);
     }
   },
 );

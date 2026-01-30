@@ -4,6 +4,7 @@ import { IGoogleUser } from "@/app/Components/GoogleButton/GoogleButton";
 import { IConfirmInterface } from "@/app/confirmPassword/page";
 import { IResetPass } from "@/app/newPassword/page";
 import { IFormValues } from "@/app/auth/page";
+import { handleThunkError } from "@/app/hooks/handlingErr";
 
 interface IUser {
   id: string;
@@ -38,8 +39,8 @@ export const loginThunk = createAsyncThunk<
   try {
     const response = await api.post("/auth/login", credentials);
     return response.data;
-  } catch (error: any) {
-    return rejectWithValue(error.response?.data || error.message);
+  } catch (error: unknown) {
+    return handleThunkError(error, rejectWithValue);
   }
 });
 
@@ -49,8 +50,8 @@ export const confirmEmailThunk = createAsyncThunk<any, IConfirmInterface>(
     try {
       const { data } = await api.post("/auth/confirm-email", values);
       return data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || error.message);
+    } catch (error: unknown) {
+      return handleThunkError(error, rejectWithValue);
     }
   },
 );
@@ -61,8 +62,8 @@ export const registerThunk = createAsyncThunk<any, IFormValues>(
     try {
       const response = await api.post("/auth/register", userData);
       return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || error.message);
+    } catch (error: unknown) {
+      return handleThunkError(error, rejectWithValue);
     }
   },
 );
@@ -74,8 +75,8 @@ export const forgetPasswordThunk = createAsyncThunk<any, { email: string }>(
       // إرسال values مباشرة (غالباً السيرفر يحتاج {email: ...})
       const { data } = await api.post("/auth/forget-password", values);
       return data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || error.message);
+    } catch (error: unknown) {
+      return handleThunkError(error, rejectWithValue);
     }
   },
 );
@@ -87,8 +88,8 @@ export const confirmPasswordThunk = createAsyncThunk<any, IConfirmInterface>(
       const { data } = await api.post("/auth/confirm-password", values);
 
       return data;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+    } catch (error:unknown) {
+      return handleThunkError(error, rejectWithValue);
     }
   },
 );
@@ -99,8 +100,8 @@ export const newPasswordThunk = createAsyncThunk<any, IResetPass>(
       const { data } = await api.post("/auth/reset-password", values);
 
       return data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || error.message);
+    } catch (error: unknown) {
+      return handleThunkError(error, rejectWithValue);
     }
   },
 );
@@ -111,8 +112,8 @@ export const signinWithGoogleThunk = createAsyncThunk<any, IGoogleUser>(
     try {
       const { data } = await api.post("/auth/google-login", values);
       return data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || error.message);
+    } catch (error: unknown) {
+      return handleThunkError(error, rejectWithValue);
     }
   },
 );
@@ -123,7 +124,7 @@ export const getDiscordRedirect = createAsyncThunk<any, any>(
     try {
       const { data } = await api.get("/auth/discord");
       return data;
-    } catch (err: any) {
+    } catch (err: unknown) {
       return rejectWithValue(err.response?.data || err.message);
     }
   },
@@ -139,8 +140,8 @@ export const checkAuthThunk = createAsyncThunk<any, any>(
         { withCredentials: true },
       );
       return data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || error.message);
+    } catch (error: unknown) {
+      return handleThunkError(error, rejectWithValue);
     }
   },
 );
@@ -152,8 +153,8 @@ export const resendOtpThunk = createAsyncThunk<any, { email: string }>(
       const { data } = await api.post("/auth/resend-otp", { email });
 
       return data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || error.message);
+    } catch (error: unknown) {
+      return handleThunkError(error, rejectWithValue);
     }
   },
 );
@@ -168,8 +169,8 @@ export const logoutThunk = createAsyncThunk<any, any>(
         { withCredentials: true },
       );
       return data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || error.message);
+    } catch (error: unknown) {
+      return handleThunkError(error, rejectWithValue);
     }
   },
 );
@@ -181,8 +182,8 @@ export const refreshAuthThunk = createAsyncThunk(
       // السيرفر سيسحب الـ refresh_token من الكوكيز تلقائياً
       const { data } = await api.get("/auth/refresh");
       return data.result; // يحتوي على الـ access_token والـ user
-    } catch (error: any) {
-      return rejectWithValue(error.response.data);
+    } catch (error: unknown) {
+      return handleThunkError(error, rejectWithValue);;
     }
   },
 );

@@ -6,12 +6,10 @@ import donate from "./features/donateSlice";
 import blogs from "./features/blogSlice";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
-import superSlice from './features/superSlice';
-
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth" , "theme" , "leaderboard" , "donate" , "superSlice" , "blogs"],
+  whitelist: ["auth" , "theme" , "leaderboard" , "donate" , "blogs"],
 };
 
 const rootReducer = combineReducers({
@@ -19,7 +17,6 @@ const rootReducer = combineReducers({
   theme,
   leaderboard,
   donate,
-  superSlice,
   blogs
 });
 

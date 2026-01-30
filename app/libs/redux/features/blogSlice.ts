@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../../api/api";
+import { handleThunkError } from "@/app/hooks/handlingErr";
 
 // تعريف الـ Interface الخاص بالـ State
 interface IBlogState {
@@ -29,10 +30,10 @@ export const createBlogThunk = createAsyncThunk(
       });
       // نرجع البيانات التي أرسلها السيرفر (عادة تحتوي على الـ Blog الجديد)
       return data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || error.message);
+    } catch (error: unknown) {
+      return handleThunkError(error, rejectWithValue);
     }
-  }
+  },
 );
 
 /**
@@ -44,10 +45,10 @@ export const getBlogThunk = createAsyncThunk(
     try {
       const { data } = await api.get("/blog/");
       return data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || error.message);
+    } catch (error: unknown) {
+      return handleThunkError(error, rejectWithValue);
     }
-  }
+  },
 );
 
 const blogSlice = createSlice({
@@ -57,7 +58,7 @@ const blogSlice = createSlice({
     // يمكنك إضافة Action يدوي هنا لو رغبت في مسح الأخطاء مثلاً
     clearBlogError: (state) => {
       state.error = null;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -70,7 +71,7 @@ const blogSlice = createSlice({
         state.loading = false;
         // هنا نقوم بتخزين المصفوفة القادمة من السيرفر
         // ملاحظة: تأكد إذا كان السيرفر يرسل المصفوفة داخل object اسمه result أو مباشرة
-        state.blog = action.payload.result || action.payload; 
+        state.blog = action.payload.result || action.payload;
         state.error = null;
       })
       .addCase(getBlogThunk.rejected, (state, action) => {
@@ -90,7 +91,8 @@ const blogSlice = createSlice({
         state.error = null;
 
         // استخراج المنشور الجديد من الـ Payload
-        const newBlog = action.payload.result || action.payload.blog || action.payload;
+        const newBlog =
+          action.payload.result || action.payload.blog || action.payload;
 
         // ✅ إضافة المنشور الجديد فوراً في أول المصفوفة (التحديث اللحظي)
         if (Array.isArray(state.blog)) {
