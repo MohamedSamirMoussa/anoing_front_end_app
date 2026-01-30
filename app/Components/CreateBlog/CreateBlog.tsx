@@ -70,7 +70,7 @@ const CreateBlog = ({ theme }: { theme: any }) => {
               onChange={handleChange}
               placeholder="Post Title"
               className="w-full bg-transparent border-b-2 border-gray-600 p-3 outline-none focus:border-white transition-colors text-white font-orbitron"
-              style={{ focusColor: theme.color }}
+             
             />
           </div>
         </div>
