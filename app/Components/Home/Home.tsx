@@ -13,12 +13,10 @@ import { RootState } from "@/app/libs/redux/store";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { data } = useSelector(
-    (s: RootState) => s.leaderboard,
-  );
+  const { data } = useSelector((s: RootState) => s.leaderboard);
   const users = data?.result?.leaderboard;
-  const activeTab = useSelector((state: RootState) => state.theme.activeServer);
-
+  const activeTab =
+    useSelector((state: RootState) => state.theme.activeServer) || "Vanilla";
   const currentTheme = themes[activeTab] || themes["Vanilla"];
 
   const handleTabChange = (tabName: string) => {
@@ -104,7 +102,7 @@ const Home = () => {
                 </span>
                 <p className="flex flex-col text-[20px]">
                   <span className="text-white">
-                    {users?.filter((user:any) => user.is_online).length}/
+                    {users?.filter((user: any) => user.is_online).length}/
                     {users?.length}
                   </span>
 

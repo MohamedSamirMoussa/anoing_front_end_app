@@ -1,6 +1,6 @@
 "use client";
 import Image from 'next/image';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBlogThunk } from '@/app/libs/redux/features/blogSlice';
 import { RootState } from '@/app/libs/redux/store';
@@ -12,13 +12,16 @@ interface BlogsProps {
 
 const Blogs = ({ theme, isLogged }: BlogsProps) => {
   const dispatch = useDispatch();
+  const [isClient, setIsClient] = useState<boolean>(false);
   const blogs = useSelector((s: RootState) => s.blogs.blog);
     
   useEffect(() => {
+    setIsClient(true);
     // @ts-ignore (Or use AppDispatch type for better TS support)
     dispatch(getBlogThunk());
   }, [dispatch]);
 
+  if (!isClient) return <div className="min-h-[200px]" />;
   return (
     <div className={`${!isLogged ? "disabled: opacity-30" : "opacity-100"} "blogs mb-20"`}>
       <div className="inner grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20">
