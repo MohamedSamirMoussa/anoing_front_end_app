@@ -99,7 +99,7 @@ const Page = () => {
                   <input
                     type="email"
                     id="email"
-                    name="email"
+                    
                     placeholder="Email Address"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}

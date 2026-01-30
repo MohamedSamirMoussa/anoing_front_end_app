@@ -3,14 +3,15 @@ import { successHandler } from "./successHandler";
 import { ErrorHandler } from "./handleErr";
 import { FormikValues } from "formik";
 import { AppDispatch } from "../libs/redux/store";
-import { Router } from "next/router";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+
 export const Onsubmit = async (
   values: FormikValues,
-  helpers: () => void,
+  helpers: () => void, 
   fnThunk: any,
   dispatch: AppDispatch,
-  router?:Router,
-  path?:string
+  router?: AppRouterInstance,
+  path?: string
 ) => {
 
   const res = await dispatch(fnThunk(values));
@@ -18,10 +19,14 @@ export const Onsubmit = async (
   if (res.meta.requestStatus === "rejected") {
     toast.error(ErrorHandler(res));
   }
+  
   if (res.meta.requestStatus === "fulfilled") {
-    helpers();
+    helpers(); 
     toast.success(successHandler(res));
-    router?.push(path as string)
+    
+    if (router && path) {
+      router.push(path);
+    }
   }
 
   return res;

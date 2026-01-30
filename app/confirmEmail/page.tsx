@@ -85,7 +85,6 @@ const Page = () => {
               <label className="pl-4 opacity-50"><Image src={emailIcon} alt="email" width={20} className="brightness-200" /></label>
               <input
                 type="email"
-                name="email"
                 placeholder="Email Address"
                 className="w-full bg-transparent p-5 outline-none"
                 {...formik.getFieldProps('email')}
@@ -98,7 +97,6 @@ const Page = () => {
               <label className="pl-4 opacity-50"><FontAwesomeIcon icon={faCode} /></label>
               <input
                 type="text"
-                name="otp"
                 placeholder="Enter 6-digit code"
                 className="w-full bg-transparent p-5 outline-none tracking-[0.5em] font-bold"
                 {...formik.getFieldProps('otp')}
