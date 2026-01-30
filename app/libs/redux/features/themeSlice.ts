@@ -5,7 +5,7 @@ interface ServerState {
 }
 
 const initialState: ServerState = {
-  activeServer: "Vanilla",
+  activeServer: "atm 10",
 };
 
 export const serverSlice = createSlice({
