@@ -1,7 +1,12 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { faBoxOpen, faUsers } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBoxOpen,
+  faCheck,
+  faCopy,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 // Redux Imports
@@ -10,10 +15,13 @@ import "./Home.css";
 import { setActiveServer } from "@/app/libs/redux/features/themeSlice";
 import { themes } from "@/app/hooks/themes";
 import { RootState } from "@/app/libs/redux/store";
+import { useState } from "react";
 
 const Home = () => {
+  const ipAddress = "cf2.anoing.com:25566";
   const dispatch = useDispatch();
   const { data } = useSelector((s: RootState) => s.leaderboard);
+  const [copied, setCopied] = useState(false);
   const users = data?.result?.leaderboard;
   const activeTab =
     useSelector((state: RootState) => state.theme.activeServer) || "Vanilla";
@@ -21,6 +29,17 @@ const Home = () => {
 
   const handleTabChange = (tabName: string) => {
     dispatch(setActiveServer(tabName));
+  };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(ipAddress);
+      setCopied(true);
+
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy!", err);
+    }
   };
 
   return (
@@ -119,7 +138,34 @@ const Home = () => {
                 </p>
               </div>
             </div>
-
+            <div className="my-2 ip relative group">
+              {" "}
+              {/* أضفنا relative هنا */}
+              <input
+                type="text"
+                value={ipAddress}
+                readOnly
+                className="w-full p-3 bg-[#1a1a1a] border border-[#333] rounded-xl cursor-default focus:outline-none text-gray-300 font-mono text-sm transition-all duration-300 group-hover:border-[#444]"
+                style={{ borderLeft: `4px solid ${currentTheme.color}` }} // إضافة لمسة جمالية بلون السيرفر
+              />
+              <button
+                onClick={handleCopy}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-2 hover:bg-[#333] rounded-lg transition-all duration-300 text-gray-400 hover:text-white"
+                title="Copy IP Address"
+              >
+                {copied ? (
+                  <FontAwesomeIcon icon={faCheck} className="text-green-500" />
+                ) : (
+                  <FontAwesomeIcon icon={faCopy} />
+                )}
+              </button>
+              {/* تنبيه صغير عند النسخ */}
+              {copied && (
+                <span className="absolute -top-8 right-0 text-xs font-bold text-green-500 animate-bounce">
+                  Copied!
+                </span>
+              )}
+            </div>
             {/* Discover More Button */}
             <div className="discover my-3 flex justify-center items-center">
               <Link
