@@ -6,12 +6,15 @@ interface ThemeProps {
   name: string;
   players: string;
   version: string;
-  color: string; // اللون الأساسي
-  shadowColor: string; // لون التوهج
-  hoverColor?: string; // اللون اللي هيكون --hover-color
-  primaryColor?: string; // اللون اللي هيكون --color-primary
-  gradient: string; // --aniong-color (linear gradient)
+  color: string;
+  shadowColor: string;
+  hoverColor?: string;
+  primaryColor?: string;
+  gradient: string;
   image: StaticImageData;
+  // أضف الأسطر التالية لحل المشكلة:
+  backgroundClip?: string; 
+  WebkitTextFillColor?: string;
 }
 
 export const themes: Record<string, ThemeProps> = {
