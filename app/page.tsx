@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
  // Recommended: typed hooks
 import { refreshAuthThunk } from "./libs/redux/features/authSlice";
 import { useDispatch } from "react-redux";
+import Loading from "./Components/Loading/Loading";
 
 // Components
 const Home = React.lazy(() => import("./Components/Home/Home"));
@@ -23,7 +24,7 @@ const initialized = React.useRef(false)
 
   return (
     /* Consider adding a loading spinner or skeleton in fallback */
-    <React.Suspense fallback={<div className="loading-screen" />}>
+    <React.Suspense fallback={<Loading />}>
       <Home />
       <About />
       <OptionalMods />

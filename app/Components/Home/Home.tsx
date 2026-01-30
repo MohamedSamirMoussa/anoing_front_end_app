@@ -16,11 +16,12 @@ import { setActiveServer } from "@/app/libs/redux/features/themeSlice";
 import { themes } from "@/app/hooks/themes";
 import { RootState } from "@/app/libs/redux/store";
 import { useState } from "react";
+import Loading from "../Loading/Loading";
 
 const Home = () => {
   const ipAddress = "cf2.anoing.com:25566";
   const dispatch = useDispatch();
-  const { data } = useSelector((s: RootState) => s.leaderboard);
+  const { data , loading } = useSelector((s: RootState) => s.leaderboard);
   const [copied, setCopied] = useState(false);
   const users = data?.result?.leaderboard;
   const activeTab =
@@ -41,6 +42,8 @@ const Home = () => {
       console.error("Failed to copy!", err);
     }
   };
+
+  if(loading) return <Loading />
 
   return (
     <div id="home" className="py-20 lg:py-0">

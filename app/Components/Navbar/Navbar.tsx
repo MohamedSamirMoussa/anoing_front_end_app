@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { IAuthState, logout, logoutThunk } from "@/app/libs/redux/features/authSlice";
 import type { AppDispatch, RootState } from "@/app/libs/redux/store";
 import { themes } from "@/app/hooks/themes";
+import Loading from "../Loading/Loading";
 
 const sections = ["home", "about", "op", "community", "gallery", "leaderboard"];
 
@@ -21,7 +22,7 @@ const Navbar = () => {
   const theme = themes[activeTab] || themes["Vanilla"];
   const pathname = usePathname();
   const dispatch = useDispatch<AppDispatch>();
-  const { isLogged }: IAuthState = useSelector((s: RootState) => s.auth);
+  const { isLogged , loading }: IAuthState = useSelector((s: RootState) => s.auth);
 
   // Logic لتحديد السكشن الفعال بناءً على المسار
   const getActiveSection = useCallback(() => {
@@ -72,6 +73,8 @@ const Navbar = () => {
     color: activeSection === sec ? theme.color : "#fff",
     "--hover-color": theme.color, // نستخدم CSS Variable للـ hover في ملف الـ CSS
   } as React.CSSProperties);
+
+  if(loading) return <Loading />
 
   return (
     <nav className="nav w-full shadow-xl fixed top-0 z-[999] backdrop-blur-md bg-[#00000033]">

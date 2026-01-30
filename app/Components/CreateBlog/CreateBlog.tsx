@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createBlogThunk } from "@/app/libs/redux/features/blogSlice";
 import toast from "react-hot-toast";
+import Loading from "../Loading/Loading";
 
 const CreateBlog = ({ theme }: { theme: any }) => {
   const dispatch = useDispatch<any>();
@@ -55,6 +56,8 @@ const CreateBlog = ({ theme }: { theme: any }) => {
       setLoading(false);
     }
   };
+
+  if(loading) return <Loading />
 
   return (
     <div

@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCrown, faMedal } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import LiveSearch from "../Components/LiveSearch/LiveSearch";
+import Loading from "../Components/Loading/Loading";
 
 const servers: string[] = ["atm 10", "GTNH", "Vanilla"];
 
@@ -32,31 +33,25 @@ const Leaderboard = () => {
     dispatch(setActiveServer(server));
   };
 
-const formatLastSeen = (dateString) => {
-  const now = new Date();
-  const lastSeen = new Date(dateString);
-  const diffInSeconds = Math.floor((now - lastSeen) / 1000);
+  const formatLastSeen = (dateString) => {
+    const now = new Date();
+    const lastSeen = new Date(dateString);
+    const diffInSeconds = Math.floor((now - lastSeen) / 1000);
 
-  if (diffInSeconds < 60) return `${diffInSeconds}s ago`;
-  const diffInMinutes = Math.floor(diffInSeconds / 60);
-  if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
-  const diffInHours = Math.floor(diffInMinutes / 60);
-  if (diffInHours < 24) return `${diffInHours}h ago`;
-  const diffInDays = Math.floor(diffInHours / 24);
-  return `${diffInDays}d ago`;
-};
-
+    if (diffInSeconds < 60) return `${diffInSeconds}s ago`;
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) return `${diffInHours}h ago`;
+    const diffInDays = Math.floor(diffInHours / 24);
+    return `${diffInDays}d ago`;
+  };
 
   useEffect(() => {
     dispatch(getLeaderboardAtmThunk(activeServer) as any);
   }, [dispatch, activeServer]);
 
-  if (isLoading)
-    return (
-      <div className="text-white text-center py-20 font-orbitron">
-        Loading Universe Legends...
-      </div>
-    );
+  if (isLoading) return <Loading />;
 
   return (
     <div className="leaderboard-container min-h-screen w-[90%] md:w-[80%] mx-auto py-20 px-4">
@@ -152,7 +147,7 @@ const formatLastSeen = (dateString) => {
                       </div>
                     </div>
                     <span
-                      className="text-white/20 font-black italic text-2xl border w-18 h-10 flex justify-center items-center rounded-2xl"
+                      className="text-white font-black italic text-xl border w-18 h-10 flex justify-center items-center rounded-2xl"
                       style={{ borderColor: currentTheme.color }}
                     >
                       {index === 0 ? (
@@ -178,7 +173,11 @@ const formatLastSeen = (dateString) => {
                         Total Playtime
                       </p>
                       <p className="text-white font-orbitron text-lg font-bold">
-                      {d > 0 ? `${d}d ${h}h` : h > 0 ? `${h}h ${m}m` : `${m}m`}
+                        {d > 0
+                          ? `${d}d ${h}h`
+                          : h > 0
+                            ? `${h}h ${m}m`
+                            : `${m}m`}
                         <span
                           className="text-xs ml-1"
                           style={{ color: currentTheme.color }}
@@ -198,7 +197,9 @@ const formatLastSeen = (dateString) => {
                         }}
                       ></span>
                       <span className="text-[10px] text-gray-400 uppercase">
-                        {user.is_online ? "Online Now" : formatLastSeen(user.lastSeen)}
+                        {user.is_online
+                          ? "Online Now"
+                          : formatLastSeen(user.lastSeen)}
                       </span>
                     </div>
                   </div>

@@ -28,6 +28,7 @@
     "react-hot-toast": "^2.6.0",
     "react-redux": "^9.2.0",
     "react-snowfall": "^2.4.0",
+    "react-spinners": "^0.17.0",
     "react-tsparticles": "^2.12.2",
     "redux-persist": "^6.0.0",
     "tsparticles": "^3.9.1",
