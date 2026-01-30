@@ -25,8 +25,8 @@ const Home = () => {
   const [copied, setCopied] = useState(false);
   const users = data?.result?.leaderboard;
   const activeTab =
-    useSelector((state: RootState) => state.theme.activeServer) || "Vanilla";
-  const currentTheme = themes[activeTab] || themes["Vanilla"];
+    useSelector((state: RootState) => state.theme.activeServer) || "atm 10";
+  const currentTheme = themes[activeTab] || themes["atm 10"];
 
   const handleTabChange = (tabName: string) => {
     dispatch(setActiveServer(tabName));

@@ -44,7 +44,7 @@ const page = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const activeServer = useSelector(
-    (state: RootState) => state.theme.activeServer || "Vanilla",
+    (state: RootState) => state.theme.activeServer || "atm 10",
   );
   const theme = themes[activeServer];
   const onSubmit = async (values:IResetPass, { resetForm, setSubmitting }:FormikHelpers<IResetPass>) => {

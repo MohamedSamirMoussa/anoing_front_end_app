@@ -5,9 +5,9 @@ import { themes } from "@/app/hooks/themes";
 import { RootState } from "@/app/libs/redux/store";
 const About = () => {
   const activeTab = useSelector(
-    (state: RootState) => state.theme.activeServer || "Vanilla",
+    (state: RootState) => state.theme.activeServer || "atm 10",
   );
-  const theme = themes[activeTab] || themes["Vanilla"];
+  const theme = themes[activeTab] || themes["atm 10"];
   return (
     <div id="about">
       <div className="container w-[80%] m-auto flex justify-center items-center h-screen ">

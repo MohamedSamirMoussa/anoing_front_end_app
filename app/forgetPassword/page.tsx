@@ -26,9 +26,9 @@ const Page = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const activeServer = useSelector(
-    (state: RootState) => state.theme.activeServer || "Vanilla",
+    (state: RootState) => state.theme.activeServer || "atm 10",
   );
-  const theme = themes[activeServer] || themes["Vanilla"];
+  const theme = themes[activeServer] || themes["atm 10"];
   const onSubmit = async (
     values:{email:string},
     { resetForm, setSubmitting }:FormikHelpers<{email:string}>,

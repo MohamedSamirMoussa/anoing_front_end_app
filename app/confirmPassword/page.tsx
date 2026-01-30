@@ -37,8 +37,8 @@ const Page = () => {
   const router = useRouter();
   const [timer, setTimer] = useState(0); 
 
-  const activeServer = useSelector((state: RootState) => state.theme.activeServer || "Vanilla");
-  const theme = themes[activeServer] || themes["Vanilla"];
+  const activeServer = useSelector((state: RootState) => state.theme.activeServer || "atm 10");
+  const theme = themes[activeServer] || themes["atm 10"];
 
   useEffect(() => {
     let interval: NodeJS.Timeout;

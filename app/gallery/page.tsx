@@ -18,9 +18,9 @@ import CreateBlog from "../Components/CreateBlog/CreateBlog";
 
 const page = () => {
   const activeServer = useSelector(
-    (state: RootState) => state.theme.activeServer || "Vanilla",
+    (state: RootState) => state.theme.activeServer || "atm 10",
   );
-  const theme = themes[activeServer] || themes["Vanilla"];
+  const theme = themes[activeServer] || themes["atm 10"];
 
   const { isLogged }: IAuthState = useSelector(
     (state: RootState) => state.auth,
