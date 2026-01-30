@@ -1,4 +1,3 @@
-import "../auth/login.css";
 import Image from "next/image";
 import two from "../../public/two.png";
 import Link from "next/link";
