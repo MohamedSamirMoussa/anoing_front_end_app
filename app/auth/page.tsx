@@ -1,0 +1,262 @@
+"use client";
+import "./auth.css";
+import Image from "next/image";
+import * as Yup from "yup";
+import toast from "react-hot-toast";
+import React, { useState } from "react";
+import two from "../../public/two.png";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { FormikHelpers, useFormik } from "formik";
+import GoogleButton from "../Components/GoogleButton/GoogleButton";
+const Register = React.lazy(() => import("../Components/Register/Register"));
+const Login = React.lazy(() => import("../Components/Login/Login"));
+import { loginThunk, registerThunk } from "../libs/redux/features/authSlice";
+import DiscordButton from "../Components/DiscordButton/DiscordButton";
+import { themes } from "../hooks/themes";
+import { RootState } from "../libs/redux/store";
+
+export interface IFormValues {
+  email: string;
+  password: string;
+  username: string;
+  confirmPassword: string;
+  gender?: string;
+}
+
+const initialValues: IFormValues = {
+  email: "",
+  password: "",
+  username: "",
+  confirmPassword: "",
+  gender: "",
+};
+
+const TABS = {
+  SIGN_IN: "Sign in",
+  SIGN_UP: "Sign up",
+} as const;
+
+export type TabType = (typeof TABS)[keyof typeof TABS];
+
+const loginSchema = Yup.object({
+  email: Yup.string().required("Email is required").email("Invalid email"),
+  password: Yup.string().required("Password is required"),
+});
+
+const registerSchema = Yup.object({
+  username: Yup.string().required("Username is required"),
+  email: Yup.string().required("Email is required").email("Invalid email"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(8, "Password must be at least 8 characters")
+    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .matches(/\d/, "Password must contain at least one number"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password")], "Passwords must match")
+    .required("Confirm password is required"),
+  gender: Yup.string().required("Gender is required"),
+});
+
+const Page = () => {
+  const [activeTab, setActiveTab] = useState<TabType>(TABS.SIGN_IN);
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const { isLogged } = useSelector((s: RootState) => s.auth);
+  const active = useSelector(
+    (state: RootState) => state.theme.activeServer || "Vanilla",
+  );
+  const theme = themes[active];
+
+  const handleSubmit = async (
+    values: IFormValues,
+    helpers: FormikHelpers<IFormValues>,
+  ) => {
+    try {
+      let submitData;
+      if (activeTab === TABS.SIGN_IN) {
+        submitData = { email: values.email, password: values.password };
+      } else {
+        submitData = {
+          username: values.username,
+          email: values.email,
+          password: values.password,
+          confirmPassword: values.confirmPassword,
+          gender: values.gender,
+        };
+      }
+
+      const thunk = activeTab === TABS.SIGN_IN ? loginThunk : registerThunk;
+      const redirectPath = activeTab === TABS.SIGN_IN ? "/" : "/confirmEmail";
+
+      
+
+      const result = await dispatch(thunk(submitData as any));
+      if (thunk.rejected.match(result)) {
+        toast.error((result?.payload as any)?.errMessage);
+        helpers.setSubmitting(false);
+        return;
+      }
+
+      if (thunk.fulfilled.match(result)) {
+        toast.success(result.payload.message);
+        helpers.resetForm();
+        helpers.setSubmitting(false);
+        setTimeout(() => {
+          router.push(redirectPath);
+        }, 1500);
+      }
+    } catch (error: any) {
+      toast.error(error.message || "An unexpected error occurred.");
+      helpers.setSubmitting(false);
+    }
+  };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: activeTab === TABS.SIGN_IN ? loginSchema : registerSchema,
+    onSubmit: handleSubmit,
+  });
+
+  const handleTabs = (tab: TabType) => {
+    formik.resetForm();
+    setActiveTab(tab);
+  };
+
+  if (isLogged) {
+    router.push("/");
+    return null;
+  }
+
+  return (
+    <div className="auth text-white py-12 min-h-screen flex items-center">
+      <div className="container w-[90%] md:w-[80%] m-auto flex flex-col lg:flex-row justify-center items-center gap-5">
+        {/* LEFT IMAGE */}
+        <div className="img hidden lg:block w-1/2">
+          <figure className="relative w-full transition-all duration-700">
+            {/* Glow effect behind image */}
+            <div
+              className="absolute inset-0 blur-[120px] opacity-20 rounded-full -z-10"
+              style={{ background: theme.gradient }}
+            ></div>
+            <Image
+              src={two}
+              alt="minecraft-char"
+              width={900}
+              height={900}
+              priority
+              className="w-full h-auto object-contain drop-shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+            />
+          </figure>
+        </div>
+
+        {/* RIGHT FORM */}
+        <div className="inputs-group flex flex-col gap-6 w-full lg:w-1/2 max-w-lg">
+          {/* TABS */}
+          <div className="tabs border border-white/10 w-full flex p-1.5 rounded-2xl bg-white/5 backdrop-blur-sm">
+            {Object.values(TABS).map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                className={`flex-1 text-center rounded-xl py-3 text-sm sm:text-base transition-all duration-500 font-bold uppercase tracking-wider`}
+                style={{
+                  background:
+                    activeTab === tab ? theme.gradient : "transparent",
+                  color: activeTab === tab ? "#000" : "#fff",
+                  boxShadow:
+                    activeTab === tab
+                      ? `0 4px 15px ${theme.shadowColor}`
+                      : "none",
+                }}
+                onClick={() => handleTabs(tab)}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          <div className="description">
+            <h1
+              className="text-4xl md:text-5xl font-black font-orbitron leading-tight"
+              style={{
+                backgroundImage: theme?.gradient, // استخدم backgroundImage بدل background
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover",
+                WebkitBackgroundClip: "text",
+                color: "transparent",
+              }}
+            >
+              ENTER YOUR UNIVERSE
+            </h1>
+            <p className="text-gray-400">
+              {activeTab === TABS.SIGN_IN
+                ? "Sign in to continue where your story left off."
+                : "Sign up to create your universe account."}
+            </p>
+          </div>
+
+          <form onSubmit={formik.handleSubmit} className="flex flex-col gap-3">
+            <React.Suspense
+              fallback={
+                <div className="h-40 flex items-center justify-center">
+                  Loading...
+                </div>
+              }
+            >
+              {activeTab === TABS.SIGN_IN ? (
+                <Login formik={formik} activeTab={activeTab} />
+              ) : (
+                <Register formik={formik} activeTab={activeTab} />
+              )}
+            </React.Suspense>
+
+            {/* SUBMIT BUTTON */}
+            <button
+              type="submit"
+              disabled={!formik.isValid || !formik.dirty || formik.isSubmitting}
+              className="w-full rounded-2xl py-4 font-orbitron font-bold tracking-[0.2em] uppercase text-black transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] active:scale-95"
+              style={{
+                background: theme.gradient,
+                boxShadow: `0 8px 25px -5px ${theme.shadowColor}`,
+              }}
+            >
+              {formik.isSubmitting ? "Processing..." : activeTab}
+            </button>
+
+            <div className="relative flex items-center my-2">
+              <div className="flex-grow border-t border-white/10"></div>
+              <span className="mx-4 text-gray-500 text-xs font-bold uppercase tracking-widest">
+                OR
+              </span>
+              <div className="flex-grow border-t border-white/10"></div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <GoogleButton />
+              <DiscordButton />
+            </div>
+          </form>
+
+          <p className="text-center text-gray-500 text-sm">
+            {activeTab === TABS.SIGN_IN ? "New explorer?" : "Already a member?"}
+            <button
+              type="button"
+              onClick={() =>
+                handleTabs(
+                  activeTab === TABS.SIGN_IN ? TABS.SIGN_UP : TABS.SIGN_IN,
+                )
+              }
+              className="ml-2 font-bold transition-colors"
+              style={{ color: theme.color }}
+            >
+              {activeTab === TABS.SIGN_IN ? "Create an account" : "Log in here"}
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Page;
