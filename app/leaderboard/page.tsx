@@ -33,7 +33,7 @@ const Leaderboard = () => {
     dispatch(setActiveServer(server));
   };
 
-  const formatLastSeen = (dateString) => {
+  const formatLastSeen = (dateString:string) => {
     const now = new Date();
     const lastSeen = new Date(dateString);
     const diffInSeconds = Math.floor((now - lastSeen) / 1000);
