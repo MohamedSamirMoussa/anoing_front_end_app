@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { refreshAuthThunk } from "./libs/redux/features/authSlice";
@@ -15,7 +16,7 @@ const Main = () => {
 
 useEffect(() => {
   // محاولة استعادة الجلسة عند فتح الموقع
-  dispatch(refreshAuthThunk());
+  dispatch(refreshAuthThunk() as any);
 }, [dispatch]);
 
   return (
