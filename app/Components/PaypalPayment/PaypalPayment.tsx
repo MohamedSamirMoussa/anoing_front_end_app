@@ -6,6 +6,7 @@ import {
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { useDispatch } from "react-redux";
 import { IDonate } from "../Donate/Donate";
+import toast from "react-hot-toast";
 
 
 interface IOptions {
@@ -27,8 +28,6 @@ const PaypalPayment = ({ amount }: { amount: IDonate }) => {
       
       const res = await dispatch(donateWithPaypalThunk(amount) as any);
 
-    console.log(res);
-    
       if (res.payload) {
         return res.payload;
       }
@@ -45,9 +44,10 @@ const handleApprove = async (data:{orderID:string}) => {
   
   // نبعت للباك إند
   const res = await dispatch(captureWithPaypalThunk(data.orderID) as any);
+  console.log(res);
   
   if (res.payload?.status === "COMPLETED") {
-     console.log("Payment Successful!");
+     toast.success(res.payload.status)
   }
 };
   return (
