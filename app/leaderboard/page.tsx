@@ -33,19 +33,28 @@ const Leaderboard = () => {
     dispatch(setActiveServer(server));
   };
 
-  const formatLastSeen = (dateString:any) => {
-    const now = new Date();
-    const lastSeen = new Date(dateString);
-    const diffInSeconds = Math.floor((now - lastSeen) / 1000);
+const formatLastSeen = (dateString: string | number | Date) => {
+  if (!dateString) return "Unknown";
+  
+  const now = new Date().getTime();
+  const lastSeen = new Date(dateString).getTime();
+  
+  // If the date is invalid, getTime() returns NaN
+  if (isNaN(lastSeen)) return "Never";
 
-    if (diffInSeconds < 60) return `${diffInSeconds}s ago`;
-    const diffInMinutes = Math.floor(diffInSeconds / 60);
-    if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    if (diffInHours < 24) return `${diffInHours}h ago`;
-    const diffInDays = Math.floor(diffInHours / 24);
-    return `${diffInDays}d ago`;
-  };
+  const diffInSeconds = Math.floor((now - lastSeen) / 1000);
+
+  if (diffInSeconds < 60) return `${diffInSeconds}s ago`;
+  
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+  
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (diffInHours < 24) return `${diffInHours}h ago`;
+  
+  const diffInDays = Math.floor(diffInHours / 24);
+  return `${diffInDays}d ago`;
+};
 
   useEffect(() => {
     dispatch(getLeaderboardAtmThunk(activeServer) as any);
