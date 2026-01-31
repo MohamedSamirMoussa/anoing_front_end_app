@@ -16,6 +16,9 @@ const Donate = React.lazy(() => import("./Components/Donate/Donate"));
 
 const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string;
 
+console.log(clientId);
+
+
 export const OrbitronFont = Orbitron({
   variable: "--font-orbitron",
   subsets: ["latin"],

@@ -25,9 +25,12 @@ export const getLeaderboardAtmThunk = createAsyncThunk(
         params: { serverName },
       });
       
-
+      console.log(data);
+      
       return data;
     } catch (error: unknown) {
+      console.log(error);
+      
       return handleThunkError(error, rejectWithValue);
     }
   },

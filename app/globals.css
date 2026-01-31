@@ -89,10 +89,9 @@ input:focus {
   outline: none;
 }
 
-h1:hover span {
+:where(h1):not(.description h1):hover span {
   width: 40%;
 }
-
 .animate-floating {
   animation: floating-subtle 3s ease-in-out infinite;
   -webkit-animation: floating-subtle 3s ease-in-out infinite;
@@ -118,7 +117,7 @@ h1:hover span {
     -moz-transform: translateY(0) rotate(0deg);
     -ms-transform: translateY(0) rotate(0deg);
     -o-transform: translateY(0) rotate(0deg);
-}
+  }
   50% {
     transform: translateY(-10px) rotate(2deg);
     -webkit-transform: translateY(-10px) rotate(2deg);
@@ -127,4 +126,3 @@ h1:hover span {
     -o-transform: translateY(-10px) rotate(2deg);
   }
 }
-
