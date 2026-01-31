@@ -13,7 +13,7 @@ const Main = () => {
 
   return (
     /* Consider adding a loading spinner or skeleton in fallback */
-    <React.Suspense fallback={<Loading />}>
+    <React.Suspense fallback={null}>
       <Home />
       <About />
       <OptionalMods />

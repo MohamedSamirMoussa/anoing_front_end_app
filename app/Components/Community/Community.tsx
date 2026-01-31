@@ -197,9 +197,9 @@ const Community = () => {
                 </h3>
               </div>
 
-              <p className="text-gray-400 font-roboto leading-relaxed text-xs md:text-sm group-hover:text-white transition-colors">
+              <span className="text-gray-400 font-roboto leading-relaxed text-xs md:text-sm group-hover:text-white transition-colors">
                 {step.description}
-              </p>
+              </span>
             </div>
           ))}
         </div>

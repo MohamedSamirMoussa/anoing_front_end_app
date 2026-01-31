@@ -107,16 +107,16 @@ const page = () => {
         </div>
       </div>
 
-      <div className="absolute top-0 right-0 -z-10 translate-x-225 -translate-y-10">
+      <div className="fixed top-0 right-0 -z-10 translate-x-225 -translate-y-10">
         <Image src={memories} alt="memories" />
       </div>
-      <div className="absolute top-0 left-0 -z-10 -translate-x-24 translate-y-40">
+      <div className="fixed top-0 left-0 -z-10 -translate-x-24 translate-y-40">
         <Image src={memories} alt="memories" />
       </div>
-      <div className="absolute top-0 left-0 -z-10 translate-x-30 translate-y-95">
+      <div className="fixed top-0 left-0 -z-10 translate-x-30 translate-y-95">
         <Image src={memories} alt="memories" />
       </div>
-      <div className="absolute top-0 left-0 -z-10 translate-x-10 translate-y-145">
+      <div className="fixed top-0 left-0 -z-10 translate-x-100 translate-y-145">
         <Image src={memories} alt="memories" />
       </div>
     </div>

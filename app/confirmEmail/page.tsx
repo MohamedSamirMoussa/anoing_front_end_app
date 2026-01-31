@@ -6,12 +6,12 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import emailIcon from "../../public/email.png";
 import Image from "next/image";
-import { themes } from "../hooks/themes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCode, faSync } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
 import { IConfirmInterface } from "../confirmPassword/page";
 import { RootState } from "../libs/redux/store";
+import { themes } from "../hooks/themes";
 
 const initialValues:IConfirmInterface = {
   email: "",
@@ -42,7 +42,7 @@ const Page = () => {
     }
     resetForm()
     toast.success(result.payload?.message || "Email verified!");
-    router.push("/login"); // التوجيه بعد النجاح
+    router.push("/login")
   };
 
   const handleResendOtp = async () => {

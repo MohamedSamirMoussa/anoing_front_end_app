@@ -14,7 +14,7 @@ const SnowBackground = React.lazy(
 );
 const Donate = React.lazy(() => import("./Components/Donate/Donate"));
 
-const clientId = process.env.NEXT_PUNLIC_GOOGLE_CLIENT_ID as string;
+const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string;
 
 export const OrbitronFont = Orbitron({
   variable: "--font-orbitron",

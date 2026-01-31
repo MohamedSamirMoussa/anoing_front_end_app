@@ -12,7 +12,6 @@ interface ThemeProps {
   primaryColor?: string;
   gradient: string;
   image: StaticImageData;
-  // أضف الأسطر التالية لحل المشكلة:
   backgroundClip?: string; 
   WebkitTextFillColor?: string;
 }
@@ -29,10 +28,10 @@ export const themes: Record<string, ThemeProps> = {
     gradient: `linear-gradient(to left, rgba(75, 221, 240, 1), rgba(74, 0, 224, 1))`,
     image: blue,
   },
-  "GTNH": {
-    name: "GregTech: New Horizons",
+  "AllTheMons": {
+    name: "All The Mons",
     players: "3/15",
-    version: "GregTech NH",
+    version: "All The Mons",
     color: "#f43f5e", // الأحمر/الوردي
     shadowColor: "rgba(244, 63, 94, 0.5)",
     hoverColor: "rgba(245, 34, 45, 1);", // هيتحول لـ --hover-color
@@ -42,10 +41,10 @@ export const themes: Record<string, ThemeProps> = {
     backgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
-  "Vanilla": {
-    name: "Vanilla",
+  "SB4": {
+    name: "SB4",
     players: "2/10",
-    version: "Vanilla",
+    version: "SB4",
     backgroundClip: "text",
     WebkitTextFillColor: "transparent",
     color: "#f0c14b", // الأصفر الأساسي
