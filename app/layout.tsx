@@ -42,7 +42,7 @@ export default function RootLayout({
         suppressHydrationWarning={true}
         className={`${OrbitronFont.variable} ${RobotoFont.variable} antialiased relative bg-[#050505]`}
       >
-        <div className="w-[90%] mx-auto">
+
           <ClientProvider>
             <GoogleOAuthProvider clientId={clientId}>
               <div className="z-10 relative all">
@@ -74,7 +74,7 @@ export default function RootLayout({
               </div>
             </GoogleOAuthProvider>
           </ClientProvider>
-        </div>
+
       </body>
     </html>
   );
