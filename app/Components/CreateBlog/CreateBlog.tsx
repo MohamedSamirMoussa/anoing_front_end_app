@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createBlogThunk } from "@/app/libs/redux/features/blogSlice";
 import toast from "react-hot-toast";
-import Loading from "../Loading/Loading";
+import Loading from "@/app/Loading/page";
 
 const CreateBlog = ({ theme }: { theme: any }) => {
   const dispatch = useDispatch<any>();
@@ -40,6 +40,8 @@ const CreateBlog = ({ theme }: { theme: any }) => {
     try {
       setLoading(true);
       const res = await dispatch(createBlogThunk(data));
+      console.log(res);
+      
       if (createBlogThunk.fulfilled.match(res)) {
         toast.success(res.payload?.message || "Post Published!");
         setFormData({ title: "", description: "", image: null });
@@ -47,7 +49,7 @@ const CreateBlog = ({ theme }: { theme: any }) => {
       } else {
         // في حالة الـ Rejected
         const errorMsg =
-          (res.payload as any)?.message || "Failed to create blog";
+          `${(res.payload as any)?.errMessage}..please login again` || "Failed to create blog";
         toast.error(errorMsg);
       }
     } catch (err) {

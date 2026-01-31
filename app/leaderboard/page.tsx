@@ -11,12 +11,12 @@ import { faCrown, faMedal } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import LiveSearch from "../Components/LiveSearch/LiveSearch";
 
-const servers: string[] = ["atm 10", "GTNH", "Vanilla"];
+const servers: string[] = ["atm 10", "ALL_THE_MOON", "SB4"];
 
 const Leaderboard = () => {
   const dispatch = useDispatch();
 
-  const { data, isLoading }: any = useSelector(
+  const { data }: any = useSelector(
     (state: RootState) => state.leaderboard,
   );
 
@@ -58,12 +58,8 @@ const formatLastSeen = (dateString: string | number | Date) => {
 };
 
   useEffect(() => {
-   const get = async ()=>{
-    const res = await  dispatch(getLeaderboardAtmThunk(activeServer) as any);
-    console.log(res);
-    
-   }
-   get()
+   dispatch(getLeaderboardAtmThunk(activeServer) as any);
+
   }, [dispatch, activeServer]);
 
   return (
@@ -88,7 +84,7 @@ const formatLastSeen = (dateString: string | number | Date) => {
             </div>
           </div>
 
-          <div className="left flex flex-col items-center gap-6">
+          <div className="left flex flex-col items-center gap-6 ">
             <LiveSearch currentTheme={currentTheme} />
 
             <div className="servers flex bg-[#00000040] p-1 rounded-xl border border-[#ffffff10]">

@@ -28,12 +28,12 @@ const page = () => {
 
   return (
     <div className="gallery min-h-screen pt-10">
-      <div className="container w-[90%] mx-auto">
+      <div className="container mx-auto">
         <div className="inners">
           <section className="join-us my-8">
-            <div className="inner w-full mx-auto">
-              <div className="headers text-center w-full">
-                <div className="inner w-full">
+            <div className="inner mx-auto">
+              <div className="headers text-center relative">
+                <div className="inner">
                   <h1
                     className="text-5xl md:text-8xl font-bold font-orbitron py-10 md:py-0"
                     style={{
@@ -47,47 +47,47 @@ const page = () => {
                   </h1>
 
                   {/* Stacked Images Animation Container */}
-                  <div className="group-img hidden md:flex justify-center items-center hover:scale-115 scale-100 transition-transform duration-700 relative py-16 w-fit">
+                  <div className="group-img grid  grid-cols-7 scale-110 hover:scale-115  transition-transform duration-700 py-16">
                     <div
-                      className="absolute inset-0 blur-[120px] opacity-20 rounded-full -z-10"
+                      className="absolute inset-0 blur-[200px] opacity-20 rounded-full -z-10"
                       style={{ background: theme.gradient }}
                     ></div>
 
                     {/* Image Stack - Logic for overlapping */}
-                    <div className="seven translate-x-60 transition-all duration-300">
-                      <Image src={seven} alt={`img-micecraft-${seven}`} />
+                    <div className="seven md:translate-x-30 lg:translate-x-60 transition-all duration-300">
+                      <Image src={seven} alt={`img-micecraft-${seven}`} fill />
                     </div>
 
-                    <div className="five translate-x-40  transition-all duration-300">
-                      <Image src={five} alt={`img-micecraft-${five}`} />
+                    <div className="five md:translate-x-20 lg:translate-x-40  transition-all duration-300">
+                      <Image src={five} alt={`img-micecraft-${five}`} fill/>
                     </div>
-                    <div className="two translate-x-20  transition-all duration-300">
-                      <Image src={two} alt={`img-micecraft-${two}`} />
+                    <div className="two md:translate-x-10 lg:translate-x-20  transition-all duration-300">
+                      <Image src={two} alt={`img-micecraft-${two}`} fill/>
                     </div>
 
                     <div className="three z-10">
-                      <Image src={three} alt={`img-micecraft-${three}`} />
+                      <Image src={three} alt={`img-micecraft-${three}`}/>
                     </div>
-                    <div className="one -translate-x-20 transition-all duration-300 z-20">
-                      <Image src={one} alt={`img-micecraft-${one}`} />
-                    </div>
-
-                    <div className="four -translate-x-40 transition-all z-30 duration-300">
-                      <Image src={four} alt={`img-micecraft-${four}`} />
+                    <div className="one md:-translate-x-10 lg:-translate-x-20 transition-all duration-300 z-20">
+                      <Image src={one} alt={`img-micecraft-${one}`} fill/>
                     </div>
 
-                    <div className="six -translate-x-60 transition-all duration-300 z-40">
-                      <Image src={six} alt={`img-micecraft-${six}`} />
+                    <div className="four md:-translate-x-20 lg:-translate-x-40 transition-all z-30 duration-300">
+                      <Image src={four} alt={`img-micecraft-${four}`} fill/>
+                    </div>
+
+                    <div className="six md:-translate-x-30 lg:-translate-x-60 transition-all duration-300 z-40">
+                      <Image src={six} alt={`img-micecraft-${six}`} fill/>
                     </div>
                   </div>
                 </div>
 
                 {!isLogged ? (
-                  <div className="join-us-btn mt-10">
+                  <div className="join-us-btn">
                     <Link
                       href={"/auth"}
                       style={{ background: theme.gradient }}
-                      className="px-8 py-4 text-xl md:text-2xl tracking-wider rounded-2xl text-white font-bold font-orbitron uppercase transition-opacity hover:opacity-90"
+                      className="px-8 py-4 text-xl md:text-2xl tracking-wider rounded-2xl text-white font-bold font-orbitron uppercase"
                     >
                       Join us
                     </Link>

@@ -23,7 +23,7 @@ const OptionalMods = () => {
     >
       <div className="description text-center mb-8">
         <h1
-          className="font-orbitron text-3xl md:text-4xl lg:text-5xl font-semibold my-2 flex flex-col justify-center items-center"
+          className="font-orbitron text-3xl hover:scale-105 transition-all duration-300 md:text-4xl lg:text-5xl font-semibold my-2 flex flex-col justify-center items-center"
           style={{
             backgroundImage: theme?.gradient,
             backgroundRepeat: "no-repeat",
@@ -35,9 +35,8 @@ const OptionalMods = () => {
         >
           Recommended Client-Side Mods
           <span
-            className="my-2"
+            className="my-2 w-1/5 transition-all duration-300"
             style={{
-              width: "30%",
               height: "2px",
               background: theme.gradient,
             }}

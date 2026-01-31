@@ -9,11 +9,11 @@ const About = () => {
   );
   const theme = themes[activeTab] || themes["atm 10"];
   return (
-    <div id="about">
-      <div className="container w-[80%] m-auto flex justify-center items-center h-screen ">
+    <div id="about" className="my-40 py-30 md:my-0 md:py-0">
+      <div className="container w-[80%] m-auto flex justify-center items-center md:mt-10 md:pt-10">
         <div className="about-description flex flex-col justify-center items-center gap-4 py-3">
-          <h2
-            className="lg:text-6xl text-center text-5xl font-semibold relative py-3 flex flex-col justify-center items-center"
+          <h1
+            className="lg:text-6xl hover:scale-105 transition-all duration-300 text-center text-5xl font-semibold relative py-3 flex flex-col justify-center items-center"
             style={{
               backgroundImage: theme?.gradient,
               backgroundRepeat: "no-repeat",
@@ -24,15 +24,11 @@ const About = () => {
           >
             Welcome to Anoing
             <span 
-            className="my-2"
+            className="my-2 w-[30%] h-[1px] transition-all duration-300"
             style={{
-              bottom:"0",
-              right:"0",
-              width:"30%",
-              height:"2px",
               background:theme.gradient,
             }}></span>
-          </h2>
+          </h1>
           <p className="text-white text-center">
             Dive into the definitive modded experience on Mirinda with All The
             Mods 10! Explore an incredible array of mods, traverse breathtaking
@@ -42,7 +38,7 @@ const About = () => {
           </p>
           <Link
             href={"#community"}
-            className="rounded-4xl my-2 font-orbitron font-semibold"
+            className="rounded-4xl my-2 font-orbitron font-semibold hover:scale-105 hover:shadow-lg shadow-[#ffffff30] transition-all duration-300"
             style={{
               backgroundImage: theme.gradient
             }}

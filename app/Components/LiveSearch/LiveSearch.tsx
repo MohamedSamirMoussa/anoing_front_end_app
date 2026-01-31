@@ -49,7 +49,7 @@ const LiveSearch = ({ currentTheme }: { currentTheme: any }) => {
 
   return (
     <div ref={searchContainerRef} className="relative w-full max-w-md">
-      <div className="relative z-50">
+      <div className="relative z-10">
         <input
           name="search"
           type="text"

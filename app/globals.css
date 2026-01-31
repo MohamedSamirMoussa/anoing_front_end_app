@@ -44,12 +44,13 @@ body {
   background: var(--body-linear);
 }
 
-nav , .all {
+nav,
+.all {
   z-index: 40;
 }
 
 h1 span,
-.about-description h2,
+.about-description h1,
 .description h1 {
   background: var(--aniong-color);
   -webkit-background-clip: text;
@@ -87,3 +88,43 @@ input:focus {
   border: none;
   outline: none;
 }
+
+h1:hover span {
+  width: 40%;
+}
+
+.animate-floating {
+  animation: floating-subtle 3s ease-in-out infinite;
+  -webkit-animation: floating-subtle 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes floating-subtle {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+    -webkit-transform: translateY(0) rotate(0deg);
+    -moz-transform: translateY(0) rotate(0deg);
+    -ms-transform: translateY(0) rotate(0deg);
+    -o-transform: translateY(0) rotate(0deg);
+}
+  50% {
+    transform: translateY(-10px) rotate(2deg);
+    -webkit-transform: translateY(-10px) rotate(2deg);
+    -moz-transform: translateY(-10px) rotate(2deg);
+    -ms-transform: translateY(-10px) rotate(2deg);
+    -o-transform: translateY(-10px) rotate(2deg);
+  }
+}
+

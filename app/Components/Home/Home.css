@@ -1,7 +1,4 @@
-#home p {
-  color: var(--hover-color);
-  font-size: 1.8rem;
-}
+
 h1 {
   position: relative;
 }
@@ -23,7 +20,7 @@ h1 {
 .players,
 .mod,
 .login .card,
-.htj {
+.htj , .ip {
   background-color: var(--color-bg-secondary);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -44,47 +41,8 @@ h1 {
   text-transform: uppercase;
 }
 
-.players span {
-  color: var(--hover-color);
-}
 
-.players p span,
 .mod span {
   color: var(--color-p);
-  font-size: 1rem;
 }
 
-.animate-floating {
-  animation: floating-subtle 3s ease-in-out infinite;
-  -webkit-animation: floating-subtle 3s ease-in-out infinite;
-}
-
-@keyframes floating {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
-
-@keyframes floating-subtle {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-    -webkit-transform: translateY(0) rotate(0deg);
-    -moz-transform: translateY(0) rotate(0deg);
-    -ms-transform: translateY(0) rotate(0deg);
-    -o-transform: translateY(0) rotate(0deg);
-}
-  50% {
-    transform: translateY(-10px) rotate(2deg);
-    -webkit-transform: translateY(-10px) rotate(2deg);
-    -moz-transform: translateY(-10px) rotate(2deg);
-    -ms-transform: translateY(-10px) rotate(2deg);
-    -o-transform: translateY(-10px) rotate(2deg);
-  }
-}

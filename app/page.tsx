@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-// import Loading from "./Components/Loading/Loading";
 
 // Components
 const Home = React.lazy(() => import("./Components/Home/Home"));
@@ -8,12 +7,13 @@ const About = React.lazy(() => import("./Components/About/About"));
 const OptionalMods = React.lazy(() => import("./Components/OptionalMods/OptionalMods"));
 const Community = React.lazy(() => import("./Components/Community/Community"));
 const DiscordChannel = React.lazy(() => import("./Components/DiscordChannel/DiscordChannel"));
+import Loading from './Loading/page';
 
 const Main = () => {
 
   return (
     /* Consider adding a loading spinner or skeleton in fallback */
-    <React.Suspense fallback={null}>
+    <React.Suspense fallback={<Loading />}>
       <Home />
       <About />
       <OptionalMods />

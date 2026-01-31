@@ -153,7 +153,7 @@ const Community = () => {
       <div className="desc w-full flex justify-center flex-col items-center gap-5">
         <h1
           // تعديل حجم الخط (text-3xl للموبايل)
-          className="text-3xl md:text-4xl lg:text-5xl font-orbitron font-semibold text-center flex flex-col justify-center items-center"
+          className="text-3xl md:text-4xl hover:scale-105 transition-all duration-300 lg:text-5xl font-orbitron font-semibold text-center flex flex-col justify-center items-center"
           style={{
             backgroundImage: theme?.gradient,
             backgroundRepeat: "no-repeat",
@@ -165,9 +165,8 @@ const Community = () => {
         >
           How to Join Our Server
           <span
-            className="my-2"
+            className="my-2 w-1/3 transition-all duration-300"
             style={{
-              width: "30%",
               height: "2px",
               background: theme.gradient,
             }}

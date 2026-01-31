@@ -48,6 +48,8 @@ const handleApprove = async (data:{orderID:string}) => {
   
   if (res.payload?.status === "COMPLETED") {
      toast.success(res.payload.status)
+  } else {
+    toast.error('Something went wrong ... Please try again')
   }
 };
   return (

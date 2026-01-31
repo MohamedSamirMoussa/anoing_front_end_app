@@ -14,11 +14,12 @@ const Footer = () => {
   return (
     <div
       style={{
-        background: "linear-gradient(to right, #0A0A14F2, #08080F)",
+        background: "linear-gradient(to right, #0A0A14, #08080F)",
       }}
+      className="py-15"
     >
       <div
-        className="w-[80%] mx-auto flex flex-col justify-center items-center mt-25 py-15
+        className="w-[90%] mx-auto flex flex-col justify-center items-center  py-5
     "
       >
         <h3
@@ -44,7 +45,7 @@ const Footer = () => {
         <p className="opacity-30 text-white py-5">
           Legendary Adventures Begin Here
         </p>
-        <p className="text-lg text-white">
+        <p className="text-[14px] md:text-lg text-white ">
           © 2026 Anoing • Crafted with{" "}
           <span className="mx-2">
             <FontAwesomeIcon

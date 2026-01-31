@@ -16,7 +16,7 @@ import DiscordButton from "../Components/DiscordButton/DiscordButton";
 import { themes } from "../hooks/themes";
 // ✅ تأكد من استيراد AppDispatch لحل مشكلة الـ Dispatch
 import { RootState, AppDispatch } from "../libs/redux/store"; 
-
+import memories from '../../public/Memories.png'
 export interface IFormValues {
   email: string;
   password: string;
@@ -137,12 +137,12 @@ const Page = () => {
   if (isLogged) return null;
 
   return (
-    <div className="auth text-white py-12 min-h-screen flex items-center">
+    <div className="auth text-white min-h-screen flex items-center mt-22">
         {/* ... بقية كود الـ UI كما هو ... */}
-        <div className="container w-[90%] md:w-[80%] m-auto flex justify-center items-center gap-20">
+        <div className="container w-[90%] m-auto grid lg:grid-cols-2">
             {/* LEFT IMAGE */}
-            <div className="img w-fit -translate-x-30">
-                <figure className="relative w-fit transition-all duration-700">
+            <div className="img w-full translate-y-60 -translate-x-15 -z-10 hidden lg:flex">
+                <figure className="relative transition-all duration-700 w-full">
                     <div
                         className="absolute inset-0 blur-[120px] opacity-20 rounded-full -z-10"
                         style={{ background: theme.gradient }}
@@ -150,8 +150,9 @@ const Page = () => {
                     <Image
                         src={two}
                         alt="minecraft-char"
-                        width={900}
-                        height={900}
+                        width={1200}
+                        height={1200}
+                        quality={75}
                         priority
                         className="w-full h-auto object-contain drop-shadow-[0_0_30px_rgba(0,0,0,0.5)]"
                     />
@@ -159,8 +160,8 @@ const Page = () => {
             </div>
 
             {/* RIGHT FORM */}
-            <div className="inputs-group flex flex-col w-1/2">
-                <div className="tabs border border-white/10 w-full flex p-1.5 rounded-2xl bg-white/5 backdrop-blur-sm">
+            <div className="inputs-group flex flex-col w-full">
+                <div className="tabs border border-white/10 w-full flex p-1.5 rounded-2xl bg-white/5 backdrop-blur-sm my-2">
                     {Object.values(TABS).map((tab) => (
                         <button
                             key={tab}
@@ -178,7 +179,7 @@ const Page = () => {
                     ))}
                 </div>
 
-                <div className="description">
+                <div className="description mb-5">
                     <h1
                         className="text-4xl md:text-5xl font-black font-orbitron leading-tight"
                         style={{
@@ -220,7 +221,7 @@ const Page = () => {
                     </button>
                     
                     {/* ... OR Divider and Social Buttons ... */}
-                    <div className="relative flex items-center my-2">
+                    <div className="relative flex items-center my-4">
                         <div className="flex-grow border-t border-white/10"></div>
                         <span className="mx-4 text-gray-500 text-xs font-bold uppercase tracking-widest">OR</span>
                         <div className="flex-grow border-t border-white/10"></div>
@@ -232,7 +233,7 @@ const Page = () => {
                     </div>
                 </form>
 
-                <p className="text-center text-gray-500 text-sm">
+                <p className="text-center text-gray-500 text-sm mt-8">
                     {activeTab === TABS.SIGN_IN ? "New explorer?" : "Already a member?"}
                     <button
                         type="button"
@@ -244,6 +245,20 @@ const Page = () => {
                     </button>
                 </p>
             </div>
+        </div>
+
+
+        <div className="fixed top-0 right-0 -z-10 translate-x-225 -translate-y-10">
+          <Image src={memories} alt="memories" />
+        </div>
+        <div className="fixed top-0 left-0 -z-10 -translate-x-24 translate-y-40">
+          <Image src={memories} alt="memories" />
+        </div>
+        <div className="fixed top-0 left-0 -z-10 translate-x-30 translate-y-95">
+          <Image src={memories} alt="memories" />
+        </div>
+        <div className="fixed top-0 left-0 -z-10 translate-x-10 translate-y-145">
+          <Image src={memories} alt="memories" />
         </div>
     </div>
   );

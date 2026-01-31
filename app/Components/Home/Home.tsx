@@ -16,7 +16,8 @@ import { setActiveServer } from "@/app/libs/redux/features/themeSlice";
 import { themes } from "@/app/hooks/themes";
 import { RootState } from "@/app/libs/redux/store";
 import { useState } from "react";
-import Loading from "../Loading/Loading";
+import Loading from "@/app/Loading/page";
+
 
 const Home = () => {
   const ipAddress = "cf2.anoing.com:25566";
@@ -46,12 +47,12 @@ const Home = () => {
   console.log(loading);
   
 
-  // if(loading) return <Loading />
+  if(loading) return <Loading />
 
   return (
-    <div id="home" className="py-20 lg:py-0">
-      <div className="container h-screen text-white w-[80%] mx-auto lg:flex lg:justify-center lg:items-center gap-10">
-        <figure className="flex justify-center items-center relative transition-all duration-500 ease-in-out animate-floating lg:mx-5">
+    <div id="home" className="md:py-0 md:mt-0 py-20 mt-20 lg:mt-10">
+      <div className="container h-screen text-white w-[90%] mx-auto flex flex-col md:flex-row justify-center items-center pt-20 mt-20 md:pt-0 md:mt-0 gap-5 md:gap-2">
+        <figure className="flex md:w-1/2 justify-center items-center relative transition-all duration-500 ease-in-out animate-floating lg:mx-5 lg:odd:translate-y-5">
           <Image
             key={currentTheme.name}
             src={currentTheme.image}
@@ -59,16 +60,16 @@ const Home = () => {
             width={600}
             quality={80}
             priority
-            className="drop-shadow-2xl transition-opacity duration-300"
+            className="drop-shadow-2xl transition-opacity duration-300 lg:w-600 w-full"
           />
         </figure>
 
-        <div className="description flex flex-col justify-center gap-2">
+        <div className="description md:w-1/2 flex flex-col justify-center gap-2">
           <h1 className="font-orbitron flex flex-col justify-center">
             <span
               className="text-[5.0rem] font-extrabold"
               style={{
-                backgroundImage: currentTheme?.gradient, // استخدم backgroundImage بدل background
+                backgroundImage: currentTheme?.gradient,  
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 WebkitBackgroundClip: "text",
@@ -81,7 +82,7 @@ const Home = () => {
             <span
               className="close transition-colors duration-300"
               style={{
-                backgroundImage: currentTheme?.gradient, // استخدم backgroundImage بدل background
+                backgroundImage: currentTheme?.gradient, 
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 WebkitBackgroundClip: "text",
@@ -120,18 +121,18 @@ const Home = () => {
             </div>
 
             {/* Server Info */}
-            <div className="my-2 flex justify-center items-center gap-3">
+            <div className="my-3 flex justify-center items-center gap-2">
               <div className="players rounded-xl p-2 w-full flex items-center gap-2 bg-[#222] border border-[#333]">
                 <span style={{ color: currentTheme.color }}>
                   <FontAwesomeIcon icon={faUsers} className="text-3xl" />
                 </span>
-                <p className="flex flex-col text-[20px]">
+                <p className="flex flex-col">
                   <span className="text-white">
                     {users?.filter((user: any) => user.is_online).length}/
                     {users?.length}
                   </span>
 
-                  <span className="text-gray-400 text-sm">Players Online</span>
+                  <span className="text-gray-400 text-[12px]">Online Players</span>
                 </p>
               </div>
               <div className="mod rounded-xl p-2 w-full flex items-center gap-2 bg-[#222] border border-[#333]">
@@ -139,20 +140,19 @@ const Home = () => {
                   <FontAwesomeIcon icon={faBoxOpen} className="text-3xl" />
                 </span>
                 <p className="flex flex-col">
-                  <span className="text-white">{currentTheme.version}</span>
-                  <span className="text-gray-400 text-sm">version</span>
+                  <span className="text-gray-400 text-sm">version:</span>
+                  <span className="text-white text-[12px]">{currentTheme.version}</span>
                 </p>
               </div>
             </div>
-            <div className="my-2 ip relative group">
-              {" "}
-              {/* أضفنا relative هنا */}
+            <div className="my-3  relative group">
               <input
                 type="text"
                 value={ipAddress}
                 readOnly
-                className="w-full p-3 bg-[#1a1a1a] border border-[#333] rounded-xl cursor-default focus:outline-none text-gray-300 font-mono text-sm transition-all duration-300 group-hover:border-[#444]"
-                style={{ borderLeft: `4px solid ${currentTheme.color}` }} // إضافة لمسة جمالية بلون السيرفر
+                disabled
+                className="w-full p-3 ip border rounded-xl cursor-default text-gray-300 font-mono text-sm transition-all duration-300"
+                style={{ borderLeft: `4px solid ${currentTheme.color}` }}     
               />
               <button
                 onClick={handleCopy}

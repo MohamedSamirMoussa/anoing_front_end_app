@@ -73,7 +73,7 @@ const Navbar = () => {
     "--hover-color": theme.color, 
   } as React.CSSProperties);
 
-  if(loading) return <Loading />
+  // if(loading) return <Loading />
 
   return (
     <nav className="nav w-full shadow-xl fixed top-0 z-[999] backdrop-blur-md bg-[#00000033]"

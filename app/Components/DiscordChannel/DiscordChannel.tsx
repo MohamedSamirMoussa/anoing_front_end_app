@@ -14,7 +14,7 @@ const DiscordChannel = () => {
     <div className="py-15 text-center">
       <div className="container w-[80%] mx-auto flex flex-col justify-center items-center gap-5">
         <h1
-          className="text-5xl font-orbitron flex flex-col justify-center items-center py-5 font-semibold"
+          className="text-5xl hover:scale-105 transition-all duration-300 font-orbitron flex flex-col justify-center items-center py-5 font-semibold"
           style={{
             backgroundImage: theme.gradient,
             backgroundClip: "text",
@@ -23,9 +23,8 @@ const DiscordChannel = () => {
         >
           Join Our Amazing Community
           <span
-            className="my-3"
+            className="my-3 w-1/3 transition-all duration-300"
             style={{
-              width: "30%",
               height: "2px",
               background: theme.gradient,
             }}
