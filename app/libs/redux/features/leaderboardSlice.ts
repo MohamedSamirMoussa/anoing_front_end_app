@@ -24,8 +24,6 @@ export const getLeaderboardAtmThunk = createAsyncThunk(
       const { data } = await api.get("/leaderboard/", {
         params: { serverName },
       });
-
-      console.log(data);
       
 
       return data;
@@ -42,7 +40,7 @@ export const searchbarThunk = createAsyncThunk(
       const { data } = await api.get("/leaderboard/search", {
         params: { username },
       });
-      return data; // الداتا هنا بترجع كـ { result: { searchResult: [...] } }
+      return data;
     } catch (error: unknown) {
       return handleThunkError(error, rejectWithValue);
     }

@@ -141,7 +141,7 @@ const Page = () => {
         {/* ... بقية كود الـ UI كما هو ... */}
         <div className="container w-[90%] m-auto grid lg:grid-cols-2">
             {/* LEFT IMAGE */}
-            <div className="img w-full translate-y-60 -translate-x-15 -z-10 hidden lg:flex">
+            <div className="img w-full lg:translate-y-60 lg:-translate-x-15 xl:-translate-x-25 xl:translate-y-20 hidden lg:flex z-10">
                 <figure className="relative transition-all duration-700 w-full">
                     <div
                         className="absolute inset-0 blur-[120px] opacity-20 rounded-full -z-10"
@@ -248,18 +248,7 @@ const Page = () => {
         </div>
 
 
-        <div className="fixed top-0 right-0 -z-10 translate-x-225 -translate-y-10">
-          <Image src={memories} alt="memories" />
-        </div>
-        <div className="fixed top-0 left-0 -z-10 -translate-x-24 translate-y-40">
-          <Image src={memories} alt="memories" />
-        </div>
-        <div className="fixed top-0 left-0 -z-10 translate-x-30 translate-y-95">
-          <Image src={memories} alt="memories" />
-        </div>
-        <div className="fixed top-0 left-0 -z-10 translate-x-10 translate-y-145">
-          <Image src={memories} alt="memories" />
-        </div>
+        
     </div>
   );
 };

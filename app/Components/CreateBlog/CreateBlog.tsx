@@ -40,8 +40,6 @@ const CreateBlog = ({ theme }: { theme: any }) => {
     try {
       setLoading(true);
       const res = await dispatch(createBlogThunk(data));
-      console.log(res);
-      
       if (createBlogThunk.fulfilled.match(res)) {
         toast.success(res.payload?.message || "Post Published!");
         setFormData({ title: "", description: "", image: null });

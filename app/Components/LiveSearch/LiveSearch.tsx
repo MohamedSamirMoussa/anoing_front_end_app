@@ -1,8 +1,7 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import Image from "next/image";
 import { searchbarThunk } from "@/app/libs/redux/features/leaderboardSlice";
 
 const LiveSearch = ({ currentTheme }: { currentTheme: any }) => {
@@ -13,8 +12,6 @@ const LiveSearch = ({ currentTheme }: { currentTheme: any }) => {
   const { searchResults, searchLoading } = useSelector(
     (state: any) => state.leaderboard,
   );
-  
-
   const formik = useFormik({
     initialValues: { search: "" },
     onSubmit: () => {},

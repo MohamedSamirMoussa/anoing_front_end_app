@@ -10,9 +10,7 @@ import toast from "react-hot-toast";
 import { IAuthState, logout, logoutThunk } from "@/app/libs/redux/features/authSlice";
 import type { AppDispatch, RootState } from "@/app/libs/redux/store";
 import { themes } from "@/app/hooks/themes";
-import Loading from "../Loading/Loading";
-
-const sections = ["home", "about", "op", "community", "gallery", "leaderboard"];
+const sections = ["home", "about", "Optional Mods", "community", "gallery", "leaderboard"];
 
 const Navbar = () => {
   const [scrollSection, setScrollSection] = useState<string>("home");
@@ -22,7 +20,7 @@ const Navbar = () => {
   const theme = themes[activeTab] || themes["Vanilla"];
   const pathname = usePathname();
   const dispatch = useDispatch<AppDispatch>();
-  const { isLogged , loading }: IAuthState = useSelector((s: RootState) => s.auth);
+  const { isLogged  }: IAuthState = useSelector((s: RootState) => s.auth);
 
   // Logic لتحديد السكشن الفعال بناءً على المسار
   const getActiveSection = useCallback(() => {
@@ -76,10 +74,10 @@ const Navbar = () => {
   // if(loading) return <Loading />
 
   return (
-    <nav className="nav w-full shadow-xl fixed top-0 z-[999] backdrop-blur-md bg-[#00000033]"
+    <nav className="nav w-full fixed top-0 z-[999] backdrop-blur-sm py-5 bg-[#000000]"
     style={{"--active-gradient" : theme.gradient} as React.CSSProperties}
     >
-      <section className="container md:w-[90%] lg:w-[80%] mx-auto h-20 flex items-center justify-between lg:justify-center">
+      <section className="container w-full mx-auto flex items-center justify-between lg:justify-center">
         
         {/* Mobile Logo (Left-aligned on mobile) */}
         <div className="lg:hidden p-4">

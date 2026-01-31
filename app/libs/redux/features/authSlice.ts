@@ -72,7 +72,6 @@ export const forgetPasswordThunk = createAsyncThunk<any, { email: string }>(
   "forgetPassword/auth",
   async (values, { rejectWithValue }) => {
     try {
-      // إرسال values مباشرة (غالباً السيرفر يحتاج {email: ...})
       const { data } = await api.post("/auth/forget-password", values);
       return data;
     } catch (error: unknown) {

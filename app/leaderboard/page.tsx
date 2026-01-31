@@ -20,8 +20,6 @@ const Leaderboard = () => {
     (state: RootState) => state.leaderboard,
   );
 
-  console.log(data);
-  
 
   const activeServer = useSelector(
     (state: RootState) => state.theme.activeServer || "atm 10",

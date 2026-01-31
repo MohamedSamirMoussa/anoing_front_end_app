@@ -41,7 +41,6 @@ export const captureWithPaypalThunk = createAsyncThunk<string, any>(
   async (orderId, { rejectWithValue }) => {
     try {
       const { data } = await api.post(`/checkout/paypal/${orderId}`);
-      console.log(data);
       return data.result;
     } catch (error: unknown) {
       return handleThunkError(error, rejectWithValue);

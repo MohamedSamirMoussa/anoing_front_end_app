@@ -15,6 +15,7 @@ import "./gallery.css";
 import { IAuthState } from "../libs/redux/features/authSlice";
 import Blogs from "../Components/Blogs/Blogs";
 import CreateBlog from "../Components/CreateBlog/CreateBlog";
+import memories from "../../public/Memories.png";
 
 const page = () => {
   const activeServer = useSelector(
@@ -27,7 +28,7 @@ const page = () => {
   );
 
   return (
-    <div className="gallery min-h-screen pt-10">
+    <div className="gallery min-h-screen pt-10 relative mb-50">
       <div className="container mx-auto">
         <div className="inners">
           <section className="join-us my-8">
@@ -59,25 +60,25 @@ const page = () => {
                     </div>
 
                     <div className="five md:translate-x-20 lg:translate-x-40  transition-all duration-300">
-                      <Image src={five} alt={`img-micecraft-${five}`} fill/>
+                      <Image src={five} alt={`img-micecraft-${five}`} fill />
                     </div>
                     <div className="two md:translate-x-10 lg:translate-x-20  transition-all duration-300">
-                      <Image src={two} alt={`img-micecraft-${two}`} fill/>
+                      <Image src={two} alt={`img-micecraft-${two}`} fill />
                     </div>
 
                     <div className="three z-10">
-                      <Image src={three} alt={`img-micecraft-${three}`}/>
+                      <Image src={three} alt={`img-micecraft-${three}`} />
                     </div>
                     <div className="one md:-translate-x-10 lg:-translate-x-20 transition-all duration-300 z-20">
-                      <Image src={one} alt={`img-micecraft-${one}`} fill/>
+                      <Image src={one} alt={`img-micecraft-${one}`} fill />
                     </div>
 
                     <div className="four md:-translate-x-20 lg:-translate-x-40 transition-all z-30 duration-300">
-                      <Image src={four} alt={`img-micecraft-${four}`} fill/>
+                      <Image src={four} alt={`img-micecraft-${four}`} fill />
                     </div>
 
                     <div className="six md:-translate-x-30 lg:-translate-x-60 transition-all duration-300 z-40">
-                      <Image src={six} alt={`img-micecraft-${six}`} fill/>
+                      <Image src={six} alt={`img-micecraft-${six}`} fill />
                     </div>
                   </div>
                 </div>
@@ -104,6 +105,19 @@ const page = () => {
             <Blogs theme={theme} isLogged={isLogged} />
           </section>
         </div>
+      </div>
+
+      <div className="absolute top-0 right-0 -z-10 translate-x-225 -translate-y-10">
+        <Image src={memories} alt="memories" />
+      </div>
+      <div className="absolute top-0 left-0 -z-10 -translate-x-24 translate-y-40">
+        <Image src={memories} alt="memories" />
+      </div>
+      <div className="absolute top-0 left-0 -z-10 translate-x-30 translate-y-95">
+        <Image src={memories} alt="memories" />
+      </div>
+      <div className="absolute top-0 left-0 -z-10 translate-x-10 translate-y-145">
+        <Image src={memories} alt="memories" />
       </div>
     </div>
   );

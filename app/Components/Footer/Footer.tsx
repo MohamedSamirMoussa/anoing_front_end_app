@@ -16,7 +16,7 @@ const Footer = () => {
       style={{
         background: "linear-gradient(to right, #0A0A14, #08080F)",
       }}
-      className="py-15"
+      className="py-15 mt-20"
     >
       <div
         className="w-[90%] mx-auto flex flex-col justify-center items-center  py-5
