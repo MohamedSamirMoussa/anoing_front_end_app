@@ -22,7 +22,7 @@ import { io, Socket } from "socket.io-client";
 export const createSocket = () => io(
   "https://anoing-app.vercel.app/", 
   {
-    transports: ["websocket"],
+    transports: ['polling'],
     reconnection: true,
     reconnectionAttempts: 5,
     reconnectionDelay: 1000,
