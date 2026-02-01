@@ -23,7 +23,7 @@ interface LeaderboardUser {
 }
 
 // إنشاء socket مرة واحدة
-const createSocket = () => io("http://localhost:5000/leaderboard", {
+const createSocket = () => io(process.env.NEXT_PUBLIC_BACK_END_URI, {
   transports: ["websocket"],
   reconnection: true,
   reconnectionAttempts: 5,
