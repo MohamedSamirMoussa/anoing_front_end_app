@@ -3,7 +3,7 @@ import "./auth.css";
 import Image from "next/image";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
-import React, { useState, useEffect } from "react"; // أضفت useEffect
+import React, { useState, useEffect } from "react";  
 import two from "../../public/two.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
@@ -62,7 +62,6 @@ const registerSchema = Yup.object({
 const Page = () => {
   const [activeTab, setActiveTab] = useState<TabType>(TABS.SIGN_IN);
 
-  // ✅ استخدام AppDispatch ليكون الـ dispatch "ذكياً" ويفهم الـ Thunks
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
@@ -72,7 +71,6 @@ const Page = () => {
   );
   const theme = themes[active];
 
-  // ✅ استخدام useEffect للـ redirection أفضل من وضعه في الـ Render مباشرة
   useEffect(() => {
     if (isLogged) {
       router.push("/");
@@ -102,6 +100,9 @@ const Page = () => {
 
       // ✅ الآن الـ dispatch سيعمل بدون أخطاء TypeScript
       const result = await dispatch(thunk(submitData as any));
+
+      console.log(result);
+      
 
       if (thunk.rejected.match(result)) {
         toast.error(

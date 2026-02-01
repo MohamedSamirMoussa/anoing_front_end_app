@@ -19,16 +19,35 @@ import { useEffect, useRef, useState } from "react";
 import { getLeaderboardThunk } from "@/app/libs/redux/features/leaderboardSlice";
 import { io, Socket } from "socket.io-client";
 
-export const createSocket = () => io(
-  "https://anoing-app.vercel.app/", 
-  {
-    transports: ['polling'],
-    reconnection: true,
-    reconnectionAttempts: 5,
-    reconnectionDelay: 1000,
-});
+// export const createSocket = () => io(
+//   "http://localhost:5000/", 
+//   {
+//     transports: ["websocket"],
+//     reconnection: true,
+//     reconnectionAttempts: 5,
+//     reconnectionDelay: 1000,
+// });
 
-// تعريف نوع بيانات المستخدم
+
+
+export const createSocket = () => {
+  const isProduction = process.env.NODE_ENV === 'production';
+  
+  return io(
+    process.env.NEXT_PUBLIC_BACK_END_URI || "http://localhost:5000/",
+    {
+      transports: isProduction ? ['polling'] : ['websocket', 'polling'],
+      reconnection: true,
+      reconnectionAttempts: 10,
+      reconnectionDelay: 1000,
+      timeout: 20000,
+      forceNew: isProduction,
+      path: '/socket.io/',
+    }
+  );
+}
+
+
 interface LeaderboardUser {
   username: string;
   is_online: boolean;
