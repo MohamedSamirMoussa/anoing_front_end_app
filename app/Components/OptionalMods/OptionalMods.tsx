@@ -21,7 +21,7 @@ const OptionalMods = () => {
       className="w-[95%] md:w-[85%] lg:w-[80%] mx-auto min-h-screen py-10 flex flex-col justify-center"
       id="op"
     >
-      <div className="description text-center mb-8">
+      <div className="text-center mb-8">
         <h1
           className="font-orbitron text-3xl hover:scale-105 transition-all duration-300 md:text-4xl lg:text-5xl font-semibold my-2 flex flex-col justify-center items-center"
           style={{

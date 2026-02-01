@@ -15,27 +15,142 @@ import "./Home.css";
 import { setActiveServer } from "@/app/libs/redux/features/themeSlice";
 import { themes } from "@/app/hooks/themes";
 import { RootState } from "@/app/libs/redux/store";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { getLeaderboardThunk } from "@/app/libs/redux/features/leaderboardSlice";
+import { io, Socket } from "socket.io-client";
+
+const createSocket = () => io(
+  "http://localhost:5000/", 
+  {
+    transports: ["websocket"],
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 1000,
+});
+
+// تعريف نوع بيانات المستخدم
+interface LeaderboardUser {
+  username: string;
+  is_online: boolean;
+  playTime: { hours: number; minutes: number; seconds: number };
+  lastSeen: string | null;
+  rank: { name: string };
+  avatar?: string;
+  id?: string;
+}
 
 const Home = () => {
   const ipAddress = "cf2.anoing.com:25566";
   const dispatch = useDispatch();
-  const { data  } = useSelector((s: RootState) => s.leaderboard);
   const [copied, setCopied] = useState(false);
-  const users = data?.result?.leaderboard;
-  const activeTab =
-    useSelector((state: RootState) => state.theme.activeServer) || "atm 10";
+  
+  const activeTab = useSelector((state: RootState) => state.theme.activeServer) || "atm 10";
   const currentTheme = themes[activeTab] || themes["atm 10"];
+  const socketRef = useRef<Socket | null>(null);
+  const [socketConnected, setSocketConnected] = useState(false);
+  
+  // استخدام بيانات الـ leaderboard من Redux store
+  const { data, loading } = useSelector((state: RootState) => state.leaderboard);
+  const users = data?.result?.leaderboard || [];
+  const totalPlayers = users.length;
+  const onlinePlayers = users.filter((user: LeaderboardUser) => user.is_online).length;
+  
+  // الحالة المحلية لبيانات السوكيت
+  const [leaderboard, setLeaderboard] = useState<LeaderboardUser[]>([]);
+  const [socketOnlineCount, setSocketOnlineCount] = useState<number>(0);
+
+  // استخدام بيانات السوكيت إذا كانت متاحة، وإلا استخدام بيانات API
+  const displayUsers = socketConnected && leaderboard.length > 0 ? leaderboard : users;
+  const displayTotalPlayers = displayUsers.length;
+  const displayOnlinePlayers = socketConnected ? socketOnlineCount : onlinePlayers;
+
+  useEffect(() => {
+    console.log("🔌 Initializing Socket.IO...");
+    
+    if (!socketRef.current) {
+      socketRef.current = createSocket();
+      const socket = socketRef.current;
+      
+      socket.on("connect", () => {
+        console.log("✅ Socket.IO connected, ID:", socket.id);
+        setSocketConnected(true);
+        
+        // أرسل السيرفر المختار حالياً فور الاتصال
+        socket.emit("select_server", activeTab);
+      });
+      
+      socket.on("connect_error", (error) => {
+        console.error("❌ Socket.IO connection error:", error);
+        setSocketConnected(false);
+      });
+      
+      socket.on("disconnect", () => {
+        console.log("❌ Socket.IO disconnected");
+        setSocketConnected(false);
+      });
+
+      const handleLeaderboard = (data: {
+        server: string;
+        leaderboard: LeaderboardUser[];
+        onlineCount: number;
+      }) => {
+        console.log(`📦 Received data for server ${data.server}:`, data.leaderboard.length, "players");
+        
+        // تحديث فقط إذا كان نفس السيرفر النشط
+        if (data.server.toLowerCase() === activeTab.toLowerCase()) {
+          setLeaderboard(data.leaderboard);
+          setSocketOnlineCount(data.onlineCount);
+        }
+      };
+
+      socket.on("leaderboard_update", handleLeaderboard);
+      
+      return () => {
+        console.log("🧹 Cleaning up Socket.IO");
+        socket.off("leaderboard_update", handleLeaderboard);
+        socket.off("connect");
+        socket.off("connect_error");
+        socket.off("disconnect");
+        socket.disconnect();
+        socketRef.current = null;
+      };
+    }
+  }, []);
+
+  // عندما يتغير السيرفر النشط
+  useEffect(() => {
+    if (socketRef.current?.connected) {
+      console.log(`🔄 Switching to server: ${activeTab}`);
+      
+      // أرسل للسيرفر أي سيرفر جديد مختار
+      socketRef.current.emit("select_server", activeTab);
+      
+      // Reset البيانات القديمة
+      setLeaderboard([]);
+      setSocketOnlineCount(0);
+    }
+    
+    // Also fetch from API كـ fallback
+    dispatch(getLeaderboardThunk(activeTab) as any);
+    
+  }, [activeTab, dispatch]);
 
   const handleTabChange = (tabName: string) => {
     dispatch(setActiveServer(tabName));
+    
+    // أرسل للسيرفر الجديد
+    if (socketRef.current?.connected) {
+      socketRef.current.emit("select_server", tabName);
+    }
+    
+    // Also fetch from API
+    dispatch(getLeaderboardThunk(tabName) as any);
   };
 
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(ipAddress);
       setCopied(true);
-
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error("Failed to copy!", err);
@@ -121,10 +236,8 @@ const Home = () => {
                 </span>
                 <p className="flex flex-col">
                   <span className="text-white">
-                    {users?.filter((user: any) => user.is_online).length}/
-                    {users?.length}
+                    {displayOnlinePlayers}/{displayTotalPlayers}
                   </span>
-
                   <span className="text-gray-400 text-[12px]">Online Players</span>
                 </p>
               </div>
@@ -138,7 +251,16 @@ const Home = () => {
                 </p>
               </div>
             </div>
-            <div className="my-3  relative group">
+            
+            {/* Connection Status Indicator */}
+            <div className="my-2 flex justify-center">
+              <div className="text-xs px-2 py-1 rounded-full bg-[#ffffff10] text-gray-400 flex items-center gap-1">
+                <span className={`w-2 h-2 rounded-full ${socketConnected ? "animate-pulse bg-green-500" : "bg-yellow-500"}`}></span>
+                {socketConnected ? "Live Connection" : "Polling Data"}
+              </div>
+            </div>
+            
+            <div className="my-3 relative group">
               <input
                 type="text"
                 value={ipAddress}
@@ -165,16 +287,17 @@ const Home = () => {
                 </span>
               )}
             </div>
+            
             {/* Discover More Button */}
             <div className="discover my-3 flex justify-center items-center">
               <Link
                 href={"#about"}
                 className="rounded-3xl font-orbitron tracking-widest uppercase font-semibold w-full text-center py-3 shadow-lg transition-all duration-300 hover:brightness-110"
                 style={{
-                  backgroundImage: currentTheme?.gradient, // استخدم backgroundImage بدل background
+                  backgroundImage: currentTheme?.gradient,
                   backgroundRepeat: "no-repeat",
                   backgroundSize: "cover",
-                  boxShadow: `0 0 20px ${currentTheme.shadowColor}`, // توهج بنفس لون الثيم
+                  boxShadow: `0 0 20px ${currentTheme.shadowColor}`,
                 }}
               >
                 Discover more

@@ -17,7 +17,7 @@ import { themes } from "@/app/hooks/themes";
 const sections = [
   "home",
   "about",
-  "Optional Mods",
+  "op",
   "community",
   "gallery",
   "leaderboard",
@@ -121,8 +121,8 @@ const Navbar = () => {
               About
             </Link>
           </li>
-          <li className={activeSection === "Optional Mods" ? "active" : ""}>
-            <Link href="/#op" style={linkStyle("Optional Mods")}>
+          <li className={activeSection === "op" ? "active" : ""}>
+            <Link href="/#op" style={linkStyle("op")}>
               Optional Mods
             </Link>
           </li>
@@ -192,7 +192,7 @@ const Navbar = () => {
               className="text-2xl font-orbitron uppercase tracking-widest"
               style={{ color: activeSection === sec ? theme.color : "#fff" }}
             >
-              {sec}
+              {sec === "op" ? "Optional Mods" : sec}
             </Link>
           ))}
 

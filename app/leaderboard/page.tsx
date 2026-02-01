@@ -12,6 +12,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCrown, faMedal } from "@fortawesome/free-solid-svg-icons";
 import { getLeaderboardThunk } from "../libs/redux/features/leaderboardSlice";
 
+const BE_URI= process.env.NEXT_PUBLIC_BACK_END_URI as string
+
 interface LeaderboardUser {
   username: string;
   is_online: boolean;
@@ -23,7 +25,7 @@ interface LeaderboardUser {
 }
 
 // إنشاء socket مرة واحدة
-const createSocket = () => io(process.env.NEXT_PUBLIC_BACK_END_URI, {
+const createSocket = () => io(`${BE_URI}`, {
   transports: ["websocket"],
   reconnection: true,
   reconnectionAttempts: 5,
@@ -64,6 +66,7 @@ export default function Leaderboard() {
   const [socketConnected, setSocketConnected] = useState(false);
   const { data, loading } = useSelector((d: RootState) => d.leaderboard);
   const dispatch = useDispatch();
+  console.log(leaderboard);
   
   // useRef لحفظ الـ socket
   const socketRef = useRef<Socket | null>(null);
