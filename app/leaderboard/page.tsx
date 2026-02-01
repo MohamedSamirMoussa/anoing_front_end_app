@@ -11,8 +11,8 @@ import { SyncLoader } from "react-spinners";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCrown, faMedal } from "@fortawesome/free-solid-svg-icons";
 import { getLeaderboardThunk } from "../libs/redux/features/leaderboardSlice";
+import { createSocket } from "../Components/Home/Home";
 
-const BE_URI= process.env.NEXT_PUBLIC_BACK_END_URI as string
 
 interface LeaderboardUser {
   username: string;
@@ -23,16 +23,6 @@ interface LeaderboardUser {
   avatar?: string;
   id?: string;
 }
-
-// إنشاء socket مرة واحدة
-const createSocket = () => io(`${BE_URI}`, {
-  transports: ["websocket"],
-  reconnection: true,
-  reconnectionAttempts: 5,
-  reconnectionDelay: 1000,
-});
-
-// دالة لتحديد لون الرتبة بناءً على عدد الساعات
 const getRankColor = (hours: number): string => {
   if (hours < 10) return "#808080"; // رمادي - Visitor
   if (hours < 24) return "#00FF00"; // أخضر - Newcomer
@@ -43,8 +33,6 @@ const getRankColor = (hours: number): string => {
   if (hours < 1500) return "#FFD700"; // ذهبي - Legend
   return "#FF0000"; // أحمر - Immortal
 };
-
-// دالة لتحديد اسم الرتبة بناءً على عدد الساعات
 const getRankName = (hours: number): string => {
   if (hours < 10) return "Visitor";
   if (hours < 24) return "Newcomer";

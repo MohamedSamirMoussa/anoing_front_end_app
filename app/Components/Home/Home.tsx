@@ -19,8 +19,8 @@ import { useEffect, useRef, useState } from "react";
 import { getLeaderboardThunk } from "@/app/libs/redux/features/leaderboardSlice";
 import { io, Socket } from "socket.io-client";
 
-const createSocket = () => io(
-  "http://localhost:5000/", 
+export const createSocket = () => io(
+  "https://anoing-app.vercel.app/", 
   {
     transports: ["websocket"],
     reconnection: true,
