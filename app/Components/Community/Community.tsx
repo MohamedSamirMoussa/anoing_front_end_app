@@ -147,7 +147,6 @@ const Community = () => {
   return (
     <div
       id="community"
-      // تغيير h-screen إلى min-h-screen وتعديل الـ padding
       className="w-[95%] md:w-[85%] lg:w-[80%] mx-auto min-h-screen flex items-center justify-center py-20"
     >
       <div className="desc w-full flex justify-center flex-col items-center gap-5">

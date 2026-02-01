@@ -43,17 +43,17 @@ const Home = () => {
   };
 
   return (
-    <div id="home" className="md:py-0 md:mt-0 py-20 mt-20 lg:mt-10">
-      <div className="container h-screen text-white w-[90%] mx-auto flex flex-col md:flex-row justify-center items-center pt-20 mt-20 md:pt-0 md:mt-0 gap-5 md:gap-2">
+    <div id="home" className="">
+      <div className="container h-screen text-white w-[90%] mx-auto flex flex-col md:flex-row justify-center items-center">
         <figure className="flex md:w-1/2 justify-center items-center relative transition-all duration-500 ease-in-out animate-floating lg:mx-5 xl:odd:translate-y-12">
           <Image
             key={currentTheme.name}
             src={currentTheme.image}
             alt={`${currentTheme.name} modpack`}
-            width={500}
+            width={600}
             quality={80}
             priority
-            className="drop-shadow-2xl transition-opacity duration-300 lg:w-600 w-full"
+            className="drop-shadow-2xl transition-opacity duration-300 lg:w-auto w-full"
           />
         </figure>
 

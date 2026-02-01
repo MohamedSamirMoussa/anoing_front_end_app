@@ -1,6 +1,6 @@
 "use client";
-import { useSelector } from "react-redux";
-import { RootState } from "../libs/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../libs/redux/store";
 import { themes } from "../hooks/themes";
 import Link from "next/link";
 import Image from "next/image";
@@ -94,7 +94,10 @@ const page = () => {
                     </Link>
                   </div>
                 ) : (
-                  <CreateBlog theme={theme} />
+                  <CreateBlog
+                    theme={theme}
+                    isLogged={isLogged}
+                  />
                 )}
               </div>
             </div>

@@ -1,35 +1,79 @@
 "use client";
-import { useEffect } from "react";
+import Image from "next/image";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getLeaderboardAtmThunk } from "../libs/redux/features/leaderboardSlice";
-import { themes } from "../hooks/themes";
-import { setActiveServer } from "../libs/redux/features/themeSlice";
+import { io, Socket } from "socket.io-client";
 import { RootState } from "../libs/redux/store";
-import "./leaderboard.css";
+import { themes } from "../hooks/themes";
+import LiveSearch from "../Components/LiveSearch/LiveSearch";
+import { setActiveServer } from "../libs/redux/features/themeSlice";
+import { SyncLoader } from "react-spinners";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCrown, faMedal } from "@fortawesome/free-solid-svg-icons";
-import Image from "next/image";
-import LiveSearch from "../Components/LiveSearch/LiveSearch";
-import Loading from "../Loading/page";
-import { SyncLoader } from "react-spinners";
+import { getLeaderboardThunk } from "../libs/redux/features/leaderboardSlice";
 
-const Leaderboard = () => {
-  const dispatch = useDispatch();
+interface LeaderboardUser {
+  username: string;
+  is_online: boolean;
+  playTime: { hours: number; minutes: number; seconds: number };
+  lastSeen: string | null;
+  rank: { name: string };
+  avatar?: string;
+  id?: string;
+}
 
-  // تأكد من وجود حالة loading في الـ Slice الخاص بك لتحسين تجربة المستخدم
-  const { data, loading } = useSelector(
-    (state: RootState) => state.leaderboard,
-  );
+// إنشاء socket مرة واحدة
+const createSocket = () => io("http://localhost:5000/leaderboard", {
+  transports: ["websocket"],
+  reconnection: true,
+  reconnectionAttempts: 5,
+  reconnectionDelay: 1000,
+});
+
+// دالة لتحديد لون الرتبة بناءً على عدد الساعات
+const getRankColor = (hours: number): string => {
+  if (hours < 10) return "#808080"; // رمادي - Visitor
+  if (hours < 24) return "#00FF00"; // أخضر - Newcomer
+  if (hours < 50) return "#0000FF"; // أزرق - Regular
+  if (hours < 150) return "#00FFFF"; // سماوي - Dedicated
+  if (hours < 350) return "#800080"; // بنفسجي - Trusted
+  if (hours < 700) return "#FFA500"; // برتقالي - Veteran
+  if (hours < 1500) return "#FFD700"; // ذهبي - Legend
+  return "#FF0000"; // أحمر - Immortal
+};
+
+// دالة لتحديد اسم الرتبة بناءً على عدد الساعات
+const getRankName = (hours: number): string => {
+  if (hours < 10) return "Visitor";
+  if (hours < 24) return "Newcomer";
+  if (hours < 50) return "Regular";
+  if (hours < 150) return "Dedicated";
+  if (hours < 350) return "Trusted";
+  if (hours < 700) return "Veteran";
+  if (hours < 1500) return "Legend";
+  return "Immortal";
+};
+
+export default function Leaderboard() {
   const activeServer = useSelector(
     (state: RootState) => state.theme.activeServer || "atm 10",
   );
-
   const currentTheme = themes[activeServer] || themes["atm 10"];
+  const [leaderboard, setLeaderboard] = useState<LeaderboardUser[]>([]);
+  const [onlineCount, setOnlineCount] = useState(0);
+  const [socketConnected, setSocketConnected] = useState(false);
+  const { data, loading } = useSelector((d: RootState) => d.leaderboard);
+  const dispatch = useDispatch();
+  
+  // useRef لحفظ الـ socket
+  const socketRef = useRef<Socket | null>(null);
+  
   const users = data?.result?.leaderboard || [];
+  const apiOnlineCount = data?.result?.onlineCount || 0;
 
-  const handleServerChange = (server: string) => {
-    dispatch(setActiveServer(server));
-  };
+  // استخدم الـ Socket.IO data لو متاحة، وإلا استخدم الـ API data
+  const displayUsers = leaderboard.length > 0 ? leaderboard : users;
+  const displayOnlineCount = socketConnected ? onlineCount : apiOnlineCount;
 
   const formatLastSeen = (dateString: string | number | Date) => {
     if (!dateString) return "Unknown";
@@ -47,18 +91,115 @@ const Leaderboard = () => {
     return `${diffInDays}d ago`;
   };
 
+  // تهيئة Socket.IO عند أول render
   useEffect(() => {
-    dispatch(getLeaderboardAtmThunk(activeServer) as any);
-  }, [dispatch, activeServer]);
+    console.log("🔌 Initializing Socket.IO...");
+    
+    if (!socketRef.current) {
+      socketRef.current = createSocket();
+      const socket = socketRef.current;
+      
+      socket.on("connect", () => {
+        console.log("✅ Socket.IO connected, ID:", socket.id);
+        setSocketConnected(true);
+        
+        // أرسل السيرفر المختار حالياً فور الاتصال
+        socket.emit("select_server", activeServer);
+      });
+      
+      socket.on("connect_error", (error) => {
+        console.error("❌ Socket.IO connection error:", error);
+        setSocketConnected(false);
+      });
+      
+      socket.on("disconnect", () => {
+        console.log("❌ Socket.IO disconnected");
+        setSocketConnected(false);
+      });
+
+      const handleLeaderboard = (data: {
+        server: string;
+        leaderboard: LeaderboardUser[];
+        onlineCount: number;
+      }) => {
+        console.log(`📦 Received data for server ${data.server}:`, data.leaderboard.length, "players");
+        
+        // تحديث فقط إذا كان نفس السيرفر النشط
+        if (data.server.toLowerCase() === activeServer.toLowerCase()) {
+          setLeaderboard(data.leaderboard);
+          setOnlineCount(data.onlineCount);
+        }
+      };
+
+      socket.on("leaderboard_update", handleLeaderboard);
+      
+      return () => {
+        console.log("🧹 Cleaning up Socket.IO");
+        socket.off("leaderboard_update", handleLeaderboard);
+        socket.off("connect");
+        socket.off("connect_error");
+        socket.off("disconnect");
+        socket.disconnect();
+        socketRef.current = null;
+      };
+    }
+  }, []);
+
+  // عندما يتغير السيرفر النشط
+  useEffect(() => {
+    if (socketRef.current?.connected) {
+      console.log(`🔄 Switching to server: ${activeServer}`);
+      
+      // أرسل للسيرفر أي سيرفر جديد مختار
+      socketRef.current.emit("select_server", activeServer);
+      
+      // Reset البيانات القديمة
+      setLeaderboard([]);
+      setOnlineCount(0);
+    }
+    
+    // Also fetch from API كـ fallback
+    dispatch(getLeaderboardThunk(activeServer) as any);
+    
+  }, [activeServer, dispatch]);
+
+  const handleServerChange = (server: string) => {
+    dispatch(setActiveServer(server));
+  };
+
+  // تحديث الـ Socket عند تغيير السيرفر
+  const handleServerButtonClick = async (serverKey: string) => {
+    handleServerChange(serverKey);
+    
+    // أرسل للسيرفر الجديد
+    if (socketRef.current?.connected) {
+      socketRef.current.emit("select_server", serverKey);
+    }
+    
+    // Also fetch from API
+    await dispatch(getLeaderboardThunk(serverKey) as any);
+  };
+
+  // أضف indicator للـ Socket.IO status
+  const socketStatus = socketConnected ? 
+    <span className="text-xs px-2 py-1 rounded-full bg-green-900/30 text-green-400">
+      ● Live
+    </span> : 
+    <span className="text-xs px-2 py-1 rounded-full bg-yellow-900/30 text-yellow-400">
+      ● Polling
+    </span>;
 
   return (
     <div className="leaderboard-container min-h-screen w-[60%] mx-auto py-20 px-4">
       <div className="py-10">
         <div className="tabs-container flex flex-col lg:flex-row justify-between items-center p-6 rounded-3xl bg-[#ffffff05] border border-[#ffffff10] gap-8 backdrop-blur-md">
           <div className="right ps-4">
-            <h1 className="font-orbitron font-bold text-3xl md:text-4xl text-white">
-              Playtime Leaderboard
-            </h1>
+            <div className="flex items-center gap-2 mb-2">
+              <h1 className="font-orbitron font-bold text-3xl md:text-4xl text-white">
+                Playtime Leaderboard
+              </h1>
+              {socketStatus}
+            </div>
             <div className="flex items-center gap-4 mt-2">
               <p className="text-[#ffffff60] uppercase tracking-widest text-sm font-medium">
                 {activeServer}
@@ -67,7 +208,10 @@ const Leaderboard = () => {
                 style={{ color: currentTheme.color }}
                 className="font-orbitron font-bold text-lg"
               >
-                {users.length} players
+                {displayUsers.length} players
+              </span>
+              <span className="text-sm text-green-400 font-bold">
+                {displayOnlineCount} online
               </span>
             </div>
           </div>
@@ -81,7 +225,7 @@ const Leaderboard = () => {
                 return (
                   <button
                     key={serverKey}
-                    onClick={() => handleServerChange(serverKey)}
+                    onClick={() => handleServerButtonClick(serverKey)}
                     className={`px-4 py-2 rounded-lg font-orbitron text-[10px] md:text-xs uppercase transition-all duration-300 ${
                       isActive
                         ? "text-white shadow-lg"
@@ -91,7 +235,6 @@ const Leaderboard = () => {
                       background: isActive ? tabTheme.gradient : "transparent",
                     }}
                   >
-                    {/* الإصلاح هنا: استخدام serverKey أو tabTheme.name مباشرة */}
                     {serverKey}
                   </button>
                 );
@@ -101,18 +244,26 @@ const Leaderboard = () => {
         </div>
       </div>
 
-      {loading ? (
-        <div className=" flex justify-center items-center">
-          {" "}
+      {loading && displayUsers.length === 0 ? (
+        <div className="flex justify-center items-center min-h-[400px]">
           <SyncLoader color={currentTheme.color} />
+        </div>
+      ) : displayUsers.length === 0 ? (
+        <div className="text-center py-20">
+          <p className="text-gray-500 text-lg">No players found for {activeServer}</p>
+          <p className="text-gray-400 text-sm mt-2">Make sure the server is running and data is being collected</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-          {users.map((user: any, index: number) => {
-            const totalHours = user.playTime.hours || 0;
+          {displayUsers.map((user: LeaderboardUser, index: number) => {
+            const totalHours = user.playTime?.hours || 0;
             const days = Math.floor(totalHours / 24);
             const hours = Math.floor(totalHours % 24);
-            const minutes = user.playTime.minutes || 0;
+            const minutes = user.playTime?.minutes || 0;
+            
+            // تحديد لون واسم الرتبة بناءً على عدد الساعات
+            const rankColor = getRankColor(totalHours);
+            const rankName = getRankName(totalHours);
 
             return (
               <div
@@ -130,10 +281,13 @@ const Leaderboard = () => {
                       <div className="flex items-center gap-3">
                         <div className="relative w-[50px] h-[50px] bg-white/5 rounded-lg overflow-hidden border border-white/10">
                           <Image
-                            src={user.avatar}
+                            src={user.avatar || `https://mc-heads.net/avatar/${user.username}/64`}
                             alt={user.username}
                             fill
                             className="object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = `https://mc-heads.net/avatar/Steve/64`;
+                            }}
                           />
                         </div>
                         <div>
@@ -143,11 +297,11 @@ const Leaderboard = () => {
                           <span
                             className="text-[10px] uppercase px-2 py-0.5 rounded-full font-medium"
                             style={{
-                              backgroundColor: `${currentTheme.color}20`,
-                              color: currentTheme.color,
+                              backgroundColor: `${rankColor}20`,
+                              color: rankColor,
                             }}
                           >
-                            {user.rank.name}
+                            {rankName}
                           </span>
                         </div>
                       </div>
@@ -188,7 +342,7 @@ const Leaderboard = () => {
                         <span className="text-[9px] text-gray-400 uppercase font-bold tracking-tighter">
                           {user.is_online
                             ? "Online Now"
-                            : formatLastSeen(user.lastSeen)}
+                            : formatLastSeen(user.lastSeen || new Date())}
                         </span>
                       </div>
                     </div>
@@ -211,6 +365,4 @@ const Leaderboard = () => {
       )}
     </div>
   );
-};
-
-export default Leaderboard;
+}

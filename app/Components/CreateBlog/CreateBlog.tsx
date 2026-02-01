@@ -4,8 +4,9 @@ import { useDispatch } from "react-redux";
 import { createBlogThunk } from "@/app/libs/redux/features/blogSlice";
 import toast from "react-hot-toast";
 import Loading from "@/app/Loading/page";
+import { logout, logoutThunk } from "@/app/libs/redux/features/authSlice";
 
-const CreateBlog = ({ theme }: { theme: any }) => {
+const CreateBlog = ({ theme, isLogged }: any) => {
   const dispatch = useDispatch<any>();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -13,6 +14,19 @@ const CreateBlog = ({ theme }: { theme: any }) => {
     description: "",
     image: null as File | null,
   });
+  const handleLogout = async () => {
+    const res = await dispatch(logoutThunk(undefined));
+    try {
+      if (res.type === "auth/logout/rejected") {
+        toast.error(res.payload.errMessage);
+        dispatch(logout());
+        return;
+      }
+      toast.success("Logged out successfully");
+    } catch {
+      toast.error(res.payload.errMessage);
+    }
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -47,7 +61,8 @@ const CreateBlog = ({ theme }: { theme: any }) => {
       } else {
         // في حالة الـ Rejected
         const errorMsg =
-          `${(res.payload as any)?.errMessage}..please login again` || "Failed to create blog";
+          `${(res.payload as any)?.errMessage}..please login again` ||
+          "Failed to create blog";
         toast.error(errorMsg);
       }
     } catch (err) {
@@ -57,11 +72,11 @@ const CreateBlog = ({ theme }: { theme: any }) => {
     }
   };
 
-  if(loading) return <Loading />
+  if (loading) return <Loading />;
 
   return (
     <div
-      className="py-12 w-full md:w-[60%] lg:w-[50%] mx-auto backdrop-blur-xl p-8 rounded-3xl border"
+      className="py-12 w-full md:w-[60%] lg:w-[50%] mx-auto backdrop-blur-xl p-8 rounded-3xl border relative"
       style={{
         borderColor: `${theme.color}44`,
         background: "rgba(255,255,255,0.03)",
@@ -133,6 +148,18 @@ const CreateBlog = ({ theme }: { theme: any }) => {
           {loading ? "Uploading..." : "Publish Post"}
         </button>
       </form>
+
+      {isLogged && (
+        <button
+          onClick={handleLogout}
+          style={{
+            background: theme.gradient,
+          }}
+          className="top-0 right-0 bg-rose-600 absolute px-3 py-2 rounded-2xl -translate-x-2 translate-y-2 hidden lg:block text-white"
+        >
+          Logout
+        </button>
+      )}
     </div>
   );
 };

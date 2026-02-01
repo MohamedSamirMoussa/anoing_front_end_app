@@ -9,8 +9,8 @@ const About = () => {
   );
   const theme = themes[activeTab] || themes["atm 10"];
   return (
-    <div id="about" className="my-40 py-30 md:my-0 md:py-0">
-      <div className="container w-[80%] m-auto flex justify-center items-center md:mt-10 md:pt-10">
+    <div id="about">
+      <div className="container w-[80%] h-screen m-auto flex justify-center items-center">
         <div className="about-description flex flex-col justify-center items-center gap-4 py-3">
           <h1
             className="lg:text-6xl hover:scale-105 transition-all duration-300 text-center text-5xl font-semibold relative py-3 flex flex-col justify-center items-center"

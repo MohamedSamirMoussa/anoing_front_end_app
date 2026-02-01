@@ -17,7 +17,7 @@ const initialState: ILeaderboard = {
   searchLoading: false,
   error: null,
 };
-export const getLeaderboardAtmThunk = createAsyncThunk(
+export const getLeaderboardThunk = createAsyncThunk(
   "leaderboard/atm10",
   async (serverName:any, { rejectWithValue }) => {
     try {
@@ -55,15 +55,15 @@ const leaderboardSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getLeaderboardAtmThunk.fulfilled, (state, action) => {
+      .addCase(getLeaderboardThunk.fulfilled, (state, action) => {
         state.data = action.payload;
         state.error = null;
         state.loading = false;
       })
-      .addCase(getLeaderboardAtmThunk.pending, (state) => {
+      .addCase(getLeaderboardThunk.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getLeaderboardAtmThunk.rejected, (state, action) => {
+      .addCase(getLeaderboardThunk.rejected, (state, action) => {
         state.error = action.payload || action.error;
       }).addCase(searchbarThunk.pending, (state) => {
         state.searchLoading = true;
