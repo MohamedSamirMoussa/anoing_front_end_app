@@ -262,7 +262,7 @@ const [totalPlayers, setTotalPlayers] = useState(0);
       ) : (
         <>
           {/* Leaderboard grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10">
             {leaderboard.map((user: LeaderboardUser, index: number) => {
               const totalHours = user.playTime?.hours || 0;
               const minutes = user.playTime?.minutes || 0;

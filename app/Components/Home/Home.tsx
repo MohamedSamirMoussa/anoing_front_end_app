@@ -120,7 +120,7 @@ const [totalPlayers, setTotalPlayers] = useState(0);
   // -------------------- Render --------------------
   return (
     <div id="home" className="mt-40 md:mt-0 lg:mt-0">
-      <div className="container h-screen text-white lg:w-[60%] md:w-[80%] mx-auto flex flex-col gap-10 md:flex-row justify-center items-center pt-40 md:pt-0 lg:pt-0">
+      <div className="container h-screen text-white lg:w-[60%] md:w-[90%] mx-auto flex flex-col gap-10 md:flex-row justify-center items-center pt-40 md:pt-0 lg:pt-0">
         <figure className="flex md:w-1/2 w-[80%] justify-center items-center relative transition-all duration-500 ease-in-out animate-floating lg:mx-5">
           <Image
             key={currentTheme.name}
@@ -137,7 +137,7 @@ const [totalPlayers, setTotalPlayers] = useState(0);
         <div className="description md:w-1/2 flex flex-col justify-center gap-2">
           <h1 className="font-orbitron flex flex-col justify-center">
             <span
-              className="md:text-8xl text-7xl py-2 font-extrabold"
+              className="lg:text-8xl text-7xl py-2 font-extrabold"
               style={{
                 backgroundImage: currentTheme?.gradient,
                 backgroundRepeat: "no-repeat",
@@ -150,7 +150,7 @@ const [totalPlayers, setTotalPlayers] = useState(0);
             </span>
 
             <span
-              className="close transition-colors duration-300 translate-x-29 translate-y-17.5 md:translate-x-49 md:translate-y-23.5"
+              className="close transition-colors duration-300 translate-x-29 translate-y-17.5 lg:translate-x-49 lg:translate-y-23.5"
               style={{
                 backgroundImage: currentTheme?.gradient,
                 backgroundRepeat: "no-repeat",
