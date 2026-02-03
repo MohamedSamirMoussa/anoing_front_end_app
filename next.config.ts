@@ -12,6 +12,14 @@ const nextConfig: NextConfig = {
     ],
     domains: ['res.cloudinary.com'],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/socket.io/:path*",
+        destination: "https://anoing-app.vercel.app/socket.io/:path*",
+      },
+    ];
+  },
 };
 
 export default nextConfig;
