@@ -16,7 +16,7 @@ import { io, Socket } from "socket.io-client";
 export const createSocket = () => {
   const isProduction = process.env.NODE_ENV === "production";
 
-  return io(process.env.NEXT_PUBLIC_BACK_END_URI || "http://localhost:5000/", {
+  return io(process.env.NEXT_PUBLIC_BACK_END_URI, {
     transports: isProduction ? ["polling"] : ["websocket", "polling"],
     reconnection: true,
     reconnectionAttempts: 10,
