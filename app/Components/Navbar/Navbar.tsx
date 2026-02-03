@@ -90,7 +90,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className="nav w-full fixed top-0 z-[999] backdrop-blur-sm py-5 bg-[#000000]"
+      className="nav w-full fixed top-0 z-[999] backdrop-blur-sm py-3 bg-[#000000]"
       style={{ "--active-gradient": theme.gradient } as React.CSSProperties}
     >
       <section className="container w-full mx-auto flex items-center justify-between lg:justify-center">
@@ -110,7 +110,7 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Menu */}
-        <ul className="hidden lg:flex justify-center items-center gap-5 text-white font-medium links">
+        <ul className="hidden lg:flex justify-center items-center lg:gap-15 gap-5 text-white font-medium links">
           <li className={activeSection === "home" ? "active" : ""}>
             <Link href="/#home" style={linkStyle("home")}>
               Home

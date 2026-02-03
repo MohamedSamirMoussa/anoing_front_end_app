@@ -147,7 +147,7 @@ const Community = () => {
   return (
     <div
       id="community"
-      className="w-[95%] md:w-[85%] lg:w-[80%] mx-auto min-h-screen flex items-center justify-center py-20"
+      className="w-[95%] md:w-[80%] lg:w-[70%] mx-auto min-h-screen flex items-center justify-center py-20"
     >
       <div className="desc w-full flex justify-center flex-col items-center gap-5">
         <h1

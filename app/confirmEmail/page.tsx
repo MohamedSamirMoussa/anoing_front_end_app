@@ -42,7 +42,7 @@ const Page = () => {
     }
     resetForm()
     toast.success(result.payload?.message || "Email verified!");
-    router.push("/login")
+    router.push("/auth")
   };
 
   const handleResendOtp = async () => {

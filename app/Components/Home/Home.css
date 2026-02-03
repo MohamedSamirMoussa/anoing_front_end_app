@@ -1,4 +1,3 @@
-
 h1 {
   position: relative;
 }
@@ -10,11 +9,6 @@ h1 {
   right: 0;
   left: 0;
   top: 0;
-  transform: translate(125%, 77%);
-  -webkit-transform: translate(125%, 77%);
-  -moz-transform: translate(125%, 77%);
-  -ms-transform: translate(125%, 77%);
-  -o-transform: translate(125%, 77%);
 }
 .tabs,
 .players,

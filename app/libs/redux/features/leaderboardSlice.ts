@@ -25,8 +25,6 @@ export const getLeaderboardThunk = createAsyncThunk(
         params: { serverName },
       });
       
-      console.log(data);
-      
       return data;
     } catch (error: unknown) {
       console.log(error);

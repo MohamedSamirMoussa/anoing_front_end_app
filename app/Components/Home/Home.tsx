@@ -1,15 +1,9 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  faBoxOpen,
-  faCheck,
-  faCopy,
-  faUsers,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBoxOpen, faCheck, faCopy, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-// Redux Imports
 import { useSelector, useDispatch } from "react-redux";
 import "./Home.css";
 import { setActiveServer } from "@/app/libs/redux/features/themeSlice";
@@ -19,34 +13,19 @@ import { useEffect, useRef, useState } from "react";
 import { getLeaderboardThunk } from "@/app/libs/redux/features/leaderboardSlice";
 import { io, Socket } from "socket.io-client";
 
-// export const createSocket = () => io(
-//   "http://localhost:5000/", 
-//   {
-//     transports: ["websocket"],
-//     reconnection: true,
-//     reconnectionAttempts: 5,
-//     reconnectionDelay: 1000,
-// });
-
-
-
 export const createSocket = () => {
-  const isProduction = process.env.NODE_ENV === 'production';
-  
-  return io(
-    process.env.NEXT_PUBLIC_BACK_END_URI || "http://localhost:5000/",
-    {
-      transports: isProduction ? ['polling'] : ['websocket', 'polling'],
-      reconnection: true,
-      reconnectionAttempts: 10,
-      reconnectionDelay: 1000,
-      timeout: 20000,
-      forceNew: isProduction,
-      path: '/socket.io/',
-    }
-  );
-}
+  const isProduction = process.env.NODE_ENV === "production";
 
+  return io(process.env.NEXT_PUBLIC_BACK_END_URI || "http://localhost:5000/", {
+    transports: isProduction ? ["polling"] : ["websocket", "polling"],
+    reconnection: true,
+    reconnectionAttempts: 10,
+    reconnectionDelay: 1000,
+    timeout: 20000,
+    forceNew: isProduction,
+    path: "/socket.io/",
+  });
+};
 
 interface LeaderboardUser {
   username: string;
@@ -62,107 +41,69 @@ const Home = () => {
   const ipAddress = "cf2.anoing.com:25566";
   const dispatch = useDispatch();
   const [copied, setCopied] = useState(false);
-  
+  const [connected, setConnected] = useState(false)
   const activeTab = useSelector((state: RootState) => state.theme.activeServer) || "atm 10";
   const currentTheme = themes[activeTab] || themes["atm 10"];
   const socketRef = useRef<Socket | null>(null);
   const [socketConnected, setSocketConnected] = useState(false);
-  
-  // استخدام بيانات الـ leaderboard من Redux store
-  const { data, loading } = useSelector((state: RootState) => state.leaderboard);
-  const users = data?.result?.leaderboard || [];
-  const totalPlayers = users.length;
-  const onlinePlayers = users.filter((user: LeaderboardUser) => user.is_online).length;
-  
-  // الحالة المحلية لبيانات السوكيت
-  const [leaderboard, setLeaderboard] = useState<LeaderboardUser[]>([]);
-  const [socketOnlineCount, setSocketOnlineCount] = useState<number>(0);
+ const [onlineCount, setOnlineCount] = useState(0);
+  const { data } = useSelector((state: RootState) => state.leaderboard);
+const [totalPlayers, setTotalPlayers] = useState(0);
+  const [loading, setLoading] = useState(true);
 
-  // استخدام بيانات السوكيت إذا كانت متاحة، وإلا استخدام بيانات API
-  const displayUsers = socketConnected && leaderboard.length > 0 ? leaderboard : users;
-  const displayTotalPlayers = displayUsers.length;
-  const displayOnlinePlayers = socketConnected ? socketOnlineCount : onlinePlayers;
-
+  // -------------------- Socket.IO Setup --------------------
   useEffect(() => {
-    console.log("🔌 Initializing Socket.IO...");
-    
-    if (!socketRef.current) {
-      socketRef.current = createSocket();
-      const socket = socketRef.current;
-      
-      socket.on("connect", () => {
-        console.log("✅ Socket.IO connected, ID:", socket.id);
-        setSocketConnected(true);
-        
-        // أرسل السيرفر المختار حالياً فور الاتصال
-        socket.emit("select_server", activeTab);
-      });
-      
-      socket.on("connect_error", (error) => {
-        console.error("❌ Socket.IO connection error:", error);
-        setSocketConnected(false);
-      });
-      
-      socket.on("disconnect", () => {
-        console.log("❌ Socket.IO disconnected");
-        setSocketConnected(false);
-      });
+    if (socketRef.current) return;
 
-      const handleLeaderboard = (data: {
-        server: string;
-        leaderboard: LeaderboardUser[];
-        onlineCount: number;
-      }) => {
-        console.log(`📦 Received data for server ${data.server}:`, data.leaderboard.length, "players");
-        
-        // تحديث فقط إذا كان نفس السيرفر النشط
-        if (data.server.toLowerCase() === activeTab.toLowerCase()) {
-          setLeaderboard(data.leaderboard);
-          setSocketOnlineCount(data.onlineCount);
-        }
-      };
+    const socket = createSocket();
+    socketRef.current = socket;
 
-      socket.on("leaderboard_update", handleLeaderboard);
-      
-      return () => {
-        console.log("🧹 Cleaning up Socket.IO");
-        socket.off("leaderboard_update", handleLeaderboard);
-        socket.off("connect");
-        socket.off("connect_error");
-        socket.off("disconnect");
-        socket.disconnect();
-        socketRef.current = null;
-      };
-    }
+    socket.on("connect", () => {
+      socket.emit("select_server", {
+        serverName: activeTab
+      });
+    });
+
+    socket.on("disconnect", () => {
+      setConnected(false);
+    });
+
+    socket.on("leaderboard_updates", (data) => {
+      if (data.serverName !== activeTab.toLowerCase()) return;
+
+
+      setOnlineCount(data.onlineCount);
+       setTotalPlayers(data.pagination.totalPlayers);
+      setLoading(false);
+    });
+
+    return () => {
+      socket.disconnect();
+      socketRef.current = null;
+    };
   }, []);
 
-  // عندما يتغير السيرفر النشط
+  /* -------------------- Server Change -------------------- */
+
   useEffect(() => {
+    setLoading(true);
+
     if (socketRef.current?.connected) {
-      console.log(`🔄 Switching to server: ${activeTab}`);
-      
-      // أرسل للسيرفر أي سيرفر جديد مختار
-      socketRef.current.emit("select_server", activeTab);
-      
-      // Reset البيانات القديمة
-      setLeaderboard([]);
-      setSocketOnlineCount(0);
+      socketRef.current.emit("select_server", {
+        serverName: activeTab,
+      });
     }
-    
-    // Also fetch from API كـ fallback
+
+    // API fallback
     dispatch(getLeaderboardThunk(activeTab) as any);
-    
-  }, [activeTab, dispatch]);
+  }, [activeTab]);
+
 
   const handleTabChange = (tabName: string) => {
     dispatch(setActiveServer(tabName));
-    
-    // أرسل للسيرفر الجديد
     if (socketRef.current?.connected) {
       socketRef.current.emit("select_server", tabName);
     }
-    
-    // Also fetch from API
     dispatch(getLeaderboardThunk(tabName) as any);
   };
 
@@ -176,15 +117,17 @@ const Home = () => {
     }
   };
 
+  // -------------------- Render --------------------
   return (
-    <div id="home" className="">
-      <div className="container h-screen text-white w-[90%] mx-auto flex flex-col md:flex-row justify-center items-center">
-        <figure className="flex md:w-1/2 justify-center items-center relative transition-all duration-500 ease-in-out animate-floating lg:mx-5 xl:odd:translate-y-12">
+    <div id="home" className="mt-40 md:mt-0 lg:mt-0">
+      <div className="container h-screen text-white lg:w-[60%] md:w-[80%] mx-auto flex flex-col gap-10 md:flex-row justify-center items-center pt-40 md:pt-0 lg:pt-0">
+        <figure className="flex md:w-1/2 w-[80%] justify-center items-center relative transition-all duration-500 ease-in-out animate-floating lg:mx-5">
           <Image
             key={currentTheme.name}
             src={currentTheme.image}
             alt={`${currentTheme.name} modpack`}
-            width={600}
+            width={500}
+            height={500}
             quality={80}
             priority
             className="drop-shadow-2xl transition-opacity duration-300 lg:w-auto w-full"
@@ -194,9 +137,9 @@ const Home = () => {
         <div className="description md:w-1/2 flex flex-col justify-center gap-2">
           <h1 className="font-orbitron flex flex-col justify-center">
             <span
-              className="text-[5.0rem] font-extrabold"
+              className="md:text-8xl text-7xl py-2 font-extrabold"
               style={{
-                backgroundImage: currentTheme?.gradient,  
+                backgroundImage: currentTheme?.gradient,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 WebkitBackgroundClip: "text",
@@ -207,9 +150,9 @@ const Home = () => {
             </span>
 
             <span
-              className="close transition-colors duration-300"
+              className="close transition-colors duration-300 translate-x-29 translate-y-17.5 md:translate-x-49 md:translate-y-23.5"
               style={{
-                backgroundImage: currentTheme?.gradient, 
+                backgroundImage: currentTheme?.gradient,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
                 WebkitBackgroundClip: "text",
@@ -219,9 +162,8 @@ const Home = () => {
               close friends
             </span>
           </h1>
-          <p style={{ color: currentTheme.color }}>
-            Your Ultimate Minecraft Adventure Awaits!
-          </p>
+
+          <p style={{ color: currentTheme.color }}>Your Ultimate Minecraft Adventure Awaits!</p>
 
           <div className="servers my-3">
             {/* Tabs */}
@@ -234,10 +176,7 @@ const Home = () => {
                     onClick={() => handleTabChange(serverName)}
                     className={`px-4 py-2 rounded-xl transition-all duration-300 w-full`}
                     style={{
-                      background:
-                        activeTab === serverName
-                          ? tabTheme.gradient
-                          : "transparent",
+                      background: activeTab === serverName ? tabTheme.gradient : "transparent",
                       color: "#fff",
                     }}
                   >
@@ -247,7 +186,7 @@ const Home = () => {
               })}
             </div>
 
-            {/* Server Info */}
+            {/* Server Info: Online / Total */}
             <div className="my-3 flex justify-center items-center gap-2">
               <div className="players rounded-xl p-2 w-full flex items-center gap-2 bg-[#222] border border-[#333]">
                 <span style={{ color: currentTheme.color }}>
@@ -255,11 +194,12 @@ const Home = () => {
                 </span>
                 <p className="flex flex-col">
                   <span className="text-white">
-                    {displayOnlinePlayers}/{displayTotalPlayers}
+                    {onlineCount}/{totalPlayers}
                   </span>
                   <span className="text-gray-400 text-[12px]">Online Players</span>
                 </p>
               </div>
+
               <div className="mod rounded-xl p-2 w-full flex items-center gap-2 bg-[#222] border border-[#333]">
                 <span style={{ color: currentTheme.color }}>
                   <FontAwesomeIcon icon={faBoxOpen} className="text-3xl" />
@@ -270,15 +210,10 @@ const Home = () => {
                 </p>
               </div>
             </div>
-            
-            {/* Connection Status Indicator */}
-            <div className="my-2 flex justify-center">
-              <div className="text-xs px-2 py-1 rounded-full bg-[#ffffff10] text-gray-400 flex items-center gap-1">
-                <span className={`w-2 h-2 rounded-full ${socketConnected ? "animate-pulse bg-green-500" : "bg-yellow-500"}`}></span>
-                {socketConnected ? "Live Connection" : "Polling Data"}
-              </div>
-            </div>
-            
+
+
+
+            {/* Copy IP */}
             <div className="my-3 relative group">
               <input
                 type="text"
@@ -286,7 +221,7 @@ const Home = () => {
                 readOnly
                 disabled
                 className="w-full p-3 ip border rounded-xl cursor-default text-gray-300 font-mono text-sm transition-all duration-300"
-                style={{ borderLeft: `4px solid ${currentTheme.color}` }}     
+                style={{ borderLeft: `4px solid ${currentTheme.color}` }}
               />
               <button
                 onClick={handleCopy}
@@ -299,15 +234,14 @@ const Home = () => {
                   <FontAwesomeIcon icon={faCopy} />
                 )}
               </button>
-              {/* تنبيه صغير عند النسخ */}
               {copied && (
                 <span className="absolute -top-8 right-0 text-xs font-bold text-green-500 animate-bounce">
                   Copied!
                 </span>
               )}
             </div>
-            
-            {/* Discover More Button */}
+
+            {/* Discover More */}
             <div className="discover my-3 flex justify-center items-center">
               <Link
                 href={"#about"}

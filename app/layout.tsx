@@ -29,9 +29,25 @@ const RobotoFont = Roboto({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Anoing",
-  description: "Anoing app website is here.",
+export const metadata:Metadata = {
+  title: 'Anoing - Minecraft Server',
+  description: 'Play on our amazing Minecraft server with friends!',
+  keywords: 'minecraft, server, gaming, community',
+  openGraph: {
+    title: 'Anoing Minecraft Server',
+    description: 'Join our Minecraft community today!',
+    url: 'https://anoing-app.vercel.app',
+    siteName: 'Anoing',
+    images: [
+      {
+        url: 'https://anoing-app.vercel.app/og-image.png',
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({

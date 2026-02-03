@@ -48,7 +48,7 @@ const page = () => {
                   </h1>
 
                   {/* Stacked Images Animation Container */}
-                  <div className="group-img grid  grid-cols-7 scale-110 hover:scale-115  transition-transform duration-700 py-16">
+                  <div className="group-img hidden lg:grid  lg:grid-cols-7 scale-110 hover:scale-115  transition-transform duration-700 py-16">
                     <div
                       className="absolute inset-0 blur-[200px] opacity-20 rounded-full -z-10"
                       style={{ background: theme.gradient }}

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { searchbarThunk } from "@/app/libs/redux/features/leaderboardSlice";
+import Image from "next/image";
 
 const LiveSearch = ({ currentTheme }: { currentTheme: any }) => {
   const dispatch = useDispatch();
@@ -76,40 +77,41 @@ const LiveSearch = ({ currentTheme }: { currentTheme: any }) => {
                 Searching players...
               </div>
             ) : searchResults.length > 0 ? (
-              searchResults.map((player: any) => (
-                <div
-                  key={player._id || player.username}
-                  className="flex items-center gap-3 p-3 hover:bg-white/5 cursor-pointer border-b border-white/5 last:border-none"
-                  onClick={() => {
-                    setIsOpen(false);
-                    formik.setFieldValue("search", player.username);
-                  }}
-                >
-                  {/* <Image
-                    width={32}
-                    height={32}
-                    src={player.avatar || "/default-avatar.png"}
-                    alt={player.username}
-                    className="w-8 h-8 rounded bg-black/20"
-                  /> */}
-                  <div className="flex flex-col">
-                    <span className="text-white text-sm font-bold">
-                      {player.username}
-                    </span>
-                    <span className="text-[10px] text-white/40 uppercase">
-                      {player.rank?.name || "Player"}
-                    </span>
-                  </div>
-                  <div className="ml-auto flex flex-col items-end">
-                    <span className="text-[11px] text-white/60">
-                      {player.playTime?.hours || 0}h
-                    </span>
-                    <div
-                      className={`w-2 h-2 rounded-full ${player.is_online ? "bg-green-500 shadow-[0_0_5px_green]" : "bg-red-500"}`}
+              searchResults.map((player: any) => {
+                return (
+                  <div
+                    key={player._id || player.username}
+                    className="flex items-center gap-3 p-3 hover:bg-white/5 cursor-pointer border-b border-white/5 last:border-none"
+                    onClick={() => {
+                      setIsOpen(false);
+                      formik.setFieldValue("search", player.username);
+                    }}
+                  >
+                    <Image
+                      src={player.avatar}
+                      alt={`${player.avatar}`}
+                      width={30}
+                      height={30}
                     />
+                    <div className="flex flex-col">
+                      <span className="text-white text-sm font-bold">
+                        {player.username}
+                      </span>
+                      <span className="text-[10px] text-white/40 uppercase">
+                        {player.rank?.name || "Player"}
+                      </span>
+                    </div>
+                    <div className="ml-auto flex flex-col items-end">
+                      <span className="text-[11px] text-white/60">
+                        {player.playTime.hours || 0}h
+                      </span>
+                      <div
+                        className={`w-2 h-2 rounded-full ${player.is_online ? "bg-green-500 shadow-[0_0_5px_green]" : "bg-red-500"}`}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <div className="p-5 text-center text-white/20 text-sm italic">
                 No players found
