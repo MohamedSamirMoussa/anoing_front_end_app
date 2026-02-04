@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { api } from "../../api/api";
+import  api  from "../../api/api";
 import { handleThunkError } from "@/app/hooks/handlingErr";
 
 // 1. تحسين تعريف الأنواع (Interfaces) لجعل الكود أكثر أماناً

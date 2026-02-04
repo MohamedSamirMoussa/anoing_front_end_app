@@ -8,24 +8,22 @@ import { useDispatch } from "react-redux";
 import { IDonate } from "../Donate/Donate";
 import toast from "react-hot-toast";
 
-
 interface IOptions {
-  clientId:string
-  currency:"USD"
-  intent:"capture"
+  clientId: string;
+  currency: "USD";
+  intent: "capture";
 }
 
-const initialOptions:IOptions = {
+const initialOptions: IOptions = {
   clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID as string,
   currency: "USD",
   intent: "capture",
 };
 
-const PaypalPayment = ({ amount }: { amount: IDonate }) => {
+const PaypalPayment = ({ amount , theme }: { amount: IDonate , theme:any }) => {
   const dispatch = useDispatch();
   const handleCreateOrder = async () => {
     try {
-      
       const res = await dispatch(donateWithPaypalThunk(amount) as any);
 
       if (res.payload) {
@@ -38,31 +36,46 @@ const PaypalPayment = ({ amount }: { amount: IDonate }) => {
     }
   };
 
-const handleApprove = async (data:{orderID:string}) => {
-  // 💡 أحياناً بنحتاج ننتظر ثانية لضمان تحديث حالة الأوردر في سيرفرات باي بال
-  console.log("User approved the payment, Order ID:", data.orderID);
-  
-  // نبعت للباك إند
-  const res = await dispatch(captureWithPaypalThunk(data.orderID) as any);
-  console.log(res);
-  
-  if (res.payload?.status === "COMPLETED") {
-     toast.success(res.payload.status)
-  } else {
-    toast.error('Something went wrong ... Please try again')
-  }
-};
+  const handleApprove = async (data: { orderID: string }) => {
+    // 💡 أحياناً بنحتاج ننتظر ثانية لضمان تحديث حالة الأوردر في سيرفرات باي بال
+    console.log("User approved the payment, Order ID:", data.orderID);
+
+    // نبعت للباك إند
+    const res = await dispatch(captureWithPaypalThunk(data.orderID) as any);
+    console.log(res);
+
+    if (res.payload?.status === "COMPLETED") {
+      toast.success(res.payload.status);
+    } else {
+      toast.error("Something went wrong ... Please try again");
+    }
+  };
   return (
     <PayPalScriptProvider options={initialOptions}>
-      <div className="">
+      <div className="max-w-[400px] mx-auto p-6 bg-zinc-700 rounded-2xl shadow-lg">
+        <div className="mb-4 text-center">
+          <h3 className="text-2xl font-extrabold font-orbitron">
+            Confirm your donation
+          </h3>
+        </div>
+
         <PayPalButtons
-          style={{ shape: "rect", layout: "vertical" }}
+          style={{
+            shape: "pill",
+            color: "blue",        
+            layout: "vertical",
+            label: "donate",
+          }}
           createOrder={handleCreateOrder}
           onApprove={handleApprove}
-          onError={(err) => {
-            console.log("PayPal Button Error:", err);
-          }}
         />
+
+        <div className="mt-4 flex items-center justify-center gap-2">
+          <span className="text-[10px] uppercase tracking-widest">
+            Secure Encryption
+          </span>
+          <div className="h-px w-8 bg-gray-200"></div>
+        </div>
       </div>
     </PayPalScriptProvider>
   );

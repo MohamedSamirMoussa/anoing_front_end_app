@@ -94,10 +94,7 @@ const page = () => {
                     </Link>
                   </div>
                 ) : (
-                  <CreateBlog
-                    theme={theme}
-                    isLogged={isLogged}
-                  />
+                  <CreateBlog theme={theme} isLogged={isLogged} />
                 )}
               </div>
             </div>

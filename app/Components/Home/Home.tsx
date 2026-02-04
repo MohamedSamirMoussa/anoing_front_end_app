@@ -26,17 +26,6 @@ export const createSocket = () => {
     path: "/socket.io/",
   });
 };
-
-interface LeaderboardUser {
-  username: string;
-  is_online: boolean;
-  playTime: { hours: number; minutes: number; seconds: number };
-  lastSeen: string | null;
-  rank: { name: string };
-  avatar?: string;
-  id?: string;
-}
-
 const Home = () => {
   const ipAddress = "cf2.anoing.com:25566";
   const dispatch = useDispatch();
@@ -81,7 +70,7 @@ const [totalPlayers, setTotalPlayers] = useState(0);
       socket.disconnect();
       socketRef.current = null;
     };
-  }, []);
+  }, [activeTab]);
 
   /* -------------------- Server Change -------------------- */
 
@@ -96,7 +85,7 @@ const [totalPlayers, setTotalPlayers] = useState(0);
 
     // API fallback
     dispatch(getLeaderboardThunk(activeTab) as any);
-  }, [activeTab]);
+  }, [activeTab , dispatch]);
 
 
   const handleTabChange = (tabName: string) => {

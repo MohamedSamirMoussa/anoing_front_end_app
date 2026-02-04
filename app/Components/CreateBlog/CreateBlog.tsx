@@ -59,7 +59,6 @@ const CreateBlog = ({ theme, isLogged }: any) => {
         setFormData({ title: "", description: "", image: null });
         window.location.href = "/gallery";
       } else {
-        // في حالة الـ Rejected
         const errorMsg =
           `${(res.payload as any)?.errMessage}..please login again` ||
           "Failed to create blog";

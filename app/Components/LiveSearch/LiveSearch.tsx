@@ -70,8 +70,8 @@ const LiveSearch = ({ currentTheme }: { currentTheme: any }) => {
       </div>
 
       {isOpen && (
-        <div className="absolute top-full left-0 w-full mt-2 bg-[#121212] border border-white/10 rounded-xl overflow-hidden shadow-2xl z-40">
-          <div className="max-h-[300px] overflow-y-auto">
+        <div className="open absolute top-full left-0 w-full mt-2 bg-[#121212] border border-white/10 rounded-xl overflow-hidden shadow-2xl">
+          <div className="max-h-[300px] z-[500]">
             {searchLoading ? (
               <div className="p-5 text-center text-white/40 text-sm">
                 Searching players...
@@ -81,7 +81,7 @@ const LiveSearch = ({ currentTheme }: { currentTheme: any }) => {
                 return (
                   <div
                     key={player._id || player.username}
-                    className="flex items-center gap-3 p-3 hover:bg-white/5 cursor-pointer border-b border-white/5 last:border-none"
+                    className="flex items-center gap-3 p-3 z-40 hover:bg-white/5 cursor-pointer border-b border-white/5 last:border-none"
                     onClick={() => {
                       setIsOpen(false);
                       formik.setFieldValue("search", player.username);

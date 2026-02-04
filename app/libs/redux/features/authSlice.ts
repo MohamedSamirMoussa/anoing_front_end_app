@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, UnknownAction } from "@reduxjs/toolkit";
-import { api } from "../../api/api";
+import  api  from "../../api/api";
 import { IGoogleUser } from "@/app/Components/GoogleButton/GoogleButton";
 import { IConfirmInterface } from "@/app/confirmPassword/page";
 import { IResetPass } from "@/app/newPassword/page";

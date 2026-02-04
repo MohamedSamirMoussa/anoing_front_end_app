@@ -50,31 +50,68 @@ const Page = () => {
     return () => clearInterval(interval);
   }, [timer]);
 
-  const onSubmit = async (values:IConfirmInterface, { resetForm }:FormikHelpers<IConfirmInterface>) => {
-    const result = await dispatch(confirmPasswordThunk(values as IConfirmInterface) as any);
-    if (result.meta.requestStatus === "rejected") {
-      return toast.error(result.payload?.errMessage || "Invalid OTP");
-    }
-    resetForm()
-    toast.success(result.payload?.message || "OTP Verified Successfully");
-    router.push("/newPassword");
-  };
+const onSubmit = async (
+  values: IConfirmInterface,
+  { resetForm }: FormikHelpers<IConfirmInterface>,
+) => {
+  const result = await dispatch(
+    confirmPasswordThunk(values) as any
+  );
 
+  console.log(result);
 
-  const handleResendOtp = async () => {
-    if (!formik.values.email || formik.errors.email) {
-      return toast.error("Please enter a valid email first");
+  if (result.meta.requestStatus === "rejected") {
+    // default message
+    let errorMessage ;
+
+    // Zod validation error
+    const zodMessage =
+      result?.payload?.cause?.cause?.[0]?.issues?.[0]?.message;
+
+    if (zodMessage) {
+      errorMessage = zodMessage;
+    } 
+    // backend custom error
+    else if (result?.payload?.errMessage) {
+      errorMessage = result.payload.errMessage;
     }
 
-    const result = await dispatch(resendOtpThunk({ email: formik.values.email }) as any);
-    
-    if (result.meta.requestStatus === "fulfilled") {
-      toast.success("A new OTP has been sent!");
-      setTimer(60);
-    } else {
-      toast.error(result.payload?.errMessage || "Failed to resend code");
-    }
-  };
+    toast.error(errorMessage);
+    return;
+  }
+
+  resetForm();
+  toast.success(result.payload?.message || "Email verified!");
+  router.push("/auth");
+};
+
+const handleResendOtp = async () => {
+  if (!formik.values.email) {
+    toast.error("Please enter your email first");
+    return;
+  }
+
+  const result = await dispatch(
+    resendOtpThunk({ email: formik.values.email }) as any
+  );
+
+  if (resendOtpThunk.fulfilled.match(result)) {
+    toast.success(
+      (result.payload as any)?.message || "New OTP sent to your email"
+    );
+    setTimer(60);
+    return;
+  }
+
+  if (resendOtpThunk.rejected.match(result)) {
+    const errorMessage =
+      result?.payload?.cause?.cause?.[0]?.issues?.[0]?.message ||
+      result?.payload?.errMessage ||
+      "Failed to resend OTP";
+
+    toast.error(errorMessage);
+  }
+};
 
   const formik = useFormik({
     initialValues,

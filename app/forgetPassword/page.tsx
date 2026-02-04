@@ -29,19 +29,38 @@ const Page = () => {
     (state: RootState) => state.theme.activeServer || "atm 10",
   );
   const theme = themes[activeServer] || themes["atm 10"];
-  const onSubmit = async (
-    values:{email:string},
-    { resetForm, setSubmitting }:FormikHelpers<{email:string}>,
-  ) => {
-    const result = await dispatch(forgetPasswordThunk(values) as any);
-    console.log(result)
-    if (result.meta?.requestStatus === "rejected") {
-      return toast.error(result.payload?.errMessage);
-    }
+const onSubmit = async (
+  values: { email: string },
+  { resetForm, setSubmitting }: FormikHelpers<{ email: string }>
+) => {
+  setSubmitting(true);
+
+  const result = await dispatch(
+    forgetPasswordThunk(values) as any
+  );
+
+  /* ❌ ERROR */
+  if (forgetPasswordThunk.rejected.match(result)) {
+    const errorMessage =
+      (result.payload as any)?.cause?.cause?.[0]?.issues?.[0]?.message ||
+      (result.payload as any)?.errMessage ||
+      "Failed to send reset code";
+
+    toast.error(errorMessage);
+    setSubmitting(false);
+    return;
+  }
+
+  /* ✅ SUCCESS */
+  if (forgetPasswordThunk.fulfilled.match(result)) {
+    toast.success(
+      (result.payload as any)?.message || "Reset code sent to your email"
+    );
     resetForm();
-    toast.success(result.payload?.message );
+    setSubmitting(false);
     router.push("/confirmPassword");
-  };
+  }
+};
 
   const formik = useFormik({
     initialValues,

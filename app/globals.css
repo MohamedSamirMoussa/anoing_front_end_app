@@ -80,6 +80,10 @@ label {
   color: var(--color-p);
 }
 
+.open {
+  z-index: 999;
+}
+
 ::placeholder {
   color: var(--color-p);
 }

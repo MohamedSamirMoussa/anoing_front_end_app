@@ -3,7 +3,7 @@ import "./auth.css";
 import Image from "next/image";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
-import React, { useState, useEffect } from "react";  
+import React, { useState, useEffect } from "react";
 import two from "../../public/two.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
@@ -51,8 +51,10 @@ const registerSchema = Yup.object({
   password: Yup.string()
     .required("Password is required")
     .min(8, "Password must be at least 8 characters")
-    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .matches(/\d/, "Password must contain at least one number"),
+    .matches(
+      /^[aA-Zz](?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).+$/,
+      "Password must start with an uppercase letter and contain letters, numbers, and special characters",
+    ),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password")], "Passwords must match")
     .required("Confirm password is required"),
@@ -83,8 +85,12 @@ const Page = () => {
   ) => {
     try {
       let submitData;
+
       if (activeTab === TABS.SIGN_IN) {
-        submitData = { email: values.email, password: values.password };
+        submitData = {
+          email: values.email,
+          password: values.password,
+        };
       } else {
         submitData = {
           username: values.username,
@@ -98,30 +104,32 @@ const Page = () => {
       const thunk = activeTab === TABS.SIGN_IN ? loginThunk : registerThunk;
       const redirectPath = activeTab === TABS.SIGN_IN ? "/" : "/confirmEmail";
 
-      // ✅ الآن الـ dispatch سيعمل بدون أخطاء TypeScript
       const result = await dispatch(thunk(submitData as any));
 
-      console.log(result);
-      
-
+      /* ❌ REJECTED */
       if (thunk.rejected.match(result)) {
-        toast.error(
-          (result?.payload as any)?.errMessage || "Authentication failed",
-        );
+        const errorMessage =
+          result?.payload?.cause?.cause?.[0]?.issues?.[0]?.message ||
+          result?.payload?.errMessage ||
+          "Authentication failed";
+
+        toast.error(errorMessage);
         helpers.setSubmitting(false);
         return;
       }
 
+      /* ✅ FULFILLED */
       if (thunk.fulfilled.match(result)) {
         toast.success((result.payload as any)?.message || "Success!");
         helpers.resetForm();
         helpers.setSubmitting(false);
+
         setTimeout(() => {
           router.push(redirectPath);
         }, 1500);
       }
     } catch (error: any) {
-      toast.error(error.message || "An unexpected error occurred.");
+      toast.error(error?.message || "An unexpected error occurred.");
       helpers.setSubmitting(false);
     }
   };
@@ -242,9 +250,13 @@ const Page = () => {
               <div className="flex-grow border-t border-white/10"></div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <GoogleButton />
-              <DiscordButton />
+            <div className="flex flex-col justify-center items-center gap-4">
+              <div className="w-full">
+                <GoogleButton />
+              </div>
+              <div className="w-full">
+                <DiscordButton />
+              </div>
             </div>
           </form>
 

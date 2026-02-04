@@ -9,7 +9,7 @@ import { persistReducer, persistStore } from "redux-persist";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth" , "theme" , "leaderboard" , "donate" , "blogs"],
+  whitelist: ["auth" , "theme" , "leaderboard" , "donate" , "blogs" , ],
 };
 
 const rootReducer = combineReducers({
@@ -17,7 +17,7 @@ const rootReducer = combineReducers({
   theme,
   leaderboard,
   donate,
-  blogs
+  blogs,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

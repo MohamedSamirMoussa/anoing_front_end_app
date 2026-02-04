@@ -8,7 +8,7 @@ import { themes } from "@/app/hooks/themes";
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import { RootState } from "@/app/libs/redux/store";
-import './Donate.css'
+import "./Donate.css";
 export interface IDonate {
   currency_code: "USD";
   value: string;
@@ -28,9 +28,9 @@ const validationSchema = Yup.object({
 
 const Donate = () => {
   const activeTab = useSelector(
-    (state: RootState) => state.theme.activeServer || "Vanilla",
+    (state: RootState) => state.theme.activeServer || "atm 10",
   );
-  const theme = themes[activeTab] || themes["Vanilla"];
+  const theme = themes[activeTab] || themes["atm 10"];
   const [hidden, setHidden] = useState<boolean>(true);
 
   const handleDonateBtn = () => setHidden(!hidden);
@@ -118,6 +118,7 @@ const Donate = () => {
             {isValidAmount ? (
               <div className="animate-fade-in">
                 <PaypalPayment
+                  theme={theme}
                   amount={{
                     currency_code: "USD",
                     value: formik.values.value,

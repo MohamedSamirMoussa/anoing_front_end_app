@@ -33,7 +33,7 @@ const validationSchema = Yup.object({
   newPassword: Yup.string()
     .required("Password is required")
     .min(8, "Password must be at least 8 characters")
-    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .matches(/[A-Z]/, "Password must start with an uppercase letter and contain letters, numbers, and special characters")
     .matches(/\d/, "Password must contain at least one number"),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("newPassword")], "Passwords must match")
@@ -47,16 +47,39 @@ const page = () => {
     (state: RootState) => state.theme.activeServer || "atm 10",
   );
   const theme = themes[activeServer];
-  const onSubmit = async (values:IResetPass, { resetForm, setSubmitting }:FormikHelpers<IResetPass>) => {
-    const result = await dispatch(newPasswordThunk(values) as any);
+const onSubmit = async (
+  values: IResetPass,
+  { resetForm, setSubmitting }: FormikHelpers<IResetPass>
+) => {
+  setSubmitting(true);
 
-    if (result.meta.requestStatus === "rejected") {
-      return toast.error(result.payload.errMessage);
-    }
+  const result = await dispatch(
+    newPasswordThunk(values) as any
+  );
+
+  /* ❌ ERROR */
+  if (newPasswordThunk.rejected.match(result)) {
+    const errorMessage =
+      (result.payload as any)?.cause?.cause?.[0]?.issues?.[0]?.message ||
+      (result.payload as any)?.errMessage ||
+      "Failed to reset password";
+
+    toast.error(errorMessage);
+    setSubmitting(false);
+    return;
+  }
+
+  /* ✅ SUCCESS */
+  if (newPasswordThunk.fulfilled.match(result)) {
+    toast.success(
+      (result.payload as any)?.message || "Password reset successfully"
+    );
     resetForm();
-    toast.success(result.payload.message);
+    setSubmitting(false);
     router.push("/auth");
-  };
+  }
+};
+
 
   const formik = useFormik({
     initialValues,

@@ -217,7 +217,7 @@ const [totalPlayers, setTotalPlayers] = useState(0);
             </div>
           </div>
 
-          <div className="left flex flex-col items-center gap-6">
+          <div className="left flex flex-col items-center gap-6 z-50">
             <LiveSearch currentTheme={currentTheme} />
             <div className="servers flex bg-[#00000040] p-1 rounded-xl border border-[#ffffff10] flex-wrap justify-center">
               {Object.keys(themes).map((serverKey) => {
@@ -262,7 +262,7 @@ const [totalPlayers, setTotalPlayers] = useState(0);
       ) : (
         <>
           {/* Leaderboard grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-15">
             {leaderboard.map((user: LeaderboardUser, index: number) => {
               const totalHours = user.playTime?.hours || 0;
               const minutes = user.playTime?.minutes || 0;

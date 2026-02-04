@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { api } from "../../api/api";
+import  api  from "../../api/api";
 import { IDonate } from "@/app/Components/Donate/Donate";
 import { handleThunkError } from "@/app/hooks/handlingErr";
 
