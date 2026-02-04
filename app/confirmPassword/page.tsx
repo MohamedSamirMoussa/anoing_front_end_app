@@ -105,8 +105,8 @@ const handleResendOtp = async () => {
 
   if (resendOtpThunk.rejected.match(result)) {
     const errorMessage =
-      result?.payload?.cause?.cause?.[0]?.issues?.[0]?.message ||
-      result?.payload?.errMessage ||
+      (result?.payload as any)?.cause?.cause?.[0]?.issues?.[0]?.message ||
+      (result?.payload as any)?.errMessage ||
       "Failed to resend OTP";
 
     toast.error(errorMessage);

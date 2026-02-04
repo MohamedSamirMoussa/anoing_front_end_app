@@ -106,11 +106,11 @@ const Page = () => {
 
       const result = await dispatch(thunk(submitData as any));
 
-      /* ❌ REJECTED */
       if (thunk.rejected.match(result)) {
+        const payload = result.payload as any
         const errorMessage =
-          result?.payload?.cause?.cause?.[0]?.issues?.[0]?.message ||
-          result?.payload?.errMessage ||
+          payload?.cause?.cause?.[0]?.issues?.[0]?.message ||
+          payload?.errMessage ||
           "Authentication failed";
 
         toast.error(errorMessage);
