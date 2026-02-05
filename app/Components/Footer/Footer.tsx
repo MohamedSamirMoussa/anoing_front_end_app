@@ -7,9 +7,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSelector } from "react-redux";
 const Footer = () => {
   const activeTab = useSelector(
-    (state: RootState) => state.theme.activeServer || "Vanilla",
+    (state: RootState) => state.theme.activeServer || "atm 10",
   );
-  const theme = themes[activeTab] || themes["Vanilla"];
+  const theme = themes[activeTab] || themes["atm 10"];
 
   return (
     <div

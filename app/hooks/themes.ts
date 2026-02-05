@@ -25,7 +25,7 @@ export const themes: Record<string, ThemeProps> = {
     shadowColor: "rgba(59, 130, 246, 0.5)",
     backgroundClip: "text",
     WebkitTextFillColor: "transparent",
-    gradient: `linear-gradient(to top right , rgba(75, 221, 240, 1), rgba(74, 0, 224, 1))`,
+    gradient: `linear-gradient(to top , rgba(75, 221, 240, 1), rgba(74, 0, 224, 1))`,
     image: blue,
   },
   "AllTheMons": {

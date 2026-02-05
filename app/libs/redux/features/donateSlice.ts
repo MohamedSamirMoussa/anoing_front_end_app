@@ -17,11 +17,11 @@ const initialState: DonateState = {
 
 export const donateWithPaypalThunk = createAsyncThunk(
   "donate/paypal",
-  async (amount: IDonate, { rejectWithValue }) => {
+  async (paymentData: IDonate, { rejectWithValue }) => {
     try {
       const { data } = await api.post(
         "/checkout/paypal",
-        { amount },
+        paymentData ,
         {
           headers: {
             "Content-Type": "application/json",

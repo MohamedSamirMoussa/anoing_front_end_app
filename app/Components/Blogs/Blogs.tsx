@@ -8,12 +8,12 @@ import { RootState } from '@/app/libs/redux/store';
 interface BlogsProps {
   theme: any;
   isLogged: boolean;
+  blogs:any
 }
 
-const Blogs = ({ theme, isLogged }: BlogsProps) => {
+const Blogs = ({ theme, isLogged , blogs }: BlogsProps) => {
   const dispatch = useDispatch();
   const [isClient, setIsClient] = useState<boolean>(false);
-  const blogs = useSelector((s: RootState) => s.blogs.blog);
 
   useEffect(() => {
     setIsClient(true);

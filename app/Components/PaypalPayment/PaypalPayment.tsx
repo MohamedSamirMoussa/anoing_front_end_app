@@ -20,12 +20,15 @@ const initialOptions: IOptions = {
   intent: "capture",
 };
 
-const PaypalPayment = ({ amount , theme }: { amount: IDonate , theme:any }) => {
+const PaypalPayment = ({ theme, data }: { theme: any; data: IDonate }) => {
   const dispatch = useDispatch();
+  console.log(data);
+  
   const handleCreateOrder = async () => {
     try {
-      const res = await dispatch(donateWithPaypalThunk(amount) as any);
-
+      const res = await dispatch(donateWithPaypalThunk(data) as any);
+      console.log(res);
+      
       if (res.payload) {
         return res.payload;
       }
@@ -52,7 +55,10 @@ const PaypalPayment = ({ amount , theme }: { amount: IDonate , theme:any }) => {
   };
   return (
     <PayPalScriptProvider options={initialOptions}>
-      <div className="max-w-[400px] mx-auto p-6 bg-zinc-700 rounded-2xl shadow-lg">
+      <div
+        className="max-w-[400px] mx-auto p-6  rounded-2xl shadow-lg"
+        style={{ background: theme.gradient }}
+      >
         <div className="mb-4 text-center">
           <h3 className="text-2xl font-extrabold font-orbitron">
             Confirm your donation
@@ -62,7 +68,7 @@ const PaypalPayment = ({ amount , theme }: { amount: IDonate , theme:any }) => {
         <PayPalButtons
           style={{
             shape: "pill",
-            color: "blue",        
+            color: "blue",
             layout: "vertical",
             label: "donate",
           }}

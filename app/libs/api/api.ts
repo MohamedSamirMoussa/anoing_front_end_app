@@ -1,36 +1,39 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 
-console.log(process.env.NEXT_PUBLIC_BACK_END_URI);
-
 const api = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_BACK_END_URI}/api/v1`,
   withCredentials: true,
 });
 
+let isToastActive = false;
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    const status = error.response.status;
-    if (
-      (typeof window !== "undefined" && error.response && status === 401) ||
-      403
-    ) {
-      localStorage.clear();
-      toast.error("Your session are expired please try login again", {
-        duration: 4000,
-        position: "top-center",
-        style: {
-          borderRadius: "12px",
-          background: "#333",
-          color: "#fff",
-        },
-      });
+    const status = error.response?.status;
+    const method = error.config?.method;
 
-      window.location.href = "/auth";
+    if (status === 401 || status === 403) {
+      
+      localStorage.clear();
+
+      if (method !== 'get') {
+        if (!isToastActive) {
+          isToastActive = true;
+          toast.error("انتهت الجلسة، سجل دخول عشان تنفذ العملية دي", {
+            onClose: () => { isToastActive = false; } // نصفر الـ flag لما الرسالة تختفي
+          });
+          window.location.href = "/auth";
+        }
+      } 
+      else {
+        console.warn("Silent failure: User is browsing with expired session");
+      }
     }
+
     return Promise.reject(error);
-  },
+  }
 );
 
 export default api;

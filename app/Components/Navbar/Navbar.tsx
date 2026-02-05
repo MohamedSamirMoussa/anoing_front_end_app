@@ -20,9 +20,9 @@ const Navbar = () => {
   const [scrollSection, setScrollSection] = useState<string>("home");
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const activeTab = useSelector(
-    (state: RootState) => state.theme.activeServer || "Vanilla",
+    (state: RootState) => state.theme.activeServer || "atm 10",
   );
-  const theme = themes[activeTab] || themes["Vanilla"];
+  const theme = themes[activeTab] || themes["atm 10"];
   const pathname = usePathname();
   const dispatch = useDispatch<AppDispatch>();
   const { isLogged }: IAuthState = useSelector((s: RootState) => s.auth);
@@ -84,12 +84,12 @@ const Navbar = () => {
     <>
       {pathname !== "/dashboard" ? (
         <nav
-          className="nav w-full fixed top-0 z-[999] backdrop-blur-sm py-3 bg-[#000000]"
+          className="nav fixed top-0 start-0 end-0 z-[999] backdrop-blur-sm py-3 bg-[#000000]"
           style={{ "--active-gradient": theme.gradient } as React.CSSProperties}
         >
-          <section className="container w-full mx-auto flex items-center justify-between lg:justify-center">
+          <section className="container lg:w-[70%] md:w-[80%] flex items-center justify-between mx-auto lg:justify-center">
             {/* Mobile Logo (Left-aligned on mobile) */}
-            <div className="lg:hidden p-4">
+            <div className="lg:hidden p-4 ">
               <Link
                 href="/"
                 className="logo text-3xl font-bold font-orbitron"
@@ -104,7 +104,7 @@ const Navbar = () => {
             </div>
 
             {/* Desktop Menu */}
-            <ul className="hidden lg:flex justify-center items-center lg:gap-15 gap-5 text-white font-medium links">
+            <ul className="lg:flex justify-center items-center gap-9 2xl:gap-22 links hidden">
               <li className={activeSection === "home" ? "active" : ""}>
                 <Link href="/#home" style={linkStyle("home")}>
                   Home
@@ -115,7 +115,7 @@ const Navbar = () => {
                   About
                 </Link>
               </li>
-              <li className={activeSection === "op" ? "active" : ""}>
+              <li className={`${activeSection === "op" ? "active" : ""} flex text-xs font-bold`}>
                 <Link href="/#op" style={linkStyle("op")}>
                   Optional Mods
                 </Link>

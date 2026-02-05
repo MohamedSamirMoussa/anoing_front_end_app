@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 import { themes } from "@/app/hooks/themes";
 
 const SnowBackground = () => {
-  const activeServer = useSelector((state: any) => state.theme.activeServer || "Vanilla");
-  const theme = themes[activeServer] || themes["Vanilla"];
+  const activeServer = useSelector((state: any) => state.theme.activeServer || "atm 10");
+  const theme = themes[activeServer] || themes["atm 10"];
 
   return (
     <div 

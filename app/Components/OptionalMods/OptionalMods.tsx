@@ -18,7 +18,7 @@ const OptionalMods = () => {
 
   return (
     <div
-      className="w-[95%] md:w-[80%] lg:w-[70%] mx-auto min-h-screen py-10 flex flex-col justify-center"
+      className="md:w-[80%] lg:w-[58%] mx-auto min-h-screen py-10 flex flex-col justify-center"
       id="op"
     >
       <div className="text-center mb-8">

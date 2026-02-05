@@ -10,39 +10,44 @@ import { setActiveServer } from "../libs/redux/features/themeSlice";
 import { SyncLoader } from "react-spinners";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faChartLine,
   faCircleDot,
   faCrown,
   faGem,
+  faHeart,
+  faInfo,
   faMedal,
   faSeedling,
   faShield,
   faStar,
   faTrophy,
   faUserCheck,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { getLeaderboardThunk } from "../libs/redux/features/leaderboardSlice";
 import { createSocket } from "../Components/Home/Home";
 
-interface LeaderboardUser {
+export interface LeaderboardUser {
   username: string;
   is_online: boolean;
   playTime: { hours: number; minutes: number; seconds: number };
   lastSeen: string | null;
   avatar?: string;
   id?: string;
+  isSupported?: { name: string };
 }
 
 /* -------------------- Helpers -------------------- */
 
 const getRankIcon = (hours: number) => {
-  if (hours < 10) return faCircleDot;    // Visitor
-  if (hours < 24) return faSeedling;     // Newcomer
-  if (hours < 50) return faUserCheck;    // Regular
-  if (hours < 150) return faStar;        // Dedicated
-  if (hours < 350) return faGem;         // Trusted
-  if (hours < 700) return faShield;      // Veteran
-  if (hours < 1500) return faTrophy;     // Legend
-  return faCrown;                         // Immortal
+  if (hours < 10) return faCircleDot; // Visitor
+  if (hours < 24) return faSeedling; // Newcomer
+  if (hours < 50) return faUserCheck; // Regular
+  if (hours < 150) return faStar; // Dedicated
+  if (hours < 350) return faGem; // Trusted
+  if (hours < 700) return faShield; // Veteran
+  if (hours < 1500) return faTrophy; // Legend
+  return faCrown; // Immortal
 };
 
 const getRankColor = (hours: number): string => {
@@ -93,16 +98,14 @@ const formatLastSeen = (dateStr: string | Date): string => {
   return result + " ago";
 };
 
-
 /* -------------------- Component -------------------- */
 
 export default function Leaderboard() {
   const dispatch = useDispatch();
 
   const activeServer = useSelector(
-    (state: RootState) => state.theme.activeServer || "atm 10"
+    (state: RootState) => state.theme.activeServer || "atm 10",
   );
-
   const currentTheme = themes[activeServer] || themes["atm 10"];
   const socketRef = useRef<Socket | null>(null);
 
@@ -110,7 +113,7 @@ export default function Leaderboard() {
   const [onlineCount, setOnlineCount] = useState(0);
   const [connected, setConnected] = useState(false);
   const [loading, setLoading] = useState(true);
-const [totalPlayers, setTotalPlayers] = useState(0);
+  const [totalPlayers, setTotalPlayers] = useState(0);
   // pagination
   const [page, setPage] = useState(1);
   const limit = 8;
@@ -143,7 +146,7 @@ const [totalPlayers, setTotalPlayers] = useState(0);
       setLeaderboard(data.leaderboard);
       setOnlineCount(data.onlineCount);
       setTotalPages(data.pagination.totalPages);
-       setTotalPlayers(data.pagination.totalPlayers);
+      setTotalPlayers(data.pagination.totalPlayers);
       setLoading(false);
     });
 
@@ -151,7 +154,7 @@ const [totalPlayers, setTotalPlayers] = useState(0);
       socket.disconnect();
       socketRef.current = null;
     };
-  }, [activeServer , page]);
+  }, [activeServer, page]);
 
   /* -------------------- Server Change -------------------- */
 
@@ -162,13 +165,13 @@ const [totalPlayers, setTotalPlayers] = useState(0);
       socketRef.current.emit("select_server", {
         serverName: activeServer,
         page,
-        limit
+        limit,
       });
     }
 
     // API fallback
     dispatch(getLeaderboardThunk(activeServer) as any);
-  }, [activeServer ,page]);
+  }, [activeServer, page]);
 
   /* -------------------- Page Change -------------------- */
 
@@ -178,9 +181,9 @@ const [totalPlayers, setTotalPlayers] = useState(0);
     socketRef.current.emit("select_server", {
       serverName: activeServer,
       page,
-      limit
+      limit,
     });
-  }, [activeServer , page]);
+  }, [activeServer, page]);
 
   /* -------------------- Handlers -------------------- */
 
@@ -191,7 +194,7 @@ const [totalPlayers, setTotalPlayers] = useState(0);
   /* -------------------- UI -------------------- */
 
   return (
-    <div className="leaderboard-container min-h-screen md:w-[60%] mx-auto py-20 px-4">
+    <div className="leaderboard-container min-h-screen md:w-[70%] xl:w-[60%] mx-auto py-20 px-4">
       {/* Tabs + header */}
       <div className="py-10">
         <div className="tabs-container flex flex-col lg:flex-row justify-between items-center p-6 rounded-3xl bg-[#ffffff05] border border-[#ffffff10] gap-8 backdrop-blur-md">
@@ -270,11 +273,20 @@ const [totalPlayers, setTotalPlayers] = useState(0);
               const rankName = getRankName(totalHours);
 
               return (
-                <div key={user.id || index} className="player-card relative group">
+                <div
+                  key={user.id || index}
+                  className={`player-card relative group`}
+                >
                   <div
-                    className="inner p-[1px] rounded-2xl overflow-hidden transition-all duration-500 hover:scale-[1.01]"
+                    className={`
+  ${index === 0 && page === 1 ? "hover:shadow-[0_0_10px_rgba(255,215,0,0.4)]" : ""} 
+  inner p-[1px] rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.01]
+`}
                     style={{
-                      background: `linear-gradient(180deg, ${currentTheme.color}40, transparent)`,
+                      background:
+                        index === 0 && page === 1
+                          ? `linear-gradient(180deg, #ffd70036, transparent)`
+                          : `linear-gradient(180deg, ${currentTheme.color}40, transparent)`,
                     }}
                   >
                     <div className="bg-[#0f0f0f] rounded-2xl p-5 flex flex-col gap-4">
@@ -292,8 +304,7 @@ const [totalPlayers, setTotalPlayers] = useState(0);
                               height={50}
                               className="object-cover"
                               onError={(e) => {
-                                e.currentTarget.src =
-                                  `https://mc-heads.net/avatar/Steve/64`;
+                                e.currentTarget.src = `https://mc-heads.net/avatar/Steve/64`;
                               }}
                             />
                           </div>
@@ -308,15 +319,46 @@ const [totalPlayers, setTotalPlayers] = useState(0);
                                 color: rankColor,
                               }}
                             >
-                              <FontAwesomeIcon icon={getRankIcon(totalHours)} className="mr-1" />
+                              <FontAwesomeIcon
+                                icon={getRankIcon(totalHours)}
+                                className="mr-1"
+                              />
                               {rankName}
                             </span>
+                            {user.isSupported && (
+                              <span className="text-[10px] font-bold text-white shadow-[#ffffff30] shadow-lg uppercase px-2 py-0.5 rounded-full bg-rose-700 mx-2">
+                                <FontAwesomeIcon
+                                  icon={faHeart}
+                                  className="me-1 text-[14px]"
+                                />
+                                {user.isSupported?.name}
+                              </span>
+                            )}
                           </div>
                         </div>
                         <span
-                          className="text-white font-black italic text-xl border px-4 h-10 flex justify-center items-center rounded-2xl bg-white/5"
-                          style={{ borderColor: `${currentTheme.color}40` }}
+                          className="text-white text-lg font-black italic border px-4 h-10 flex justify-center items-center rounded-2xl bg-white/5"
+                          style={{
+                            borderColor:
+                              index === 0 && page === 1
+                                ? "#ffd70036"
+                                : `${currentTheme.color}40`,
+                          }}
                         >
+                          {index === 0 && page === 1 ? (
+                            <FontAwesomeIcon
+                              icon={faCrown}
+                              className="text-amber-300"
+                            />
+                          ) : (index === 1 && page === 1) ||
+                            (index === 2 && page === 1) ? (
+                            <FontAwesomeIcon
+                              icon={faMedal}
+                              className="text-amber-300"
+                            />
+                          ) : (
+                            ""
+                          )}
                           #{index + 1 + (page - 1) * limit}
                         </span>
                       </div>
@@ -390,6 +432,39 @@ const [totalPlayers, setTotalPlayers] = useState(0);
             >
               Next
             </button>
+          </div>
+
+          <div className="leaderboard-footer my-5 py-8 px-6 rounded-2xl flex items-center gap-5 bg-[##111119] z-50 border-2 border-white/5">
+            <div className="desc flex items-center gap-3 w-2/3 bg-[#00000033] p-3 rounded-2xl border border-white/5 hover:-translate-y-2 transition-all duration-300 hover:shadow shadow-white/5">
+              <span
+                className="w-8 h-8 rounded-full flex justify-center items-center"
+                style={{ background: currentTheme.gradient }}
+              >
+                <FontAwesomeIcon icon={faInfo} />
+              </span>
+              <h3 className="text-white text-xl">
+                Playtime is tracked automatically. Play more to climb the ranks!
+              </h3>
+            </div>
+            <div
+              className="all-players flex flex-col py-3 text-2xl w-1/3 bg-[#00000033] p-3 rounded-2xl border border-white/5 hover:-translate-y-2 transition-all duration-300 hover:shadow shadow-white/5"
+              style={{ color: currentTheme.color }}
+            >
+              <FontAwesomeIcon icon={faUsers} />
+              <span>
+                {totalPlayers} <span>Players</span>
+              </span>
+            </div>
+            <div
+              className="showing text-2xl flex flex-col py-2 w-1/3 bg-[#00000033] p-3 rounded-2xl border border-white/5 hover:-translate-y-2 transition-all duration-300 hover:shadow shadow-white/5"
+              style={{ color: currentTheme.color }}
+            >
+              <div>
+                <FontAwesomeIcon icon={faChartLine} />
+                {onlineCount}
+              </div>
+              <span>Online</span>
+            </div>
           </div>
         </>
       )}

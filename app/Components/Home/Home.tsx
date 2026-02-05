@@ -1,7 +1,12 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { faBoxOpen, faCheck, faCopy, faUsers } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBoxOpen,
+  faCheck,
+  faCopy,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -12,6 +17,8 @@ import { RootState } from "@/app/libs/redux/store";
 import { useEffect, useRef, useState } from "react";
 import { getLeaderboardThunk } from "@/app/libs/redux/features/leaderboardSlice";
 import { io, Socket } from "socket.io-client";
+import HomeSlider from "../HomeSlider/Slider";
+import Leaderboard, { LeaderboardUser } from "./../../leaderboard/page";
 
 export const createSocket = () => {
   const isProduction = process.env.NODE_ENV === "production";
@@ -30,15 +37,17 @@ const Home = () => {
   const ipAddress = "cf2.anoing.com:25566";
   const dispatch = useDispatch();
   const [copied, setCopied] = useState(false);
-  const [connected, setConnected] = useState(false)
-  const activeTab = useSelector((state: RootState) => state.theme.activeServer) || "atm 10";
+  const [connected, setConnected] = useState(false);
+  const activeTab =
+    useSelector((state: RootState) => state.theme.activeServer) || "atm 10";
   const currentTheme = themes[activeTab] || themes["atm 10"];
   const socketRef = useRef<Socket | null>(null);
   const [socketConnected, setSocketConnected] = useState(false);
- const [onlineCount, setOnlineCount] = useState(0);
+  const [onlineCount, setOnlineCount] = useState(0);
   const { data } = useSelector((state: RootState) => state.leaderboard);
-const [totalPlayers, setTotalPlayers] = useState(0);
+  const [totalPlayers, setTotalPlayers] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [Leaderboard, setLeaderboard] = useState<LeaderboardUser[]>([]);
 
   // -------------------- Socket.IO Setup --------------------
   useEffect(() => {
@@ -49,7 +58,7 @@ const [totalPlayers, setTotalPlayers] = useState(0);
 
     socket.on("connect", () => {
       socket.emit("select_server", {
-        serverName: activeTab
+        serverName: activeTab,
       });
     });
 
@@ -60,10 +69,10 @@ const [totalPlayers, setTotalPlayers] = useState(0);
     socket.on("leaderboard_updates", (data) => {
       if (data.serverName !== activeTab.toLowerCase()) return;
 
-
       setOnlineCount(data.onlineCount);
-       setTotalPlayers(data.pagination.totalPlayers);
+      setTotalPlayers(data.pagination.totalPlayers);
       setLoading(false);
+      setLeaderboard(data.leaderboard);
     });
 
     return () => {
@@ -85,8 +94,7 @@ const [totalPlayers, setTotalPlayers] = useState(0);
 
     // API fallback
     dispatch(getLeaderboardThunk(activeTab) as any);
-  }, [activeTab , dispatch]);
-
+  }, [activeTab, dispatch]);
 
   const handleTabChange = (tabName: string) => {
     dispatch(setActiveServer(tabName));
@@ -108,22 +116,21 @@ const [totalPlayers, setTotalPlayers] = useState(0);
 
   // -------------------- Render --------------------
   return (
-    <div id="home" className="mt-40 md:mt-0 lg:mt-0">
-      <div className="container h-screen text-white lg:w-[60%] md:w-[90%] mx-auto flex flex-col gap-10 md:flex-row justify-center items-center pt-40 md:pt-0 lg:pt-0">
-        <figure className="flex md:w-1/2 w-[80%] justify-center items-center relative transition-all duration-500 ease-in-out animate-floating lg:mx-5">
+    <div id="home" className="my-30 pt-10 md:my-0 md:pt-0">
+      <div className="container xl:w-[58%] md:w-[80%] h-screen mx-auto flex flex-col md:flex-row justify-center gap-5 items-center">
+        <figure className="relative transition-all duration-500 ease-in-out animate-floating md:w-full">
           <Image
             key={currentTheme.name}
             src={currentTheme.image}
             alt={`${currentTheme.name} modpack`}
-            width={500}
-            height={500}
-            quality={80}
+            width={400}
+            height={400}
             priority
-            className="drop-shadow-2xl transition-opacity duration-300 lg:w-auto w-full"
+            className="drop-shadow-2xl transition-opacity duration-300 w-[60%] md:w-full mx-auto"
           />
         </figure>
 
-        <div className="description md:w-1/2 flex flex-col justify-center gap-2">
+        <div className="description w-[90%] md:w-full">
           <h1 className="font-orbitron flex flex-col justify-center">
             <span
               className="lg:text-8xl text-7xl py-2 font-extrabold"
@@ -139,7 +146,7 @@ const [totalPlayers, setTotalPlayers] = useState(0);
             </span>
 
             <span
-              className="close transition-colors duration-300 translate-x-29 translate-y-17.5 lg:translate-x-49 lg:translate-y-23.5"
+              className="close transition-colors duration-300 translate-x-29 translate-y-17.5 lg:translate-x-49 lg:translate-y-23.5 -z-10"
               style={{
                 backgroundImage: currentTheme?.gradient,
                 backgroundRepeat: "no-repeat",
@@ -152,7 +159,9 @@ const [totalPlayers, setTotalPlayers] = useState(0);
             </span>
           </h1>
 
-          <p style={{ color: currentTheme.color }}>Your Ultimate Minecraft Adventure Awaits!</p>
+          <p style={{ color: currentTheme.color }}>
+            Your Ultimate Minecraft Adventure Awaits!
+          </p>
 
           <div className="servers my-3">
             {/* Tabs */}
@@ -165,7 +174,10 @@ const [totalPlayers, setTotalPlayers] = useState(0);
                     onClick={() => handleTabChange(serverName)}
                     className={`px-4 py-2 rounded-xl transition-all duration-300 w-full`}
                     style={{
-                      background: activeTab === serverName ? tabTheme.gradient : "transparent",
+                      background:
+                        activeTab === serverName
+                          ? tabTheme.gradient
+                          : "transparent",
                       color: "#fff",
                     }}
                   >
@@ -185,7 +197,9 @@ const [totalPlayers, setTotalPlayers] = useState(0);
                   <span className="text-white">
                     {onlineCount}/{totalPlayers}
                   </span>
-                  <span className="text-gray-400 text-[12px]">Online Players</span>
+                  <span className="text-gray-400 text-[12px]">
+                    Online Players
+                  </span>
                 </p>
               </div>
 
@@ -195,12 +209,12 @@ const [totalPlayers, setTotalPlayers] = useState(0);
                 </span>
                 <p className="flex flex-col">
                   <span className="text-gray-400 text-sm">version:</span>
-                  <span className="text-white text-[12px]">{currentTheme.version}</span>
+                  <span className="text-white text-[12px]">
+                    {currentTheme.version}
+                  </span>
                 </p>
               </div>
             </div>
-
-
 
             {/* Copy IP */}
             <div className="my-3 relative group">
@@ -228,6 +242,12 @@ const [totalPlayers, setTotalPlayers] = useState(0);
                   Copied!
                 </span>
               )}
+            </div>
+
+            <div className="flex justify-center items-center">
+              <div className="my-3">
+                <HomeSlider leaderboard={Leaderboard} />
+              </div>
             </div>
 
             {/* Discover More */}

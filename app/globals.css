@@ -1,5 +1,6 @@
 @import "tailwindcss";
-
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
 :root {
   --hover-color: #f0c14b;
   --color-bg-main: #0a0a0f;

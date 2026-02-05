@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import  api  from "../../api/api";
+import api from "../../api/api";
 import { handleThunkError } from "@/app/hooks/handlingErr";
 
 export interface ILeaderboard {
@@ -8,6 +8,7 @@ export interface ILeaderboard {
   loading: boolean;
   searchLoading: boolean;
   error: any;
+  all: [];
 }
 
 const initialState: ILeaderboard = {
@@ -16,19 +17,20 @@ const initialState: ILeaderboard = {
   loading: false,
   searchLoading: false,
   error: null,
+  all: [],
 };
 export const getLeaderboardThunk = createAsyncThunk(
   "leaderboard/atm10",
-  async (serverName:any, { rejectWithValue }) => {
+  async (serverName: any, { rejectWithValue }) => {
     try {
       const { data } = await api.get("/leaderboard/", {
         params: { serverName },
       });
-      
+
       return data;
     } catch (error: unknown) {
       console.log(error);
-      
+
       return handleThunkError(error, rejectWithValue);
     }
   },
@@ -45,8 +47,24 @@ export const searchbarThunk = createAsyncThunk(
     } catch (error: unknown) {
       return handleThunkError(error, rejectWithValue);
     }
-  }
+  },
 );
+
+export const getAllLeaderboards = createAsyncThunk(
+  "getLeaderboards/leaderboard",
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await api.get("/leaderboard/allServers", {
+        withCredentials: true,
+      });
+
+      return data;
+    } catch (error) {
+      return handleThunkError(error, rejectWithValue);
+    }
+  },
+);
+
 const leaderboardSlice = createSlice({
   name: "leaderboard",
   initialState,
@@ -63,17 +81,32 @@ const leaderboardSlice = createSlice({
       })
       .addCase(getLeaderboardThunk.rejected, (state, action) => {
         state.error = action.payload || action.error;
-      }).addCase(searchbarThunk.pending, (state) => {
+      })
+      .addCase(searchbarThunk.pending, (state) => {
         state.searchLoading = true;
       })
       .addCase(searchbarThunk.fulfilled, (state, action) => {
         state.searchLoading = false;
-        // تعديل المسار ليتوافق مع الـ Backend بتاعك
         state.searchResults = action.payload.result?.searchResult || [];
       })
       .addCase(searchbarThunk.rejected, (state) => {
         state.searchLoading = false;
         state.searchResults = [];
+      })
+      .addCase(getAllLeaderboards.fulfilled, (s, act) => {
+        s.all = act.payload || act.payload.all;
+        s.error = null;
+        s.loading = false;
+      })
+      .addCase(getAllLeaderboards.rejected, (s, act) => {
+        s.all = [];
+        s.error = act.payload;
+        s.loading = false;
+      })
+      .addCase(getAllLeaderboards.pending, (s) => {
+        s.all = [];
+        s.error = null;
+        s.loading = true;
       });
   },
 });

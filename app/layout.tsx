@@ -7,6 +7,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import "./globals.css";
 import Loading from "./Loading/page";
+import ScrollTop from "./Components/ScrollTop/ScrollTop";
 const Navbar = React.lazy(() => import("./Components/Navbar/Navbar"));
 const Footer = React.lazy(() => import("./Components/Footer/Footer"));
 const SnowBackground = React.lazy(
@@ -33,15 +34,7 @@ export const metadata:Metadata = {
   openGraph: {
     title: 'Anoing Minecraft Server',
     description: 'Join our Minecraft community today!',
-    url: 'https://anoing-app.vercel.app',
     siteName: 'Anoing',
-    images: [
-      {
-        url: 'https://anoing-app.vercel.app/og-image.png',
-        width: 1200,
-        height: 630,
-      },
-    ],
     locale: 'en_US',
     type: 'website',
   },
@@ -66,6 +59,7 @@ export default function RootLayout({
                   <SnowBackground />
                   <Navbar />
                   <Donate />
+                  <ScrollTop />
                 </React.Suspense>
 
                 <main className="min-h-screen">{children}</main>
