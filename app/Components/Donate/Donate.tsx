@@ -115,7 +115,7 @@ const Donate = () => {
                   id="username"
                   name="username"
                   placeholder="minecraft's username"
-                  className="bg-[#1a1a25] border border-[#ffffff10] py-3 px-4 rounded-xl w-24 text-center text-gray-400 w-full"
+                  className="bg-[#1a1a25] border border-[#ffffff10] py-3 px-4 rounded-xl w-24 text-gray-400 w-full"
                   value={formik.values.username}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
