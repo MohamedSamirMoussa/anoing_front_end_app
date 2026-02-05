@@ -25,7 +25,7 @@ export const themes: Record<string, ThemeProps> = {
     shadowColor: "rgba(59, 130, 246, 0.5)",
     backgroundClip: "text",
     WebkitTextFillColor: "transparent",
-    gradient: `linear-gradient(to top , rgba(75, 221, 240, 1), rgba(74, 0, 224, 1))`,
+    gradient: `linear-gradient(to top right , rgba(75, 221, 240, 1), rgba(74, 0, 224, 1))`,
     image: blue,
   },
   "AllTheMons": {
@@ -36,7 +36,7 @@ export const themes: Record<string, ThemeProps> = {
     shadowColor: "rgba(244, 63, 94, 0.5)",
     hoverColor: "rgba(245, 34, 45, 1);", // هيتحول لـ --hover-color
     primaryColor: "rgba(243, 83, 200, 1)", // هيتحول لـ --color-primary
-    gradient: `linear-gradient(to top , rgba(230, 34, 45, 1), rgba(243, 83, 200, 1))`, // --aniong-color
+    gradient: `linear-gradient(to top right , rgba(230, 34, 45, 1), rgba(243, 83, 200, 1))`, // --aniong-color
     image: newHorizon,
     backgroundClip: "text",
     WebkitTextFillColor: "transparent",
@@ -52,7 +52,7 @@ export const themes: Record<string, ThemeProps> = {
     hoverColor: "#f0c14b", // هيتحول لـ --hover-color
     primaryColor: "#a953f3", // هيتحول لـ --color-primary
     gradient:
-      "linear-gradient(to top, var(--hover-color), var(--color-primary))",
+      "linear-gradient(to top right, var(--hover-color), var(--color-primary))",
     image: one,
   },
 };
