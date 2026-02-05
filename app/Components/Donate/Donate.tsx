@@ -26,14 +26,16 @@ const initialValues: IDonate = {
 };
 
 const validationSchema = Yup.object({
-  value: Yup.number()
-    .typeError("Value must be a number")
-    .required("Value is required")
-    .positive("Value must be greater than 0"),
+  amount: Yup.object({
+    value: Yup.number()
+      .typeError("Value must be a number")
+      .required("Value is required")
+      .positive("Value must be greater than 0"),
+  }),
   username: Yup.string().required("Please enter your minecraft's username"),
 });
 
-const quickAmount = ["10", "50", "100", "300"];
+const quickAmount = ["5", "10", "25", "50"];
 
 const Donate = () => {
   const activeTab = useSelector(
@@ -97,7 +99,7 @@ const Donate = () => {
                 <button
                   key={amt}
                   onClick={() => formik.setFieldValue("amount.value", amt)}
-                  className="py-3 px-1 rounded-xl w-full bg-[#1a1a25]"
+                  className="py-3 px-3 rounded-xl w-full bg-[#1a1a25]"
                 >
                   ${amt}
                 </button>
@@ -126,7 +128,7 @@ const Donate = () => {
                   name="amount.value"
                   placeholder="0.00"
                   /**/
-                  className={`bg-[#1a1a25] border border-[#ffffff10] py-3 px-4 rounded-xl w-full focus:outline-none focus:border-rose-600 transition-colors ${formik.errors.value && formik.touched.value ? "border-red-500" : ""}`}
+                  className={`bg-[#1a1a25] border border-[#ffffff10] py-3 px-4 rounded-xl w-full focus:outline-none focus:border-rose-600 transition-colors ${formik.errors?.amount?.value && formik.touched?.amount?.value ? "border-red-500" : ""}`}
                   onChange={(e) => {
                     const regex = /^[0-9\b]+$/;
                     if (e.target.value === "" || regex.test(e.target.value)) {

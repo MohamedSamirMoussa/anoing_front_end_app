@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import Slider from "react-slick";
+import Slider  from 'react-slick';
 
 // نستخدم واجهة بيانات مرنة
 interface HomeSliderProps {
