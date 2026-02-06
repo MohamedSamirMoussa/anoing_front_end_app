@@ -47,8 +47,6 @@ const onSubmit = async (
     confirmEmailThunk(values) as any
   );
 
-  console.log(result);
-
   if (result.meta.requestStatus === "rejected") {
     // default message
     let errorMessage ;

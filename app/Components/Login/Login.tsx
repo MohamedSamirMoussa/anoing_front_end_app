@@ -17,9 +17,9 @@ const Login = ({
   activeTab: string;
 }) => {
   const activeServer = useSelector(
-    (state: RootState) => state.theme.activeServer || "Vanilla",
+    (state: RootState) => state.theme.activeServer || "atm 10",
   );
-  const theme = themes[activeServer] || themes["Vanilla"];
+  const theme = themes[activeServer] || themes["atm 10"];
 
   if (activeTab !== "Sign in") return null;
 

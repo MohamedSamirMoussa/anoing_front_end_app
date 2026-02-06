@@ -36,9 +36,7 @@ export const loginThunk = createAsyncThunk<
   { email: string; password: string }
 >("auth/login", async (credentials, { rejectWithValue }) => {
   try {
-    const response = await api.post("/auth/login", credentials);
-    console.log(response);
-    
+    const response = await api.post("/auth/login", credentials);    
     return response.data;
   } catch (error: unknown) {
     console.log(error);
@@ -63,10 +61,7 @@ export const registerThunk = createAsyncThunk<any, IFormValues>(
   "auth/register",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await api.post("/auth/register", userData);
-
-      console.log(response);
-      
+      const response = await api.post("/auth/register", userData);      
 
       return response.data;
     } catch (error: unknown) {

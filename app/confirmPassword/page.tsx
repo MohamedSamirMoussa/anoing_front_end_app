@@ -57,9 +57,6 @@ const onSubmit = async (
   const result = await dispatch(
     confirmPasswordThunk(values) as any
   );
-
-  console.log(result);
-
   if (result.meta.requestStatus === "rejected") {
     // default message
     let errorMessage ;

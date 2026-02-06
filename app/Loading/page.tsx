@@ -7,8 +7,8 @@ import { SyncLoader  } from "react-spinners";
 
 const Loading = () => {
   const activeTab =
-    useSelector((state: RootState) => state.theme.activeServer) || "Vanilla";
-  const currentTheme = themes[activeTab] || themes["Vanilla"];
+    useSelector((state: RootState) => state.theme.activeServer) || "atm 10";
+  const currentTheme = themes[activeTab] || themes["atm 10"];
 
   return (
     <div className="h-screen max-w-full flex justify-center items-center bg-[#12121a] z-[999999999] fixed top-0 left-0 right-0 bottom-0">

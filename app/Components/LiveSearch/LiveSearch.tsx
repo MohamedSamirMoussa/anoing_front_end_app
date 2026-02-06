@@ -16,10 +16,7 @@ const LiveSearch = ({ currentTheme }: { currentTheme: any }) => {
   const formik = useFormik({
     initialValues: { search: "" },
     onSubmit: () => {},
-  });
-
-  console.log(searchResults);
-  
+  });  
 
   useEffect(() => {
     const query = formik.values.search.trim();

@@ -29,7 +29,6 @@ export const getLeaderboardThunk = createAsyncThunk(
 
       return data;
     } catch (error: unknown) {
-      console.log(error);
 
       return handleThunkError(error, rejectWithValue);
     }
@@ -43,28 +42,11 @@ export const searchbarThunk = createAsyncThunk(
       const { data } = await api.get("/leaderboard/search", {
         params: { username },
       });
-      console.log(data);
       
-
       return data;
     } catch (error: unknown) {
       console.log(error);
       
-      return handleThunkError(error, rejectWithValue);
-    }
-  },
-);
-
-export const getAllLeaderboards = createAsyncThunk(
-  "getLeaderboards/leaderboard",
-  async (_, { rejectWithValue }) => {
-    try {
-      const { data } = await api.get("/leaderboard/allServers", {
-        withCredentials: true,
-      });
-
-      return data;
-    } catch (error) {
       return handleThunkError(error, rejectWithValue);
     }
   },

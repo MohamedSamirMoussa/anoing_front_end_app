@@ -1,9 +1,8 @@
 "use client";
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { getBlogThunk } from '@/app/libs/redux/features/blogSlice';
-import { RootState } from '@/app/libs/redux/store';
 
 interface BlogsProps {
   theme: any;

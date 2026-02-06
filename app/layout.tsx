@@ -7,7 +7,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import "./globals.css";
 import Loading from "./Loading/page";
-import ScrollTop from "./Components/ScrollTop/ScrollTop";
+const ScrollTop = React.lazy(()=> import("./Components/ScrollTop/ScrollTop"));
 const Navbar = React.lazy(() => import("./Components/Navbar/Navbar"));
 const Footer = React.lazy(() => import("./Components/Footer/Footer"));
 const SnowBackground = React.lazy(

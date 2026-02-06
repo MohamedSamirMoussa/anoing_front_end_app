@@ -20,9 +20,6 @@ const initialOptions: IOptions = {
   intent: "capture",
 };
 
-console.log(process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID);
-
-
 const PaypalPayment = ({ theme, data }: { theme: any; data: IDonate }) => {
   const dispatch = useDispatch();
   
@@ -42,12 +39,9 @@ const PaypalPayment = ({ theme, data }: { theme: any; data: IDonate }) => {
   };
 
   const handleApprove = async (data: { orderID: string }) => {
-    // 💡 أحياناً بنحتاج ننتظر ثانية لضمان تحديث حالة الأوردر في سيرفرات باي بال
     console.log("User approved the payment, Order ID:", data.orderID);
 
-    // نبعت للباك إند
     const res = await dispatch(captureWithPaypalThunk(data.orderID) as any);
-    console.log(res);
 
     if (res.payload?.status === "COMPLETED") {
       toast.success(res.payload.status);

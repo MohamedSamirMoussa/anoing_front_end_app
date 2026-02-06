@@ -6,9 +6,9 @@ import { useSelector } from "react-redux";
 
 const DiscordChannel = () => {
   const activeTab = useSelector(
-    (state: RootState) => state.theme.activeServer || "Vanilla",
+    (state: RootState) => state.theme.activeServer || "atm 10",
   );
-  const theme = themes[activeTab] || themes["Vanilla"];
+  const theme = themes[activeTab] || themes["atm 10"];
 
   return (
     <div className="py-15 text-center">

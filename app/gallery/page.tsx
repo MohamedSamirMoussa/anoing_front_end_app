@@ -27,7 +27,6 @@ const page = () => {
     (state: RootState) => state.auth,
   );
   const blogs = useSelector((s: RootState) => s.blogs.blog);
-  console.log(blogs);
 
   return (
     <div className="gallery min-h-screen pt-10 relative mb-50 overflow-hidden">

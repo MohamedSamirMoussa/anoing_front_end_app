@@ -8,9 +8,9 @@ import { RootState } from "@/app/libs/redux/store";
 
 const Community = () => {
   const activeTab = useSelector(
-    (state: RootState) => state.theme.activeServer || "Vanilla",
+    (state: RootState) => state.theme.activeServer || "atm 10",
   );
-  const theme = themes[activeTab] || themes["Vanilla"];
+  const theme = themes[activeTab] || themes["atm 10"];
 
   const STEPS = [
     {
@@ -151,7 +151,6 @@ const Community = () => {
     >
       <div className="desc w-full flex justify-center flex-col items-center gap-5">
         <h1
-          // تعديل حجم الخط (text-3xl للموبايل)
           className="text-3xl md:text-4xl hover:scale-105 transition-all duration-300 lg:text-5xl font-orbitron font-semibold text-center flex flex-col justify-center items-center"
           style={{
             backgroundImage: theme?.gradient,
@@ -172,7 +171,6 @@ const Community = () => {
           ></span>
         </h1>
 
-        {/* تعديل الـ Grid: 1 للموبايل، 2 للتابلت، 3 للشاشات الكبيرة */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full max-w-6xl mx-auto py-10 px-2 md:px-4">
           {STEPS.map((step) => (
             <div

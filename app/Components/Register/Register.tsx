@@ -31,9 +31,9 @@ const Register = ({ formik, activeTab }: RegisterProps) => {
 
   // 1. جلب الثيم النشط من Redux
   const activeServer = useSelector(
-    (state: any) => state.theme.activeServer || "Vanilla",
+    (state: any) => state.theme.activeServer || "atm 10",
   );
-  const theme = themes[activeServer] || themes["Vanilla"];
+  const theme = themes[activeServer] || themes["atm 10"];
 
   if (activeTab !== TABS.SIGN_UP) return null;
 

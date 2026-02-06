@@ -1,8 +1,8 @@
 "use client";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import { useGoogleLogin } from "@react-oauth/google"; // التغيير هنا
-import axios from "axios"; // عشان نجيب بيانات اليوزر بعد ما ناخد الـ Access Token
+import { useGoogleLogin } from "@react-oauth/google";   
+import axios from "axios";           
 import toast from "react-hot-toast";
 import { signinWithGoogleThunk } from "../../libs/redux/features/authSlice";
 import google from "../../../public/search.png";
@@ -11,7 +11,6 @@ const GoogleButton = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  // الفانكشن دي هتشتغل لما اليوزر يوافق على تسجيل الدخول
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
@@ -23,19 +22,17 @@ const GoogleButton = () => {
           { headers: { Authorization: `Bearer ${accessToken}` } },
         );
 
-        const { email, name, picture, sub } = userInfo.data;
+        const { email, name, picture } = userInfo.data;
         console.log(userInfo);
         
         const googleUser = {
-          token: accessToken, // أو الـ ID Token حسب الباك إند عندك محتاج إيه
+          token: accessToken,           
           email,
           name,
           picture,
         };
 
-        // 3. بنبعت البيانات للـ Thunk بتاعنا
         const res = await dispatch(signinWithGoogleThunk(googleUser) as any);
-        console.log(res);
         
         if (res.meta.requestStatus === "fulfilled") {
           toast.success(res.payload?.message || "Login Successful");
