@@ -29,7 +29,6 @@ export const getLeaderboardThunk = createAsyncThunk(
 
       return data;
     } catch (error: unknown) {
-
       return handleThunkError(error, rejectWithValue);
     }
   },
@@ -42,11 +41,11 @@ export const searchbarThunk = createAsyncThunk(
       const { data } = await api.get("/leaderboard/search", {
         params: { username },
       });
-      
+
       return data;
     } catch (error: unknown) {
       console.log(error);
-      
+
       return handleThunkError(error, rejectWithValue);
     }
   },
@@ -79,21 +78,6 @@ const leaderboardSlice = createSlice({
       .addCase(searchbarThunk.rejected, (state) => {
         state.searchLoading = false;
         state.searchResults = [];
-      })
-      .addCase(getAllLeaderboards.fulfilled, (s, act) => {
-        s.all = act.payload || act.payload.all;
-        s.error = null;
-        s.loading = false;
-      })
-      .addCase(getAllLeaderboards.rejected, (s, act) => {
-        s.all = [];
-        s.error = act.payload;
-        s.loading = false;
-      })
-      .addCase(getAllLeaderboards.pending, (s) => {
-        s.all = [];
-        s.error = null;
-        s.loading = true;
       });
   },
 });
