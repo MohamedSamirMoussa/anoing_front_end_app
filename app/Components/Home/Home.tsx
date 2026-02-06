@@ -172,7 +172,7 @@ const Home = () => {
                   <button
                     key={serverName}
                     onClick={() => handleTabChange(serverName)}
-                    className={`px-4 py-2 rounded-xl transition-all duration-300 w-full`}
+                    className={`px-4 py-2 rounded-xl transition-all duration-300 w-full hover:-translate-y-0.5 brightness-70 hover:brightness-105`}
                     style={{
                       background:
                         activeTab === serverName
@@ -189,7 +189,7 @@ const Home = () => {
 
             {/* Server Info: Online / Total */}
             <div className="my-3 flex justify-center items-center gap-2">
-              <div className="players rounded-xl p-2 w-full flex items-center gap-2 bg-[#222] border border-[#333]">
+              <div className="players rounded-xl p-2 w-full flex items-center gap-2 bg-[#222] border border-[#333] hover:-translate-y-0.5 transition-all duration-300 brightness-70 hover:brightness-105">
                 <span style={{ color: currentTheme.color }}>
                   <FontAwesomeIcon icon={faUsers} className="text-3xl" />
                 </span>
@@ -203,7 +203,7 @@ const Home = () => {
                 </p>
               </div>
 
-              <div className="mod rounded-xl p-2 w-full flex items-center gap-2 bg-[#222] border border-[#333]">
+              <div className="mod rounded-xl p-2 w-full flex items-center gap-2 bg-[#222] border border-[#333] hover:-translate-y-0.5 transition-all duration-300 brightness-70 hover:brightness-105">
                 <span style={{ color: currentTheme.color }}>
                   <FontAwesomeIcon icon={faBoxOpen} className="text-3xl" />
                 </span>
@@ -217,7 +217,7 @@ const Home = () => {
             </div>
 
             {/* Copy IP */}
-            <div className="my-3 relative group">
+            <div className="my-3 relative group hover:-translate-y-0.5 transition-all duration-300 brightness-70 hover:brightness-105">
               <input
                 type="text"
                 value={ipAddress}
@@ -244,14 +244,14 @@ const Home = () => {
               )}
             </div>
 
-            <div className="flex justify-center items-center">
+            <div className="flex items-center">
               <div className="my-1">
                 <HomeSlider leaderboard={Leaderboard} />
               </div>
             </div>
 
             {/* Discover More */}
-            <div className="discover my-3 flex justify-center items-center">
+            <div className="discover my-3 flex justify-center items-center hover:-translate-y-0.5 transition-all duration-300 brightness-70 hover:brightness-105">
               <Link
                 href={"#about"}
                 className="rounded-3xl font-orbitron tracking-widest uppercase font-semibold w-full text-center py-3 shadow-lg transition-all duration-300 hover:brightness-110"

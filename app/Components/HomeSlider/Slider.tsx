@@ -20,7 +20,7 @@ function HomeSlider({ leaderboard }: HomeSliderProps) {
 
   const settings = {
     className: "start",
-    centerMode:false,
+    centerMode: false,
     infinite: onlinePlayers.length > 4,
     slidesToShow: Math.min(onlinePlayers.length, 4) || 1,
     swipeToSlide: true,
@@ -49,9 +49,7 @@ function HomeSlider({ leaderboard }: HomeSliderProps) {
       <Slider {...settings}>
         {onlinePlayers.map((user) => (
           <div key={user._id || user.username} className="px-2 outline-none">
-            {/* الكارت بتأثير Glassmorphism و Glow خفيف */}
             <div className="flex p-2 gap-3 justify-between items-center bg-[#ffffff03] backdrop-blur-md border border-white/10 rounded-xl hover:bg-white/5 hover:border-white/20 hover:shadow-[0_0_15px_rgba(255,255,255,0.05)] transition-all duration-500 group cursor-pointer">
-              {/* الصورة مع Border مضيء */}
               <div className="relative flex-shrink-0 w-9 h-9 rounded-lg overflow-hidden border border-white/10 group-hover:border-green-500/50 transition-colors duration-500">
                 <Image
                   src={
@@ -67,14 +65,6 @@ function HomeSlider({ leaderboard }: HomeSliderProps) {
               <span className="text-[11px] font-orbitron truncate flex-1 font-semibold tracking-wider text-gray-400 group-hover:text-white transition-colors duration-300">
                 {user.username}
               </span>
-
-              {/* مؤشر الـ Online النباض (Pulsing Effect) */}
-              <div className="flex items-center justify-center pr-1">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                </span>
-              </div>
             </div>
           </div>
         ))}
