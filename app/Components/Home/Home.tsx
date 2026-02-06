@@ -116,7 +116,7 @@ const Home = () => {
 
   // -------------------- Render --------------------
   return (
-    <div id="home" className="my-30 pt-10 md:my-0 md:pt-0">
+    <div id="home" className="my-35 py-35 md:my-0 md:pt-0">
       <div className="container xl:w-[58%] md:w-[80%] h-screen mx-auto flex flex-col md:flex-row justify-center gap-5 items-center">
         <figure className="relative transition-all duration-500 ease-in-out animate-floating md:w-full">
           <Image

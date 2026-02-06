@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { RootState } from "@/app/libs/redux/store";
 
 const Community = () => {
+  const ipAddress = "cf2.anoing.com:25566";
+
   const activeTab = useSelector(
     (state: RootState) => state.theme.activeServer || "atm 10",
   );
@@ -121,7 +123,8 @@ const Community = () => {
                 className="uppercase p-1 rounded-lg"
                 style={{ color: theme.color, backgroundColor: "#A953F31F" }}
               >
-                 Anoing ${activeTab}
+                {/* لاحظ استخدام الـ Backticks `` هنا */}
+                {`Anoing ${activeTab}`}
               </span>
             </li>
             <li className=" my-2">
@@ -129,12 +132,12 @@ const Community = () => {
                 icon={faCaretRight}
                 style={{ color: theme.color }}
               />
-              Server IP: :{" "}
+              Server IP:{" "}
               <span
                 className="uppercase p-1 rounded-lg"
                 style={{ color: theme.color, backgroundColor: "#A953F31F" }}
               >
-                 Anoing ${activeTab}
+                {`Anoing ${ipAddress}`}
               </span>
             </li>
             <li className=" my-2">Click "Done" and prepare for adventure!</li>

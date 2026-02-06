@@ -197,8 +197,8 @@ export default function Leaderboard() {
     <div className="leaderboard-container min-h-screen md:w-[70%] xl:w-[60%] mx-auto py-20 px-4">
       {/* Tabs + header */}
       <div className="py-10">
-        <div className="tabs-container flex flex-col lg:flex-row justify-between items-center p-6 rounded-3xl bg-[#ffffff05] border border-[#ffffff10] gap-8 backdrop-blur-md">
-          <div className="right ps-4">
+        <div className="tabs-container flex flex-col lg:flex-row  items-center p-6 rounded-3xl bg-[#ffffff05] border border-[#ffffff10] gap-8 backdrop-blur-md">
+          <div className="right lg:w-1/2">
             <div className="flex items-center gap-2 mb-2">
               <h1 className="font-orbitron font-bold text-3xl md:text-4xl text-white">
                 Playtime Leaderboard
@@ -220,9 +220,10 @@ export default function Leaderboard() {
             </div>
           </div>
 
-          <div className="left flex flex-col items-center gap-6 z-50">
+          <div className="left flex flex-col items-center gap-6 z-50 lg:w-1/2">
             <LiveSearch currentTheme={currentTheme} />
-            <div className="servers flex bg-[#00000040] p-1 rounded-xl border border-[#ffffff10] flex-wrap justify-center">
+
+            <div className="servers flex bg-[#00000040] p-1 rounded-xl border border-[#ffffff10] flex-wrap justify-center w-full">
               {Object.keys(themes).map((serverKey) => {
                 const isActive = activeServer === serverKey;
                 const tabTheme = themes[serverKey];
@@ -230,7 +231,7 @@ export default function Leaderboard() {
                   <button
                     key={serverKey}
                     onClick={() => handleServerButtonClick(serverKey)}
-                    className={`px-4 py-2 rounded-lg font-orbitron text-[10px] md:text-xs uppercase transition-all duration-300 ${
+                    className={`px-4 py-2 rounded-lg font-orbitron text-[10px] md:text-xs uppercase transition-all duration-300 xl:w-1/3  ${
                       isActive
                         ? "text-white shadow-lg"
                         : "text-[#ffffff50] hover:text-white"
