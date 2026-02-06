@@ -20,9 +20,11 @@ const initialOptions: IOptions = {
   intent: "capture",
 };
 
+console.log(process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID);
+
+
 const PaypalPayment = ({ theme, data }: { theme: any; data: IDonate }) => {
   const dispatch = useDispatch();
-  console.log(data);
   
   const handleCreateOrder = async () => {
     try {

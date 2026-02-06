@@ -43,8 +43,13 @@ export const searchbarThunk = createAsyncThunk(
       const { data } = await api.get("/leaderboard/search", {
         params: { username },
       });
+      console.log(data);
+      
+
       return data;
     } catch (error: unknown) {
+      console.log(error);
+      
       return handleThunkError(error, rejectWithValue);
     }
   },

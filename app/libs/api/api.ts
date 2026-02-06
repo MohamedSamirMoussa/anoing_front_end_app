@@ -15,29 +15,35 @@ api.interceptors.response.use(
   (error) => {
     const status = error.response?.status;
     const method = error.config?.method;
-    localStorage.clear();
+    const url = error.config?.url || "" ;   
     if (status === 401 || status === 403) {
-      if (method !== "get") {
-        if (!isToastActive) {
-          isToastActive = true;
-          
-          toast.error("Your session has expired, please login again", {
-            duration: 3000,
-          });
-          store.dispatch(logout());
+      
+      if (!url.includes("donate") && !url.includes("paypal")) {
+        
+        localStorage.clear();
+        store.dispatch(logout());
 
-          setTimeout(() => {
-            isToastActive = false;
-            window.location.href = "/auth";
-          }, 2000);
+        if (method !== "get") {
+          if (!isToastActive) {
+            isToastActive = true;
+            toast.error("Your session has expired, please login again", {
+              duration: 3000,
+            });
+
+            setTimeout(() => {
+              isToastActive = false;
+              window.location.href = "/auth";
+            }, 2000);
+          }
+        } else {
+          console.warn("Silent failure: User is browsing with expired session");
         }
       } else {
-        console.warn("Silent failure: User is browsing with expired session");
+        console.error("PayPal/Donate Auth Error: Check Backend PayPal Credentials");
       }
     }
 
     return Promise.reject(error);
   },
 );
-
 export default api;

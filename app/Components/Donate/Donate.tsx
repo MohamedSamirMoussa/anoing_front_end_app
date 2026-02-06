@@ -80,8 +80,14 @@ const Donate = () => {
           onSubmit={formik.handleSubmit}
           className="p-8 rounded-3xl border border-[#ffffff20] bg-[#0f0f15] shadow-2xl w-full max-w-md mx-4"
         >
+          <div className="flex justify-center items-center my-5">
+            <span className="bg-red-600 w-12 h-12 flex shadow-lg animate-[pulse_2s_ease-in-out_infinite] scale-110 shadow-red-600 justify-center items-center rounded-full">
+              <FontAwesomeIcon icon={faHeart} className="text-3xl" />
+            </span>
+          </div>
+
           <h2
-            className="text-2xl font-bold mb-6 text-center font-orbitron"
+            className="text-3xl font-extrabold mb-6 text-center font-orbitron"
             style={{
               backgroundImage: theme?.gradient,
               backgroundRepeat: "no-repeat",
@@ -93,57 +99,79 @@ const Donate = () => {
             Support Our Server
           </h2>
 
-          <div className="quick-amount flex justify-center items-center gap-2 my-2">
-            <div className="grid grid-cols-4 gap-4">
-              {quickAmount.map((amt: string) => (
-                <button
-                  key={amt}
-                  onClick={() => formik.setFieldValue("amount.value", amt)}
-                  className="py-3 px-3 rounded-xl w-full bg-[#1a1a25]"
-                >
-                  ${amt}
-                </button>
-              ))}
-            </div>
-          </div>
+          <p className="text-white/50">
+            Your donation helps keep the servers running and allows us to
+            improve the experience for everyone!
+          </p>
 
-          <div className="flex justify-center gap-3 mb-6">
-            <div className="flex flex-col gap-3">
-              <div>
-                <input
-                  type="text"
-                  id="username"
-                  name="username"
-                  placeholder="minecraft's username"
-                  className="bg-[#1a1a25] border border-[#ffffff10] py-3 px-4 rounded-xl w-24 text-gray-400 w-full"
-                  value={formik.values.username}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
+          <div className=" flex flex-col gap-3">
+            <div className="quick-amount my-2">
+              <div className="head my-2 text-white/60 font-bold">
+                <h3>Amount :</h3>
               </div>
-              <div className="relative flex-1">
-                <input
-                  type="text"
-                  id="amount.value"
-                  name="amount.value"
-                  placeholder="0.00"
-                  /**/
-                  className={`bg-[#1a1a25] border border-[#ffffff10] py-3 px-4 rounded-xl w-full focus:outline-none focus:border-rose-600 transition-colors ${formik.errors?.amount?.value && formik.touched?.amount?.value ? "border-red-500" : ""}`}
-                  onChange={(e) => {
-                    const regex = /^[0-9\b]+$/;
-                    if (e.target.value === "" || regex.test(e.target.value)) {
-                      formik.handleChange(e);
-                    }
-                  }}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.amount.value}
-                />
-                <span className="absolute right-4 top-3 text-gray-500">$</span>
+              <div className="grid grid-cols-4 gap-4">
+                {quickAmount.map((amt: string) => (
+                  <button
+                    key={amt}
+                    onClick={() => formik.setFieldValue("amount.value", amt)}
+                    className="py-3 px-3 rounded-xl w-full bg-[#1a1a25] transition-all border-2 border-white/5 hover:bg-rose-600/10 hover:border-2 hover:border-rose-600/60
+                     duration-300 hover:-translate-y-1"
+                  >
+                    ${amt}
+                  </button>
+                ))}
               </div>
             </div>
+
+            <div>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="minecraft's username"
+                className={`bg-[#1a1a25] border border-[#ffffff10] py-3 px-4 rounded-xl w-24 text-gray-400 w-full ${formik.errors?.username && formik.touched?.username ? "border-red-500" : ""}`}
+                value={formik.values.username}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              {formik.errors.username && formik.touched.username && (
+                <>
+                  <span className="text-[10px] text-rose-800">
+                    Username is required
+                  </span>
+                </>
+              )}
+            </div>
+            <div className="relative flex-1 mb-2">
+              <input
+                type="text"
+                id="amount.value"
+                name="amount.value"
+                placeholder="0.00"
+                /**/
+                className={`bg-[#1a1a25] border border-[#ffffff10] py-3 px-4 rounded-xl w-full focus:outline-none focus:border-rose-600 transition-colors ${formik.errors?.amount?.value && formik.touched?.amount?.value ? "border-red-500" : ""}`}
+                onChange={(e) => {
+                  const regex = /^[0-9\b]+$/;
+                  if (e.target.value === "" || regex.test(e.target.value)) {
+                    formik.handleChange(e);
+                  }
+                }}
+                onBlur={formik.handleBlur}
+                value={formik.values.amount.value}
+              />
+              <span className="absolute right-4 top-3 text-gray-500">$</span>
+              {formik.errors.amount?.value && formik.touched.amount?.value && (
+                <>
+                  <span className="text-[10px] text-rose-800">
+                    Value is required
+                  </span>
+                </>
+              )}
+            </div>
+
             <input
               type="text"
-              className="bg-[#1a1a25] border border-[#ffffff10] py-3 px-4 rounded-xl w-24 text-center text-gray-400"
+              className="bg-[#1a1a25] hidden border border-[#ffffff10] py-3 px-4 rounded-xl w-24 text-center text-gray-400"
               disabled
               value={formik.values.amount.currency_code}
             />

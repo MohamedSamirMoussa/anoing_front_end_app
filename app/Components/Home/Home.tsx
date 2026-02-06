@@ -245,7 +245,7 @@ const Home = () => {
             </div>
 
             <div className="flex justify-center items-center">
-              <div className="my-3">
+              <div className="my-1">
                 <HomeSlider leaderboard={Leaderboard} />
               </div>
             </div>
